@@ -87,8 +87,68 @@ for current_key in my_keys:
     print(current_key, '\t', words[current_key])
 
 #Whatever this does...
+temp_list = []
+# Select a key in the dictionary
+for current_key in words.keys():
+   # determine the number of words in the sorted list
+   list_length = len(temp_list)
+
+   # start looking at position 0
+   placeholder = 0
+
+   # As long as there are still items in the list
+   while placeholder < list_length:
+
+       # Get the word in the sorted list
+       list_key = temp_list [placeholder] 
+
+       # Determine if this word has been entered
+       # more times than the current word
+       if words [list_key] > words [current_key] :
+           break
+
+       # It wasn't, so let's look at the next word
+       # in the sorted list
+       placeholder = placeholder + 1
+
+   # We found the location in the sorted list for
+   # this word, insert it 
+   temp_list.insert(placeholder, current_key)
+
+for current_key in temp_list:
+   print (current_key, '\t', words [current_key] )
 
 #Teacher's code that stores info about student test grades in a dictionary.
+# Introduction to Python Programming
+# Lesson 09 Assignment
+# Sample Solution
 
-#Links:
-#Word counter program(downloads a file): 
+test_scores = { }
+name = input("Please enter a student name (-999 quits): ")
+
+while name != '-999':
+    score = eval(input("Please enter the students score: "))
+    test_scores[name] = score
+
+    print()
+    name = input("Please enter a student name (-999 quits): ")
+
+print ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+search_name = input("Which student's score would you like to see (-999 quits): " )
+
+while search_name != '-999':
+    if search_name in test_scores:
+        print (search_name, "\t", test_scores[search_name])
+    else:
+        print (search_name, "not found in list")
+
+    print()
+    print()
+
+    search_name = input("Which student's score would you like to see (-999 quits): " )
+
+
+
+
+#Link:
+#Word counter program(downloads a file): https://api.ed2go.com/CourseBuilder/2.0/images/resources/prod/py3-0/PY3_wordCounter.py
