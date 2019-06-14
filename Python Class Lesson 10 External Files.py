@@ -95,4 +95,6 @@ db_file.close()
 #sync() allows you to write the files immediately
 db_file.sync()
 
-#Link:
+#Links:
+#1. Link to teacher's code: https://lo-ed2go-files.difference-engine.com/Resources/py3-0/PY3_L10_Solution_a.py
+#2. Info on Pickling: http://docs.python.org/py3k/library/pickle.html
