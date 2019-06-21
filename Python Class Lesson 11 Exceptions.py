@@ -103,3 +103,40 @@ except IOError as io:
     print("Could not open file:", io.filename)
 except ValueError:
     print("Could not convert", value, "to a number")
+
+#The lesson assignment was to get OverflowError and KeyboardInterrupt error. This is the teacher's solution.
+
+# Introduction to Python Programming
+# Lesson 11 Assignment
+# Sample Solution
+
+try:
+    counter = 1
+    while (counter >= 1):
+        # This code simply prints the number and
+        #   is for debugging purposes
+        #print (counter)
+
+        # A second set of code
+        # This code will raise 2^counter
+        result = 2.0 ** counter
+
+        # I used the following line for debugging
+        #   purposes for the second case
+        #print ("2 ^", counter, "=\t", result)
+
+        counter = counter + .001
+except OverflowError:
+    print ("\n\nOverflowError: You stopped the program with counter =", counter)
+
+except KeyboardInterrupt:
+    print ("\n\nKeyboardInterrupt: You stopped the program with counter =", counter)
+
+    # This is the output I used for the 2^number code
+    #print ("\n\nKeyboardInterrupt: You stopped the program with result =", result)
+
+    
+#Link:
+#This page explains exceptions and how they're used when working with external data files and discusses 
+#re-raising exceptions and some other things we didn't have space to cover here in the course.
+#https://doughellmann.com/blog/?s=python+exception+handling
