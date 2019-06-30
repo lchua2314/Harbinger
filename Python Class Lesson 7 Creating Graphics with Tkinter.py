@@ -70,12 +70,12 @@ class MyFrame(Frame): #The "(Frame)" means to inherit the Frame class
             self.myCanvas.create_rectangle(350 + increment, 350 + increment, 400 + increment, 400 + increment, fill="black")
 
         #The above for loop is inefficient because we are creating 20 squares instead of moving them around. A better way to do this is the below.
-        my_rect_id = self.myCanvas.create_rectangle(350, 350, 400, 400)
+        my_rect_id = self.myCanvas.create_rectangle(350, 350, 400, 400, fill="red") #LZEDIT: added fill argument cause its probably blackon default or something
         self.myCanvas.update()
 
         for count in range(10):
             incement = 10*count
-            self.myCanvas.coords(my_rect_id, 350 + increment, 350 + increment, 400 + increment, 400 + increment, fill="blue")
+            self.myCanvas.coords(my_rect_id, 350 + increment, 350 + increment, 400 + increment, 400 + increment) #LZEDIT: removed fill argument cause causes error
             self.myCanvas.update()
             sleep(1)
         #Using the coords() function will move the shape to a new location.
