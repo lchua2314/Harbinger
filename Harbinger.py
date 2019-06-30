@@ -118,7 +118,7 @@ class MainFrame (Frame):
             self.myCanvas.coords(e1_Rarm, -145+increment, 150, -160+increment, 165)
             self.myCanvas.coords(e1_Rleg, -145+increment, 175, -160+increment, 183)
             self.myCanvas.coords(e1_Lleg, -115+increment, 175, -130+increment, 183)
-            self.myCanvas.coords(e1_bandana1, -125+increment, 140, -150+increment, 140, -150+increment, -150) #Creates a polyon (triangle). Main part of banadana
+            self.myCanvas.coords(e1_bandana1, -125+increment, 140, -150+increment, 140, -150+increment, 150) #Creates a polyon (triangle). Main part of banadana
            # self.myCanvas.coords(e1_bandana2, -125+increment, 140, -120+increment, 142, -120+increment, 145) #Knot down
            # self.myCanvas.coords(e1_bandana3,-125+increment, 140, -120+increment, 138, -120+increment, 141) #Knot up
             self.myCanvas.coords(e1_vneck,-130+increment, 150, -145+increment, 155, -145+increment, 175, -130+increment, 175)
