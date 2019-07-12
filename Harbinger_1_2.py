@@ -13,18 +13,23 @@ class MainFrame (Frame):
     def __init__(self):
         Frame.__init__(self)
 
-        self.__x, self.__y=0, 0 #THIS TELLS POSITIVE MOVEMENT
-        self.__x3, self.__y3=0,0 #This tells negative movement
-        self.__x2, self.__y2=0, 0 #THIS IS TELLING US WHAT FRAME IT IS SO ARMS IN OR ARMS OUT? IT WILL CHANGE EVERYTIME. MSG ME IF U DONT understand :)
-        self.__sprint = 0
-        #self.__name1 = 100
-        #self.__name2 = 100
+        self.__xRight, self.__yRight=0, 0 #THIS TELLS POSITIVE MOVEMENT (To the right)
+        self.__xLeft, self.__yLeft=0,0 #This tells negative movement (TO the left)
+        self.__xFrame, self.__yFrame=0, 0 #Indicates which frame. '0' means first frame. '1' means second frame. They alternate. Only using xFrame atm.
+        self.__sprint = False 
+        self.__crouch = False
         
         #KEYBINDINGS
         def spaceKey(event): #Special ability
             print("'spacebar' key pressed")
-            
-        def sKey(event): #Drop down, prone
+
+        def eKey(event): #Block
+            print("'e' key pressed")
+        
+        def qKey(event): #Switch weapons
+            print("'q' key pressed")
+        
+        def sKey(event): #Drop down
             print("'s' key pressed")
         
         def wKey(event): #Jump
@@ -36,165 +41,241 @@ class MainFrame (Frame):
         def rightClick(event): #Take aim
             print("Right Click")
 
-        def scroll(event): #Switch weapons
+        def scroll(event): 
             print("Scroll Click")
 
         def aKey(event): #Move left
             print("'a' key pressed")
-            self.__x3 -= 1
-            if self.__x2 == 0 and self.__sprint == False:
-                increment = 1*self.__x3 #Arms and legs out increment+self.__x 
-                self.myCanvas.coords(a_head, 125+increment+self.__x, 125, 150+increment+self.__x, 150)
-                self.myCanvas.coords(a_name, 138+increment+self.__x, 110)
-                self.myCanvas.coords(a_torso, 130+increment+self.__x, 150, 145+increment+self.__x, 150, 145+increment+self.__x, 175, 130+increment+self.__x, 175)
-                self.myCanvas.coords(a_Larm, 115+increment+self.__x, 150, 130+increment+self.__x, 165)
-                self.myCanvas.coords(a_Rarm, 145+increment+self.__x, 150, 160+increment+self.__x, 165)
-                self.myCanvas.coords(a_Rleg, 145+increment+self.__x, 175, 160+increment+self.__x, 183)
-                self.myCanvas.coords(a_Lleg, 115+increment+self.__x, 175, 130+increment+self.__x, 183)
-                self.myCanvas.coords(a_bandana1, 125+increment+self.__x+25, 140, 150+increment+self.__x-25, 140, 150+increment+self.__x-25, 150)
-                self.myCanvas.coords(a_bandana2, 125+increment+self.__x+25, 140, 120+increment+self.__x+35, 142, 120+increment+self.__x+35, 145)
-                self.myCanvas.coords(a_bandana3, 125+increment+self.__x+25, 140, 120+increment+self.__x+35, 138, 120+increment+self.__x+35, 141)
-                self.myCanvas.coords(a_vneck, 130+increment+self.__x, 155, 145+increment+self.__x, 150, 145+increment+self.__x, 175, 130+increment+self.__x, 175)
-                self.myCanvas.coords(a_coat, 145+increment+self.__x, 145, 133+increment+self.__x, 145, 140+increment+self.__x, 175, 160+increment+self.__x, 177, 145+increment+self.__x, 160)
-                self.__x2 = 1
+            self.__xLeft -= 1
+            if self.__xFrame == 0 and self.__sprint == False and self.__crouch == False: #Moving left without sprint or crouch FRAME #1
+                increment = 1*self.__xLeft #Arms and legs out increment+self.__xRight 
+                self.myCanvas.coords(a_head, 125+increment+self.__xRight, 125, 150+increment+self.__xRight, 150)
+                self.myCanvas.coords(a_name, 138+increment+self.__xRight, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xRight, 150, 145+increment+self.__xRight, 150, 145+increment+self.__xRight, 175, 130+increment+self.__xRight, 175)
+                self.myCanvas.coords(a_Larm, 115+increment+self.__xRight, 150, 130+increment+self.__xRight, 165)
+                self.myCanvas.coords(a_Rarm, 145+increment+self.__xRight, 150, 160+increment+self.__xRight, 165)
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xRight, 175, 160+increment+self.__xRight, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xRight, 175, 130+increment+self.__xRight, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xRight+25, 140, 150+increment+self.__xRight-25, 140, 150+increment+self.__xRight-25, 150)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xRight+25, 140, 120+increment+self.__xRight+35, 142, 120+increment+self.__xRight+35, 145)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xRight+25, 140, 120+increment+self.__xRight+35, 138, 120+increment+self.__xRight+35, 141)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xRight, 155, 145+increment+self.__xRight, 150, 145+increment+self.__xRight, 175, 130+increment+self.__xRight, 175)
+                self.myCanvas.coords(a_coat, 145+increment+self.__xRight, 145, 133+increment+self.__xRight, 145, 140+increment+self.__xRight, 175, 160+increment+self.__xRight, 177, 145+increment+self.__xRight, 160)
+                self.__xFrame = 1
                 
-            elif self.__x2 == 1 and self.__sprint == False:
-                increment = 1*self.__x3 #Arms and legs in
-                self.myCanvas.coords(a_head, 125+increment+self.__x, 125+3, 150+increment+self.__x, 150+3)
-                self.myCanvas.coords(a_name, 138+increment+self.__x, 110)
-                self.myCanvas.coords(a_torso, 130+increment+self.__x, 150+3, 145+increment+self.__x, 150+3, 145+increment+self.__x, 175+3, 130+increment+self.__x, 175+3)
-                self.myCanvas.coords(a_Larm, 130+increment+self.__x, 160, 145+increment+self.__x, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-                self.myCanvas.coords(a_Rarm, 130+increment+self.__x, 160, 145+increment+self.__x, 175) #Arm hides behind torso
-                self.myCanvas.coords(a_Rleg, 145+increment+self.__x-10, 175, 160+increment+self.__x-10, 183)
-                self.myCanvas.coords(a_Lleg, 115+increment+self.__x+10, 175, 130+increment+self.__x+10, 183)
-                self.myCanvas.coords(a_bandana1, 125+increment+self.__x+25, 140+3, 150+increment+self.__x-25, 140+3, 150+increment+self.__x-25, 150+3)
-                self.myCanvas.coords(a_bandana2, 125+increment+self.__x+25, 140+3, 120+increment+self.__x+35, 142+3, 120+increment+self.__x+35, 145+3)
-                self.myCanvas.coords(a_bandana3, 125+increment+self.__x+25, 140+3, 120+increment+self.__x+35, 138+3, 120+increment+self.__x+35, 141+3)
-                self.myCanvas.coords(a_vneck, 130+increment+self.__x, 155+3, 145+increment+self.__x, 150+3, 145+increment+self.__x, 175+3, 130+increment+self.__x, 175+3)
-                self.myCanvas.coords(a_coat, 145+increment+self.__x, 145+3, 133+increment+self.__x, 145+3, 140+increment+self.__x, 175+3, 160+increment+self.__x, 177+6, 145+increment+self.__x, 160+3)
-                self.__x2 = 0
+            elif self.__xFrame == 1 and self.__sprint == False and self.__crouch == False: #Moving left without sprint or crouch FRAME #2
+                increment = 1*self.__xLeft #Arms and legs in
+                self.myCanvas.coords(a_head, 125+increment+self.__xRight, 125+3, 150+increment+self.__xRight, 150+3)
+                self.myCanvas.coords(a_name, 138+increment+self.__xRight, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xRight, 150+3, 145+increment+self.__xRight, 150+3, 145+increment+self.__xRight, 175+3, 130+increment+self.__xRight, 175+3)
+                self.myCanvas.coords(a_Larm, 130+increment+self.__xRight, 160, 145+increment+self.__xRight, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+                self.myCanvas.coords(a_Rarm, 130+increment+self.__xRight, 160, 145+increment+self.__xRight, 175) #Arm hides behind torso
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xRight-10, 175, 160+increment+self.__xRight-10, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xRight+10, 175, 130+increment+self.__xRight+10, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xRight+25, 140+3, 150+increment+self.__xRight-25, 140+3, 150+increment+self.__xRight-25, 150+3)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xRight+25, 140+3, 120+increment+self.__xRight+35, 142+3, 120+increment+self.__xRight+35, 145+3)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xRight+25, 140+3, 120+increment+self.__xRight+35, 138+3, 120+increment+self.__xRight+35, 141+3)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xRight, 155+3, 145+increment+self.__xRight, 150+3, 145+increment+self.__xRight, 175+3, 130+increment+self.__xRight, 175+3)
+                self.myCanvas.coords(a_coat, 145+increment+self.__xRight, 145+3, 133+increment+self.__xRight, 145+3, 140+increment+self.__xRight, 175+3, 160+increment+self.__xRight, 177+6, 145+increment+self.__xRight, 160+3)
+                self.__xFrame = 0
 
-            elif self.__x2 == 0 and self.__sprint == True:
-                increment = 1*self.__x3  #Arms and legs out
-                self.myCanvas.coords(a_head, 145+increment+self.__x-40, 135, 170+increment+self.__x-40, 160) #(+20, +10) difference from walking
-                self.myCanvas.coords(a_name, 138+increment+self.__x, 110)
-                self.myCanvas.coords(a_torso, 140+increment+self.__x-4, 150, 150+increment+self.__x-24, 160, 125+increment+self.__x+26, 170, 115+increment+self.__x+46, 160) #(10, 0), (5,10), (-20,-5), (-15,-15)
-                self.myCanvas.coords(a_Larm, 85+increment+self.__x+106, 150, 100+increment+self.__x+76, 165) #(-30,0)
-                self.myCanvas.coords(a_Rarm, 175+increment+self.__x-74, 150, 190+increment+self.__x-104, 165) #(+30,0)
-                self.myCanvas.coords(a_Rleg, 150+increment+self.__x-24, 170, 165+increment+self.__x-54, 178) #(+5,-5), (+5,-5)
-                self.myCanvas.coords(a_Lleg, 110+increment+self.__x+56, 170, 125+increment+self.__x+26, 178) #(-5,-5), (-5,-5)
-                self.myCanvas.coords(a_bandana1, 145+increment+self.__x-14, 150, 170+increment+self.__x-64, 150, 170+increment+self.__x-64, 160) #(+20,10) for all bandana
-                self.myCanvas.coords(a_bandana2, 145+increment+self.__x-14, 150, 140+increment+self.__x-4, 152, 140+increment+self.__x-4, 160)
-                self.myCanvas.coords(a_bandana3, 145+increment+self.__x-14, 150, 140+increment+self.__x-4, 148, 140+increment+self.__x-4, 151) 
-                self.myCanvas.coords(a_vneck, 140+increment+self.__x-4, 150, 145+increment+self.__x-14, 163, 125+increment+self.__x+26, 170, 115+increment+self.__x+46, 160) #(10,0), (0,8), (-20,-5), (-15,-15)
-                self.myCanvas.coords(a_coat, 142+increment+self.__x-8, 145, 152+increment+self.__x-28, 155, 100+increment+self.__x+76, 175, 85+increment+self.__x+104, 157, 125+increment+self.__x+26, 155)
-                self.__x3 -= 5
+            elif self.__xFrame == 0 and self.__sprint == True: #Moving left SPRINTING FRAME #1
+                increment = 1*self.__xLeft  #Arms and legs out
+                self.myCanvas.coords(a_head, 145+increment+self.__xRight-40, 135, 170+increment+self.__xRight-40, 160) #(+20, +10) difference from walking
+                self.myCanvas.coords(a_name, 138+increment+self.__xRight, 110)
+                self.myCanvas.coords(a_torso, 140+increment+self.__xRight-4, 150, 150+increment+self.__xRight-24, 160, 125+increment+self.__xRight+26, 170, 115+increment+self.__xRight+46, 160) #(10, 0), (5,10), (-20,-5), (-15,-15)
+                self.myCanvas.coords(a_Larm, 85+increment+self.__xRight+106, 150, 100+increment+self.__xRight+76, 165) #(-30,0)
+                self.myCanvas.coords(a_Rarm, 175+increment+self.__xRight-74, 150, 190+increment+self.__xRight-104, 165) #(+30,0)
+                self.myCanvas.coords(a_Rleg, 150+increment+self.__xRight-24, 170, 165+increment+self.__xRight-54, 178) #(+5,-5), (+5,-5)
+                self.myCanvas.coords(a_Lleg, 110+increment+self.__xRight+56, 170, 125+increment+self.__xRight+26, 178) #(-5,-5), (-5,-5)
+                self.myCanvas.coords(a_bandana1, 145+increment+self.__xRight-14, 150, 170+increment+self.__xRight-64, 150, 170+increment+self.__xRight-64, 160) #(+20,10) for all bandana
+                self.myCanvas.coords(a_bandana2, 145+increment+self.__xRight-14, 150, 140+increment+self.__xRight-4, 152, 140+increment+self.__xRight-4, 160)
+                self.myCanvas.coords(a_bandana3, 145+increment+self.__xRight-14, 150, 140+increment+self.__xRight-4, 148, 140+increment+self.__xRight-4, 151) 
+                self.myCanvas.coords(a_vneck, 140+increment+self.__xRight-4, 150, 145+increment+self.__xRight-14, 163, 125+increment+self.__xRight+26, 170, 115+increment+self.__xRight+46, 160) #(10,0), (0,8), (-20,-5), (-15,-15)
+                self.myCanvas.coords(a_coat, 142+increment+self.__xRight-8, 145, 152+increment+self.__xRight-28, 155, 100+increment+self.__xRight+76, 175, 85+increment+self.__xRight+104, 157, 125+increment+self.__xRight+26, 155)
+                self.__xLeft -= 5
                 #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
-                self.__x2 = 1
+                self.__xFrame = 1
                 
-            elif self.__x2 == 1 and self.__sprint == True:
-                increment = 1*self.__x3  #Arms and legs in
-                self.myCanvas.coords(a_head, 145+increment+self.__x-40, 135+5, 170+increment+self.__x-40, 160+5) #(+20, +10) difference from walking
-                self.myCanvas.coords(a_name, 138+increment+self.__x, 110)
-                self.myCanvas.coords(a_torso, 140+increment+self.__x-4, 150+5, 150+increment+self.__x-24, 160+5, 125+increment+self.__x+26, 170+5, 115+increment+self.__x+46, 160+5) #(20, 10), (5,10)
-                self.myCanvas.coords(a_Larm, 130+increment+self.__x+16, 160, 145+increment+self.__x-14, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-                self.myCanvas.coords(a_Rarm, 130+increment+self.__x+16, 160, 145+increment+self.__x-14, 175) #Arm hides behind torso (+30,0)
-                self.myCanvas.coords(a_Rleg, 145+increment+self.__x-10, 175, 160+increment+self.__x-10, 183)
-                self.myCanvas.coords(a_Lleg, 115+increment+self.__x+10, 175, 130+increment+self.__x+10, 183)
-                self.myCanvas.coords(a_bandana1, 145+increment+self.__x-14, 150+5, 170+increment+self.__x-64, 150+5, 170+increment+self.__x-64, 160+5) #(+20,10) for all bandana
-                self.myCanvas.coords(a_bandana2, 145+increment+self.__x-14, 150+5, 140+increment+self.__x-4, 152+5, 140+increment+self.__x-4, 160+5)
-                self.myCanvas.coords(a_bandana3, 145+increment+self.__x-14, 150+5, 140+increment+self.__x-4, 148+5, 140+increment+self.__x-4, 151+5) 
-                self.myCanvas.coords(a_vneck, 140+increment+self.__x-4, 150+5, 145+increment+self.__x-14, 163+5, 125+increment+self.__x+26, 170+5, 115+increment+self.__x+46, 160+5) #(10,0), (0,8), (-20,-5), (-15,-15)
-                self.myCanvas.coords(a_coat, 142+increment+self.__x-8, 145+5, 152+increment+self.__x-28, 155+5, 100+increment+self.__x+76, 175+10, 85+increment+self.__x+104, 157+10, 125+increment+self.__x+26, 155+5)
+            elif self.__xFrame == 1 and self.__sprint == True: #Moving left SPRINTING FRAME #2
+                increment = 1*self.__xLeft  #Arms and legs in
+                self.myCanvas.coords(a_head, 145+increment+self.__xRight-40, 135+5, 170+increment+self.__xRight-40, 160+5) #(+20, +10) difference from walking
+                self.myCanvas.coords(a_name, 138+increment+self.__xRight, 110)
+                self.myCanvas.coords(a_torso, 140+increment+self.__xRight-4, 150+5, 150+increment+self.__xRight-24, 160+5, 125+increment+self.__xRight+26, 170+5, 115+increment+self.__xRight+46, 160+5) #(20, 10), (5,10)
+                self.myCanvas.coords(a_Larm, 130+increment+self.__xRight+16, 160, 145+increment+self.__xRight-14, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+                self.myCanvas.coords(a_Rarm, 130+increment+self.__xRight+16, 160, 145+increment+self.__xRight-14, 175) #Arm hides behind torso (+30,0)
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xRight-10, 175, 160+increment+self.__xRight-10, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xRight+10, 175, 130+increment+self.__xRight+10, 183)
+                self.myCanvas.coords(a_bandana1, 145+increment+self.__xRight-14, 150+5, 170+increment+self.__xRight-64, 150+5, 170+increment+self.__xRight-64, 160+5) #(+20,10) for all bandana
+                self.myCanvas.coords(a_bandana2, 145+increment+self.__xRight-14, 150+5, 140+increment+self.__xRight-4, 152+5, 140+increment+self.__xRight-4, 160+5)
+                self.myCanvas.coords(a_bandana3, 145+increment+self.__xRight-14, 150+5, 140+increment+self.__xRight-4, 148+5, 140+increment+self.__xRight-4, 151+5) 
+                self.myCanvas.coords(a_vneck, 140+increment+self.__xRight-4, 150+5, 145+increment+self.__xRight-14, 163+5, 125+increment+self.__xRight+26, 170+5, 115+increment+self.__xRight+46, 160+5) #(10,0), (0,8), (-20,-5), (-15,-15)
+                self.myCanvas.coords(a_coat, 142+increment+self.__xRight-8, 145+5, 152+increment+self.__xRight-28, 155+5, 100+increment+self.__xRight+76, 175+10, 85+increment+self.__xRight+104, 157+10, 125+increment+self.__xRight+26, 155+5)
                 #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
-                self.__x3 -= 5
-                self.__x2 = 0
+                self.__xLeft -= 5
+                self.__xFrame = 0
+
+            elif self.__xFrame == 0 and self.__crouch == True: #Moving left CROUCHING FRAME #1
+                print("crouch 1")
+                increment = 1*self.__xLeft #Arms and legs out increment+self.__xRight 
+                self.myCanvas.coords(a_head, 125+increment+self.__xRight, 125, 150+increment+self.__xRight, 150)
+                self.myCanvas.coords(a_name, 138+increment+self.__xRight, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xRight, 150, 145+increment+self.__xRight, 150, 145+increment+self.__xRight, 175, 130+increment+self.__xRight, 175)
+                self.myCanvas.coords(a_Larm, 115+increment+self.__xRight, 150, 130+increment+self.__xRight, 165)
+                self.myCanvas.coords(a_Rarm, 145+increment+self.__xRight, 150, 160+increment+self.__xRight, 165)
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xRight, 175, 160+increment+self.__xRight, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xRight, 175, 130+increment+self.__xRight, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xRight+25, 140, 150+increment+self.__xRight-25, 140, 150+increment+self.__xRight-25, 150)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xRight+25, 140, 120+increment+self.__xRight+35, 142, 120+increment+self.__xRight+35, 145)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xRight+25, 140, 120+increment+self.__xRight+35, 138, 120+increment+self.__xRight+35, 141)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xRight, 155, 145+increment+self.__xRight, 150, 145+increment+self.__xRight, 175, 130+increment+self.__xRight, 175)
+                self.myCanvas.coords(a_coat, 145+increment+self.__xRight, 145, 133+increment+self.__xRight, 145, 140+increment+self.__xRight, 175, 160+increment+self.__xRight, 177, 145+increment+self.__xRight, 160)
+                self.__xFrame = 1
+                
+            elif self.__xFrame == 1 and self.__crouch == True: #Moving left CROUCHING FRAME #2
+                print("crouch 2")
+                increment = 1*self.__xLeft #Arms and legs in
+                self.myCanvas.coords(a_head, 125+increment+self.__xRight, 125+3, 150+increment+self.__xRight, 150+3)
+                self.myCanvas.coords(a_name, 138+increment+self.__xRight, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xRight, 150+3, 145+increment+self.__xRight, 150+3, 145+increment+self.__xRight, 175+3, 130+increment+self.__xRight, 175+3)
+                self.myCanvas.coords(a_Larm, 130+increment+self.__xRight, 160, 145+increment+self.__xRight, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+                self.myCanvas.coords(a_Rarm, 130+increment+self.__xRight, 160, 145+increment+self.__xRight, 175) #Arm hides behind torso
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xRight-10, 175, 160+increment+self.__xRight-10, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xRight+10, 175, 130+increment+self.__xRight+10, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xRight+25, 140+3, 150+increment+self.__xRight-25, 140+3, 150+increment+self.__xRight-25, 150+3)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xRight+25, 140+3, 120+increment+self.__xRight+35, 142+3, 120+increment+self.__xRight+35, 145+3)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xRight+25, 140+3, 120+increment+self.__xRight+35, 138+3, 120+increment+self.__xRight+35, 141+3)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xRight, 155+3, 145+increment+self.__xRight, 150+3, 145+increment+self.__xRight, 175+3, 130+increment+self.__xRight, 175+3)
+                self.myCanvas.coords(a_coat, 145+increment+self.__xRight, 145+3, 133+increment+self.__xRight, 145+3, 140+increment+self.__xRight, 175+3, 160+increment+self.__xRight, 177+6, 145+increment+self.__xRight, 160+3)
+                self.__xFrame = 0
+
                 
             self.myCanvas.update()
 
         def dKey(event): #Move right
             print("'d' key pressed")
-            self.__x += 1
-            if self.__x2 == 0 and self.__sprint == False:
-                increment = 1*self.__x #Arms and legs out increment+self.__x3 
-                self.myCanvas.coords(a_head, 125+increment+self.__x3, 125, 150+increment+self.__x3, 150)
-                self.myCanvas.coords(a_name, 138+increment+self.__x3, 110)
-                self.myCanvas.coords(a_torso, 130+increment+self.__x3, 150, 145+increment+self.__x3, 150, 145+increment+self.__x3, 175, 130+increment+self.__x3, 175)
-                self.myCanvas.coords(a_Larm, 115+increment+self.__x3, 150, 130+increment+self.__x3, 165)
-                self.myCanvas.coords(a_Rarm, 145+increment+self.__x3, 150, 160+increment+self.__x3, 165)
-                self.myCanvas.coords(a_Rleg, 145+increment+self.__x3, 175, 160+increment+self.__x3, 183)
-                self.myCanvas.coords(a_Lleg, 115+increment+self.__x3, 175, 130+increment+self.__x3, 183)
-                self.myCanvas.coords(a_bandana1, 125+increment+self.__x3, 140, 150+increment+self.__x3, 140, 150+increment+self.__x3, 150)
-                self.myCanvas.coords(a_bandana2, 125+increment+self.__x3, 140, 120+increment+self.__x3, 142, 120+increment+self.__x3, 145)
-                self.myCanvas.coords(a_bandana3, 125+increment+self.__x3, 140, 120+increment+self.__x3, 138, 120+increment+self.__x3, 141)
-                self.myCanvas.coords(a_vneck, 130+increment+self.__x3, 150, 145+increment+self.__x3, 155, 145+increment+self.__x3, 175, 130+increment+self.__x3, 175)
-                self.myCanvas.coords(a_coat, 130+increment+self.__x3, 145, 142+increment+self.__x3, 145, 135+increment+self.__x3, 175, 115+increment+self.__x3, 177, 130+increment+self.__x3, 160)
-                self.__x2 = 1
+            self.__xRight += 1
+            if self.__xFrame == 0 and self.__sprint == False: #Moving right without sprinting or crouching FRAME #1
+                increment = 1*self.__xRight #Arms and legs out increment+self.__xLeft 
+                self.myCanvas.coords(a_head, 125+increment+self.__xLeft, 125, 150+increment+self.__xLeft, 150)
+                self.myCanvas.coords(a_name, 138+increment+self.__xLeft, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 175, 130+increment+self.__xLeft, 175)
+                self.myCanvas.coords(a_Larm, 115+increment+self.__xLeft, 150, 130+increment+self.__xLeft, 165)
+                self.myCanvas.coords(a_Rarm, 145+increment+self.__xLeft, 150, 160+increment+self.__xLeft, 165)
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xLeft, 175, 160+increment+self.__xLeft, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xLeft, 175, 130+increment+self.__xLeft, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xLeft, 140, 150+increment+self.__xLeft, 140, 150+increment+self.__xLeft, 150)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xLeft, 140, 120+increment+self.__xLeft, 142, 120+increment+self.__xLeft, 145)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xLeft, 140, 120+increment+self.__xLeft, 138, 120+increment+self.__xLeft, 141)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 155, 145+increment+self.__xLeft, 175, 130+increment+self.__xLeft, 175)
+                self.myCanvas.coords(a_coat, 130+increment+self.__xLeft, 145, 142+increment+self.__xLeft, 145, 135+increment+self.__xLeft, 175, 115+increment+self.__xLeft, 177, 130+increment+self.__xLeft, 160)
+                self.__xFrame = 1
                 
-            elif self.__x2 == 1 and self.__sprint == False:
-                increment = 1*self.__x #Arms and legs in
-                self.myCanvas.coords(a_head, 125+increment+self.__x3, 125+3, 150+increment+self.__x3, 150+3)
-                self.myCanvas.coords(a_name, 138+increment+self.__x3, 110)
-                self.myCanvas.coords(a_torso, 130+increment+self.__x3, 150+3, 145+increment+self.__x3, 150+3, 145+increment+self.__x3, 175+3, 130+increment+self.__x3, 175+3)
-                self.myCanvas.coords(a_Larm, 130+increment+self.__x3, 160, 145+increment+self.__x3, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-                self.myCanvas.coords(a_Rarm, 130+increment+self.__x3, 160, 145+increment+self.__x3, 175) #Arm hides behind torso
-                self.myCanvas.coords(a_Rleg, 145+increment+self.__x3-10, 175, 160+increment+self.__x3-10, 183)
-                self.myCanvas.coords(a_Lleg, 115+increment+self.__x3+10, 175, 130+increment+self.__x3+10, 183)
-                self.myCanvas.coords(a_bandana1, 125+increment+self.__x3, 140+3, 150+increment+self.__x3, 140+3, 150+increment+self.__x3, 150+3)
-                self.myCanvas.coords(a_bandana2, 125+increment+self.__x3, 140+3, 120+increment+self.__x3, 142+3, 120+increment+self.__x3, 145+3)
-                self.myCanvas.coords(a_bandana3, 125+increment+self.__x3, 140+3, 120+increment+self.__x3, 138+3, 120+increment+self.__x3, 141+3)
-                self.myCanvas.coords(a_vneck, 130+increment+self.__x3, 150+3, 145+increment+self.__x3, 155+3, 145+increment+self.__x3, 175+3, 130+increment+self.__x3, 175+3)
-                self.myCanvas.coords(a_coat, 130+increment+self.__x3, 145+3, 142+increment+self.__x3, 145+3, 135+increment+self.__x3, 175+3, 115+increment+self.__x3, 177+6, 130+increment+self.__x3, 160)
-                self.__x2 = 0
+            elif self.__xFrame == 1 and self.__sprint == False: #Moving right without sprinting or crouching FRAME #2
+                increment = 1*self.__xRight #Arms and legs in
+                self.myCanvas.coords(a_head, 125+increment+self.__xLeft, 125+3, 150+increment+self.__xLeft, 150+3)
+                self.myCanvas.coords(a_name, 138+increment+self.__xLeft, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xLeft, 150+3, 145+increment+self.__xLeft, 150+3, 145+increment+self.__xLeft, 175+3, 130+increment+self.__xLeft, 175+3)
+                self.myCanvas.coords(a_Larm, 130+increment+self.__xLeft, 160, 145+increment+self.__xLeft, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+                self.myCanvas.coords(a_Rarm, 130+increment+self.__xLeft, 160, 145+increment+self.__xLeft, 175) #Arm hides behind torso
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xLeft-10, 175, 160+increment+self.__xLeft-10, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xLeft+10, 175, 130+increment+self.__xLeft+10, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xLeft, 140+3, 150+increment+self.__xLeft, 140+3, 150+increment+self.__xLeft, 150+3)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xLeft, 140+3, 120+increment+self.__xLeft, 142+3, 120+increment+self.__xLeft, 145+3)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xLeft, 140+3, 120+increment+self.__xLeft, 138+3, 120+increment+self.__xLeft, 141+3)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xLeft, 150+3, 145+increment+self.__xLeft, 155+3, 145+increment+self.__xLeft, 175+3, 130+increment+self.__xLeft, 175+3)
+                self.myCanvas.coords(a_coat, 130+increment+self.__xLeft, 145+3, 142+increment+self.__xLeft, 145+3, 135+increment+self.__xLeft, 175+3, 115+increment+self.__xLeft, 177+6, 130+increment+self.__xLeft, 160)
+                self.__xFrame = 0
 
-            elif self.__x2 == 0 and self.__sprint == True:
-                increment = 1*self.__x  #Arms and legs out
-                self.myCanvas.coords(a_head, 145+increment+self.__x3, 135, 170+increment+self.__x3, 160) #(+20, +10) difference from walking
-                self.myCanvas.coords(a_name, 138+increment+self.__x3, 110)
-                self.myCanvas.coords(a_torso, 140+increment+self.__x3, 150, 150+increment+self.__x3, 160, 125+increment+self.__x3, 170, 115+increment+self.__x3, 160) #(10, 0), (5,10), (-20,-5), (-15,-15)
-                self.myCanvas.coords(a_Larm, 85+increment+self.__x3, 150, 100+increment+self.__x3, 165) #(-30,0)
-                self.myCanvas.coords(a_Rarm, 175+increment+self.__x3, 150, 190+increment+self.__x3, 165) #(+30,0)
-                self.myCanvas.coords(a_Rleg, 150+increment+self.__x3, 170, 165+increment+self.__x3, 178) #(+5,-5), (+5,-5)
-                self.myCanvas.coords(a_Lleg, 110+increment+self.__x3, 170, 125+increment+self.__x3, 178) #(-5,-5), (-5,-5)
-                self.myCanvas.coords(a_bandana1, 145+increment+self.__x3, 150, 170+increment+self.__x3, 150, 170+increment+self.__x3, 160) #(+20,10) for all bandana
-                self.myCanvas.coords(a_bandana2, 145+increment+self.__x3, 150, 140+increment+self.__x3, 152, 140+increment+self.__x3, 160)
-                self.myCanvas.coords(a_bandana3, 145+increment+self.__x3, 150, 140+increment+self.__x3, 148, 140+increment+self.__x3, 151) 
-                self.myCanvas.coords(a_vneck, 140+increment+self.__x3, 150, 145+increment+self.__x3, 163, 125+increment+self.__x3, 170, 115+increment+self.__x3, 160) #(10,0), (0,8), (-20,-5), (-15,-15)
-                self.myCanvas.coords(a_coat, 142+increment+self.__x3, 145, 152+increment+self.__x3, 155, 100+increment+self.__x3, 175, 85+increment+self.__x3, 157, 125+increment+self.__x3, 155)
-                self.__x += 5
+            elif self.__xFrame == 0 and self.__sprint == True: #Moving right SPRINTING FRAME #1
+                increment = 1*self.__xRight  #Arms and legs out
+                self.myCanvas.coords(a_head, 145+increment+self.__xLeft, 135, 170+increment+self.__xLeft, 160) #(+20, +10) difference from walking
+                self.myCanvas.coords(a_name, 138+increment+self.__xLeft, 110)
+                self.myCanvas.coords(a_torso, 140+increment+self.__xLeft, 150, 150+increment+self.__xLeft, 160, 125+increment+self.__xLeft, 170, 115+increment+self.__xLeft, 160) #(10, 0), (5,10), (-20,-5), (-15,-15)
+                self.myCanvas.coords(a_Larm, 85+increment+self.__xLeft, 150, 100+increment+self.__xLeft, 165) #(-30,0)
+                self.myCanvas.coords(a_Rarm, 175+increment+self.__xLeft, 150, 190+increment+self.__xLeft, 165) #(+30,0)
+                self.myCanvas.coords(a_Rleg, 150+increment+self.__xLeft, 170, 165+increment+self.__xLeft, 178) #(+5,-5), (+5,-5)
+                self.myCanvas.coords(a_Lleg, 110+increment+self.__xLeft, 170, 125+increment+self.__xLeft, 178) #(-5,-5), (-5,-5)
+                self.myCanvas.coords(a_bandana1, 145+increment+self.__xLeft, 150, 170+increment+self.__xLeft, 150, 170+increment+self.__xLeft, 160) #(+20,10) for all bandana
+                self.myCanvas.coords(a_bandana2, 145+increment+self.__xLeft, 150, 140+increment+self.__xLeft, 152, 140+increment+self.__xLeft, 160)
+                self.myCanvas.coords(a_bandana3, 145+increment+self.__xLeft, 150, 140+increment+self.__xLeft, 148, 140+increment+self.__xLeft, 151) 
+                self.myCanvas.coords(a_vneck, 140+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 163, 125+increment+self.__xLeft, 170, 115+increment+self.__xLeft, 160) #(10,0), (0,8), (-20,-5), (-15,-15)
+                self.myCanvas.coords(a_coat, 142+increment+self.__xLeft, 145, 152+increment+self.__xLeft, 155, 100+increment+self.__xLeft, 175, 85+increment+self.__xLeft, 157, 125+increment+self.__xLeft, 155)
+                self.__xRight += 5
                 #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
-                self.__x2 = 1
+                self.__xFrame = 1
                 
-            elif self.__x2 == 1 and self.__sprint == True:
-                increment = 1*self.__x  #Arms and legs in
-                self.myCanvas.coords(a_head, 145+increment+self.__x3, 135+5, 170+increment+self.__x3, 160+5) #(+20, +10) difference from walking
-                self.myCanvas.coords(a_name, 138+increment+self.__x3, 110)
-                self.myCanvas.coords(a_torso, 140+increment+self.__x3, 150+5, 150+increment+self.__x3, 160+5, 125+increment+self.__x3, 170+5, 115+increment+self.__x3, 160+5) #(20, 10), (5,10)
-                self.myCanvas.coords(a_Larm, 130+increment+self.__x3, 160, 145+increment+self.__x3, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-                self.myCanvas.coords(a_Rarm, 130+increment+self.__x3, 150, 145+increment+self.__x3, 175) #Arm hides behind torso (+30,0)
-                self.myCanvas.coords(a_Rleg, 145+increment+self.__x3-10, 175, 160+increment+self.__x3-10, 183)
-                self.myCanvas.coords(a_Lleg, 115+increment+self.__x3+10, 175, 130+increment+self.__x3+10, 183)
-                self.myCanvas.coords(a_bandana1, 145+increment+self.__x3, 150+5, 170+increment+self.__x3, 150+5, 170+increment+self.__x3, 160+5) #(+20,10) for all bandana
-                self.myCanvas.coords(a_bandana2, 145+increment+self.__x3, 150+5, 140+increment+self.__x3, 152+5, 140+increment+self.__x3, 155+5)
-                self.myCanvas.coords(a_bandana3, 145+increment+self.__x3, 150+5, 140+increment+self.__x3, 148+5, 140+increment+self.__x3, 151+5)
-                self.myCanvas.coords(a_vneck, 140+increment+self.__x3, 150+5, 145+increment+self.__x3, 163+5, 125+increment+self.__x3, 170+5, 115+increment+self.__x3, 160+5) #(10,0), (0,8), (-20,-5), (-15,-15)
-                self.myCanvas.coords(a_coat, 142+increment+self.__x3, 145+5, 152+increment+self.__x3, 155+5, 100+increment+self.__x3, 175+10, 85+increment+self.__x3, 157+10, 125+increment+self.__x3, 155+5)
+            elif self.__xFrame == 1 and self.__sprint == True: #Moving right SPRINTING FRAME #2
+                increment = 1*self.__xRight  #Arms and legs in
+                self.myCanvas.coords(a_head, 145+increment+self.__xLeft, 135+5, 170+increment+self.__xLeft, 160+5) #(+20, +10) difference from walking
+                self.myCanvas.coords(a_name, 138+increment+self.__xLeft, 110)
+                self.myCanvas.coords(a_torso, 140+increment+self.__xLeft, 150+5, 150+increment+self.__xLeft, 160+5, 125+increment+self.__xLeft, 170+5, 115+increment+self.__xLeft, 160+5) #(20, 10), (5,10)
+                self.myCanvas.coords(a_Larm, 130+increment+self.__xLeft, 160, 145+increment+self.__xLeft, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+                self.myCanvas.coords(a_Rarm, 130+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 175) #Arm hides behind torso (+30,0)
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xLeft-10, 175, 160+increment+self.__xLeft-10, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xLeft+10, 175, 130+increment+self.__xLeft+10, 183)
+                self.myCanvas.coords(a_bandana1, 145+increment+self.__xLeft, 150+5, 170+increment+self.__xLeft, 150+5, 170+increment+self.__xLeft, 160+5) #(+20,10) for all bandana
+                self.myCanvas.coords(a_bandana2, 145+increment+self.__xLeft, 150+5, 140+increment+self.__xLeft, 152+5, 140+increment+self.__xLeft, 155+5)
+                self.myCanvas.coords(a_bandana3, 145+increment+self.__xLeft, 150+5, 140+increment+self.__xLeft, 148+5, 140+increment+self.__xLeft, 151+5)
+                self.myCanvas.coords(a_vneck, 140+increment+self.__xLeft, 150+5, 145+increment+self.__xLeft, 163+5, 125+increment+self.__xLeft, 170+5, 115+increment+self.__xLeft, 160+5) #(10,0), (0,8), (-20,-5), (-15,-15)
+                self.myCanvas.coords(a_coat, 142+increment+self.__xLeft, 145+5, 152+increment+self.__xLeft, 155+5, 100+increment+self.__xLeft, 175+10, 85+increment+self.__xLeft, 157+10, 125+increment+self.__xLeft, 155+5)
                 #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
-                self.__x += 5
-                self.__x2 = 0
+                self.__xRight += 5
+                self.__xFrame = 0
+
+            elif self.__xFrame == 0 and self.__crouch == True: #Moving right SPRINTING FRAMe #1
+                increment = 1*self.__xRight #Arms and legs out increment+self.__xLeft 
+                self.myCanvas.coords(a_head, 125+increment+self.__xLeft, 125, 150+increment+self.__xLeft, 150)
+                self.myCanvas.coords(a_name, 138+increment+self.__xLeft, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 175, 130+increment+self.__xLeft, 175)
+                self.myCanvas.coords(a_Larm, 115+increment+self.__xLeft, 150, 130+increment+self.__xLeft, 165)
+                self.myCanvas.coords(a_Rarm, 145+increment+self.__xLeft, 150, 160+increment+self.__xLeft, 165)
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xLeft, 175, 160+increment+self.__xLeft, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xLeft, 175, 130+increment+self.__xLeft, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xLeft, 140, 150+increment+self.__xLeft, 140, 150+increment+self.__xLeft, 150)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xLeft, 140, 120+increment+self.__xLeft, 142, 120+increment+self.__xLeft, 145)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xLeft, 140, 120+increment+self.__xLeft, 138, 120+increment+self.__xLeft, 141)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xLeft, 150, 145+increment+self.__xLeft, 155, 145+increment+self.__xLeft, 175, 130+increment+self.__xLeft, 175)
+                self.myCanvas.coords(a_coat, 130+increment+self.__xLeft, 145, 142+increment+self.__xLeft, 145, 135+increment+self.__xLeft, 175, 115+increment+self.__xLeft, 177, 130+increment+self.__xLeft, 160)
+                self.__xFrame = 1
+                
+            elif self.__xFrame == 1 and self.__crouch == False: #Moving right SPRINTING FRAMe #2
+                increment = 1*self.__xRight #Arms and legs in
+                self.myCanvas.coords(a_head, 125+increment+self.__xLeft, 125+3, 150+increment+self.__xLeft, 150+3)
+                self.myCanvas.coords(a_name, 138+increment+self.__xLeft, 110)
+                self.myCanvas.coords(a_torso, 130+increment+self.__xLeft, 150+3, 145+increment+self.__xLeft, 150+3, 145+increment+self.__xLeft, 175+3, 130+increment+self.__xLeft, 175+3)
+                self.myCanvas.coords(a_Larm, 130+increment+self.__xLeft, 160, 145+increment+self.__xLeft, 175) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+                self.myCanvas.coords(a_Rarm, 130+increment+self.__xLeft, 160, 145+increment+self.__xLeft, 175) #Arm hides behind torso
+                self.myCanvas.coords(a_Rleg, 145+increment+self.__xLeft-10, 175, 160+increment+self.__xLeft-10, 183)
+                self.myCanvas.coords(a_Lleg, 115+increment+self.__xLeft+10, 175, 130+increment+self.__xLeft+10, 183)
+                self.myCanvas.coords(a_bandana1, 125+increment+self.__xLeft, 140+3, 150+increment+self.__xLeft, 140+3, 150+increment+self.__xLeft, 150+3)
+                self.myCanvas.coords(a_bandana2, 125+increment+self.__xLeft, 140+3, 120+increment+self.__xLeft, 142+3, 120+increment+self.__xLeft, 145+3)
+                self.myCanvas.coords(a_bandana3, 125+increment+self.__xLeft, 140+3, 120+increment+self.__xLeft, 138+3, 120+increment+self.__xLeft, 141+3)
+                self.myCanvas.coords(a_vneck, 130+increment+self.__xLeft, 150+3, 145+increment+self.__xLeft, 155+3, 145+increment+self.__xLeft, 175+3, 130+increment+self.__xLeft, 175+3)
+                self.myCanvas.coords(a_coat, 130+increment+self.__xLeft, 145+3, 142+increment+self.__xLeft, 145+3, 135+increment+self.__xLeft, 175+3, 115+increment+self.__xLeft, 177+6, 130+increment+self.__xLeft, 160)
+                self.__xFrame = 0
                 
             self.myCanvas.update()
 
 
         def shiftKey(event): #Sprint/Walk toggle
             print("'Shift' key pressed")
-            if self.__sprint == True:
+            if self.__sprint == True and self.__crouch == False:
                 self.__sprint = False
-            else:
+            elif self.__sprint == False and self.__crouch == False:
                 self.__sprint = True
+            else:
+                print("Cannot toggle sprint! Must be out of crouch!")
 
-        def ctrlKey(event): #Prone
+        def ctrlKey(event): #crouch
             print("'Control' key pressed")
+            if self.__crouch == True and self.__sprint == False:
+                self.__crouch = False
+            elif self.__crouch == False and self.__sprint == False:
+                self.__crouch = True
+            else:
+                print("Cannot toggle crouch! Must be out of sprint!")
+            
 
         def randomRects(num): #FOR BACKGROUND
             for i in range(0,num):
@@ -259,13 +340,15 @@ class MainFrame (Frame):
         a_bandana3 = self.myCanvas.create_polygon(125, 140, 120, 138, 120, 141, fill="black") #Knot up
 
         #KEYBINDINGS
-        self.myCanvas.bind("<Button-1>", leftClick)
+        self.myCanvas.bind("<Button-1>", leftClick) #bind.("<BUTTON_NAME>", function_call) #Functions way above
         self.myCanvas.bind("<Button-2>", scroll)
         self.myCanvas.bind("<Button-3>", rightClick)
         self.myCanvas.bind("<a>", aKey)
         self.myCanvas.bind("<d>", dKey)
         self.myCanvas.bind("<s>", sKey)
         self.myCanvas.bind("<w>", wKey)
+        self.myCanvas.bind("<q>", qKey)
+        self.myCanvas.bind("<e>", eKey)
         self.myCanvas.bind("<Shift_R>", shiftKey)
         self.myCanvas.bind("<Shift_L>", shiftKey)
         self.myCanvas.bind("<Control_L>", ctrlKey)
