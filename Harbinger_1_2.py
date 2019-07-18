@@ -10,8 +10,24 @@ canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
 
+class Sword: 
+    def __init__(self,canvas):
+        self.canvas = canvas
+
+        #I need help creating designs with a crappy sword AND an OP sword. No animating. I'll do that.
+
+        #Crappy sword
+        self.s_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Sword Name1", font=("Fixedsys", 16)) #The "s_" means sword for short.
+        self.s_blade1 = canvas.create_polygon(495, 110, 505, 110, 505, 160, 495, 160, fill="silver", outline="black") #Follow the format of naming please.
+
+        #OP Sword
+        self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Sword Name2", font=("Fixedsys", 16)) 
+        self.s_blade2 = canvas.create_polygon(995, 110, 1005, 110, 1005, 160, 995, 160, fill="silver", outline="black")
+
 class Background:
     def __init__(self,canvas):
+        self.canvas = canvas
+        
         self.a_description = canvas.create_text(0, 0, text="""Press 'd' or 'a' to move. Hold 'd' or 'a' to walk. \nPress Shift to change from walking to running. Vise-vera."""
                                                   """ \nPress Ctrl to toggle crouching."""
                                                   """ \nActions are displayed on the interpreter."""
@@ -26,7 +42,8 @@ class Background:
 
 class Player:
     def __init__(self,canvas):
-
+        self.canvas=canvas
+        
         self.__x, self.__y = 0,0 #Only one coordinate now. This coordinate is where the first shape is initialized. Not the graph.
         self.__Frame = 0 #Two frames-0 and 1. They alternate which makes the character move more lively.
         self.__sprint = False 
@@ -789,7 +806,7 @@ class Player:
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="Harbinger Titus", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="Gust", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
@@ -843,5 +860,6 @@ class Player:
         #button1.pack()
 
 background = Background(canvas)
+sword = Sword(canvas)
 player = Player(canvas)
 tk.mainloop()
