@@ -3,8 +3,11 @@
 from tkinter import *
 import random
 import time
+
+voiceOn = False #When this is true, Voice class activates.
+
 tk = Tk()
-tk.title("Harbinger - Alpha 1.8: 'Smoother' Animation Update")
+tk.title("Harbinger - Alpha 1.9: Special Ability")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
@@ -23,13 +26,110 @@ class Sword:
         self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Sword Name2", font=("Fixedsys", 16)) 
         self.s_blade2 = canvas.create_polygon(995, 110, 1005, 110, 1005, 160, 995, 160, fill="silver", outline="black")
 
+class Voice():
+    def __init__(self,canvas,player):
+        self.canvas = canvas
+        self.player = player
+
+        self.x, self.y = 0,0
+        self.vLooking = ""
+        self.counter = 0
+        self.xMove = 0
+
+        #CREATE VOICE DESIGN HERE! I WILL ANIMATE!
+        self.voice1 = canvas.create_oval(125+self.player.x, 125+self.player.y, 150+self.player.x, 150+self.player.y)
+
+        
+        canvas.move(self.voice1, -10000, -10000)
+
+    def draw(self):
+        global voiceOn
+        if voiceOn == True:
+            #print("I can hear you")
+            #MOVING LEFT NOT IN AIR. INITIALIZED VOICE
+            if self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left without sprint or crouch FRAME #1
+                canvas.coords(self.voice1, 125+self.player.x-20+self.x, 125+self.player.y, 150+self.player.x-20+self.x, 150+self.player.y)
+                self.vLooking = "Left"
+                
+            elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left without sprint or crouch FRAME #2
+                canvas.coords(self.voice1, 125+self.player.x-20+self.x, 125+3+self.player.y, 150+self.player.x-20+self.x, 150+3+self.player.y)
+                self.vLooking = "Left"
+            
+            elif self.player.Frame == 0 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left SPRINTING FRAME #1
+                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+self.player.y, 170+self.player.x-20+self.x-40, 160+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Left"
+                
+            elif self.player.Frame == 1 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left SPRINTING FRAME #2
+                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+5+self.player.y, 170+self.player.x-20+self.x-40, 160+5+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Left"
+                
+            elif self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Left" and self.vLooking == "": #Moving left CROUCHING FRAME #1
+                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+self.player.y, 170+self.player.x-20+self.x-40, 160+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Left"
+                
+            elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Left" and self.vLooking == "": #Moving left CROUCHING FRAME #2
+                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+2+self.player.y, 170+self.player.x-20+self.x-40, 160+2+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Left"
+
+            #MOVING RIGHT NOT IN AIR. INITIALIZED VOICE
+            elif self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right without sprinting or crouching FRAME #1
+                canvas.coords(self.voice1, 125+self.player.x+20+self.x, 125+self.player.y, 150+self.player.x+20+self.x, 150+self.player.y)
+                self.vLooking = "Right"
+                
+            elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right without sprinting or crouching FRAME #2
+                canvas.coords(self.voice1, 125+self.player.x+20+self.x, 125+3+self.player.y, 150+self.player.x+20+self.x, 150+3+self.player.y)
+                self.vLooking = "Right"
+            
+            elif self.player.Frame == 0 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right SPRINTING FRAME #1
+                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+self.player.y, 170+self.player.x+20+self.x, 160+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Right"
+                
+            elif self.player.Frame == 1 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right SPRINTING FRAME #2
+                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+5+self.player.y, 170+self.player.x+20+self.x, 160+5+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Right"
+                
+            elif self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Right" and self.vLooking == "": #Moving right CROUCHING FRAMe #1
+                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+self.player.y, 170+self.player.x+20+self.x, 160+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Right"
+                
+            elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Right" and self.vLooking == "": #Moving right CROUCHING FRAMe #2
+                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+2+self.player.y, 170+self.player.x+20+self.x, 160+2+self.player.y) #(+20, +10) difference from walking
+                self.vLooking = "Right"
+
+            self.counter += 1
+            
+            if self.vLooking == "Left" and self.counter == 10:
+                self.counter = 0
+                self.x -= 20
+                self.xMove = -50
+                canvas.move(self.voice1, self.xMove, 0)
+                if self.x == -520:
+                    self.x = 0
+                    voiceOn = False
+                    self.vLooking = ""
+                    canvas.move(self.voice1, -1000000, -1000000)
+                    print("Special Ready.")
+                    
+            elif self.vLooking == "Right" and self.counter == 10:
+                self.counter = 0
+                self.x += 20
+                self.xMove = 50
+                canvas.move(self.voice1, self.xMove, 0)
+                if self.x == 520:
+                    self.x = 0
+                    voiceOn = False
+                    self.vLooking = ""
+                    canvas.move(self.voice1, -1000000, -1000000)
+                    print("Special Ready.")
+    
 class Background:
     def __init__(self,canvas):
-        self.a_description = canvas.create_text(0, 0, text="""Press 'd' or 'a' to move. Hold 'd' or 'a' to walk. \nPress Shift to change from walking to running. Vise-vera."""
-                                                  """ \nPress Ctrl to toggle crouching."""
-                                                  """ \nActions are displayed on the interpreter."""
-                                                  """ \nPress 'w' to jump. Press 's' to drop down."""
-                                                  """ \nNext update will include special ablities (spacebar).""",
+        self.canvas = canvas
+        self.a_description = canvas.create_text(0, 0, text="""Press spacebar to activate special ability. You can use the ability in any stance and even mid-air!\n"""
+                                                  """There is a cooldown on the ability. I wanted to sure the orb makes it across the entire screen before activating again."""
+                                                """\nTry spamming your spacebar and checking the interpreter. Any feedback would be nice."""
+                                                """\nPlease help design two swords and the special attack (some voice particles)."""
+                                                  """ \nNext update will implement basic attacks.""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         #Creating ground1
         self.a_ground1 = canvas.create_rectangle(0,183,1500,190, outline="black",fill="green")
@@ -39,26 +139,25 @@ class Background:
 
 class Player:
     def __init__(self,canvas):
-
-        self.__x, self.__y = 0,0 #Only one coordinate now. This coordinate is where the first shape is initialized. Not the graph.
-        self.__Frame = 0 #Two frames-0 and 1. They alternate which makes the character move more lively.
-        self.__sprint = False #Pressing 'Shift' will make it True. In draw() method, will check condition.
-        self.__crouch = False #Pressing 'Ctrl' will make it True. In draw() method, will check condition.
-        self.__inAir = False #Unused. But might make the character be able to move left and right while in air later.
-        self.__looking = "Right" #Need to check what direction character is facing when moving up or down. 
-        self.__voiceOn = False #Used later
-        self.__checker = 3 #Without this, the character will slide
-        self.__checkerFrame = 0 #Changes frames Look at the bottom of the draw() method for more details.
-        self.__notMoving = True #Makes sure the char doesnt slide. This is because at the very end of the code, draw() is constantly being called in the while loop so if there is no sentinel to stop it from moving, the char would slide across the screen.
-        self.__dropping = False #Pressing 's' will make it True. In draw() method, will check condition.
-        self.__jumping = False #Pressing 'w' will make it True. In draw() method, will check condition.
-        self.__inAirCounter = 0 #Check the bottom of draw(). This allows the program to counter how many iterations I want to be in air.
-        
         self.canvas = canvas
+        
+        self.x, self.y = 0,0 #Only one coordinate now. This coordinate is where the first shape is __init__ialized. Not the graph.
+        self.Frame = 0 #Two frames-0 and 1. They alternate which makes the character move more lively.
+        self.sprint = False #Pressing 'Shift' will make it True. In draw() method, will check condition.
+        self.crouch = False #Pressing 'Ctrl' will make it True. In draw() method, will check condition.
+        self.inAir = False #Unused. But might make the character be able to move left and right while in air later.
+        self.looking = "Right" #Need to check what direction character is facing when moving up or down. 
+        self.checker = 3 #Without this, the character will slide
+        self.checkerFrame = 0 #Changes frames Look at the bottom of the draw() method for more details.
+        self.notMoving = True #Makes sure the char doesnt slide. This is because at the very end of the code, draw() is constantly being called in the while loop so if there is no sentinel to stop it from moving, the char would slide across the screen.
+        self.dropping = False #Pressing 's' will make it True. In draw() method, will check condition.
+        self.jumping = False #Pressing 'w' will make it True. In draw() method, will check condition.
+        self.inAirCounter = 0 #Check the bottom of draw(). This allows the program to counter how many iterations I want to be in air.
+        
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="Harbinger Titus", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="Overlord", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
@@ -95,626 +194,639 @@ class Player:
         #button1.pack()
 
         #KEYBINDINGS
-        self.__b_leftClick = canvas.bind("<Button-1>", self.leftClick) #bind.("<BUTTON_NAME>", function_call) #Functions way above
-        self.__b_scroll = canvas.bind("<Button-2>", self.scroll)
-        self.__b_rightClick = canvas.bind("<Button-3>", self.rightClick)
-        self.__b_a = canvas.bind("<a>", self.aKey)
-        self.__b_d = canvas.bind("<d>", self.dKey)
-        self.__b_s = canvas.bind("<s>", self.sKey)
-        self.__b_w = canvas.bind("<w>", self.wKey)
-        self.__b_q = canvas.bind("<q>", self.qKey)
-        self.__b_e = canvas.bind("<e>", self.eKey)
-        self.__b_shiftR = canvas.bind("<Shift_R>", self.shiftKey)
-        self.__b_shiftL = canvas.bind("<Shift_L>", self.shiftKey)
-        self.__b_ctrlL = canvas.bind("<Control_L>", self.ctrlKey)
-        self.__b_ctrlR = canvas.bind("<Control_R>", self.ctrlKey)
-        self.__b_space = canvas.bind("<space>", self.spaceKey)
+        self.b_leftClick = canvas.bind("<Button-1>", self.leftClick) #bind.("<BUTTON_NAME>", function_call) #Functions way above
+        self.b_scroll = canvas.bind("<Button-2>", self.scroll)
+        self.b_rightClick = canvas.bind("<Button-3>", self.rightClick)
+        self.b_a = canvas.bind("<a>", self.aKey)
+        self.b_d = canvas.bind("<d>", self.dKey)
+        self.b_s = canvas.bind("<s>", self.sKey)
+        self.b_w = canvas.bind("<w>", self.wKey)
+        self.b_q = canvas.bind("<q>", self.qKey)
+        self.b_e = canvas.bind("<e>", self.eKey)
+        self.b_shiftR = canvas.bind("<Shift_R>", self.shiftKey)
+        self.b_shiftL = canvas.bind("<Shift_L>", self.shiftKey)
+        self.b_ctrlL = canvas.bind("<Control_L>", self.ctrlKey)
+        self.b_ctrlR = canvas.bind("<Control_R>", self.ctrlKey)
+        self.b_space = canvas.bind("<space>", self.spaceKey)
 
     def draw(self): #Check the while loop way down below. This method will constantly update any movement or no movement at all.
 
-        if self.__checker == 10:
-            self.__notMoving = True
+        if self.checker == 10:
+            self.notMoving = True
+            pass
         else:
-            self.__checker += 1
+            self.checker += 1
         
-        if self.__notMoving == True and self.__dropping == False and self.__jumping == False: #If character is not moving, do nothing
+        if self.notMoving == True and self.dropping == False and self.jumping == False: #If character is not moving, do nothing
             pass
         #JUMP LEFT
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == False and self.__looking == "Left" and self.__dropping == False and self.__jumping == True: #Moving left without sprint or crouch FRAME #1
-            self.__y -= 3
-            canvas.coords(self.a_head, 125+self.__x, 125+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_Larm, 115+self.__x, 150+self.__y, 130+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rarm, 145+self.__x, 150+self.__y, 160+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rleg, 145+self.__x, 175+self.__y, 160+self.__x, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x, 175+self.__y, 130+self.__x, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x+25, 140+self.__y, 150+self.__x-25, 140+self.__y, 150+self.__x-25, 150+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x+25, 140+self.__y, 120+self.__x+35, 142+self.__y, 120+self.__x+35, 145+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x+25, 140+self.__y, 120+self.__x+35, 138+self.__y, 120+self.__x+35, 141+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 155+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_coat, 145+self.__x, 145+self.__y, 133+self.__x, 145+self.__y, 140+self.__x, 175+self.__y, 160+self.__x, 177+self.__y, 145+self.__x, 160+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left without sprint or crouch FRAME #1
+            self.y -= 3
+            canvas.coords(self.a_head, 125+self.x, 125+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_Larm, 115+self.x, 150+self.y, 130+self.x, 165+self.y)
+            canvas.coords(self.a_Rarm, 145+self.x, 150+self.y, 160+self.x, 165+self.y)
+            canvas.coords(self.a_Rleg, 145+self.x, 175+self.y, 160+self.x, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x, 175+self.y, 130+self.x, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x+25, 140+self.y, 150+self.x-25, 140+self.y, 150+self.x-25, 150+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x+25, 140+self.y, 120+self.x+35, 142+self.y, 120+self.x+35, 145+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x+25, 140+self.y, 120+self.x+35, 138+self.y, 120+self.x+35, 141+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 155+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_coat, 145+self.x, 145+self.y, 133+self.x, 145+self.y, 140+self.x, 175+self.y, 160+self.x, 177+self.y, 145+self.x, 160+self.y)
 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == False and self.__looking == "Left" and self.__dropping == False and self.__jumping == True: #Moving left without sprint or crouch FRAME #2
-            self.__y -= 3
-            canvas.coords(self.a_head, 125+self.__x, 125+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x+25, 140+3+self.__y, 150+self.__x-25, 140+3+self.__y, 150+self.__x-25, 150+3+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x+25, 140+3+self.__y, 120+self.__x+35, 142+3+self.__y, 120+self.__x+35, 145+3+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x+25, 140+3+self.__y, 120+self.__x+35, 138+3+self.__y, 120+self.__x+35, 141+3+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 155+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_coat, 145+self.__x, 145+3+self.__y, 133+self.__x, 145+3+self.__y, 140+self.__x, 175+3+self.__y, 160+self.__x, 177+6+self.__y, 145+self.__x, 160+3+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left without sprint or crouch FRAME #2
+            self.y -= 3
+            canvas.coords(self.a_head, 125+self.x, 125+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x+25, 140+3+self.y, 150+self.x-25, 140+3+self.y, 150+self.x-25, 150+3+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x+25, 140+3+self.y, 120+self.x+35, 142+3+self.y, 120+self.x+35, 145+3+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == True and self.__crouch == False and self.__looking == "Left" and self.__dropping == False and self.__jumping == True: #Moving left SPRINTING FRAME #1
-            self.__y -= 3    
-            canvas.coords(self.a_head, 145+self.__x-40, 135+self.__y, 170+self.__x-40, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+self.__y, 150+self.__x-24, 160+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 85+self.__x+106, 150+self.__y, 100+self.__x+76, 165+self.__y) #(-30,0)
-            canvas.coords(self.a_Rarm, 175+self.__x-74, 150+self.__y, 190+self.__x-104, 165+self.__y) #(+30,0)
-            canvas.coords(self.a_Rleg, 150+self.__x-24, 170+self.__y, 165+self.__x-54, 178+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 110+self.__x+56, 170+self.__y, 125+self.__x+26, 178+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+self.__y, 170+self.__x-64, 150+self.__y, 170+self.__x-64, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 152+self.__y, 140+self.__x-4, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 148+self.__y, 140+self.__x-4, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+self.__y, 145+self.__x-14, 163+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+self.__y, 152+self.__x-28, 155+self.__y, 100+self.__x+76, 175+self.__y, 85+self.__x+104, 157+self.__y, 125+self.__x+26, 155+self.__y)   
+        elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left SPRINTING FRAME #1
+            self.y -= 3    
+            canvas.coords(self.a_head, 145+self.x-40, 135+self.y, 170+self.x-40, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+self.y, 150+self.x-24, 160+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 85+self.x+106, 150+self.y, 100+self.x+76, 165+self.y) #(-30,0)
+            canvas.coords(self.a_Rarm, 175+self.x-74, 150+self.y, 190+self.x-104, 165+self.y) #(+30,0)
+            canvas.coords(self.a_Rleg, 150+self.x-24, 170+self.y, 165+self.x-54, 178+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 110+self.x+56, 170+self.y, 125+self.x+26, 178+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+self.y, 170+self.x-64, 150+self.y, 170+self.x-64, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)   
 
-        elif self.__Frame == 1 and self.__sprint == True and self.__crouch == False and self.__looking == "Left" and self.__dropping == False and self.__jumping == True: #Moving left SPRINTING FRAME #2
-            self.__y -= 3    
-            canvas.coords(self.a_head, 145+self.__x-40, 135+5+self.__y, 170+self.__x-40, 160+5+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+5+self.__y, 150+self.__x-24, 160+5+self.__y, 125+self.__x+26, 170+5+self.__y, 115+self.__x+46, 160+5+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+5+self.__y, 170+self.__x-64, 150+5+self.__y, 170+self.__x-64, 160+5+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+5+self.__y, 140+self.__x-4, 152+5+self.__y, 140+self.__x-4, 160+5+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+5+self.__y, 140+self.__x-4, 148+5+self.__y, 140+self.__x-4, 151+5+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+5+self.__y, 145+self.__x-14, 163+5+self.__y, 125+self.__x+26, 170+5+self.__y, 115+self.__x+46, 160+5+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+5+self.__y, 152+self.__x-28, 155+5+self.__y, 100+self.__x+76, 175+10+self.__y, 85+self.__x+104, 157+10+self.__y, 125+self.__x+26, 155+5+self.__y)
+        elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left SPRINTING FRAME #2
+            self.y -= 3    
+            canvas.coords(self.a_head, 145+self.x-40, 135+5+self.y, 170+self.x-40, 160+5+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+5+self.y, 150+self.x-24, 160+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+5+self.y, 170+self.x-64, 150+5+self.y, 170+self.x-64, 160+5+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+5+self.y, 140+self.x-4, 152+5+self.y, 140+self.x-4, 160+5+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+5+self.y, 140+self.x-4, 148+5+self.y, 140+self.x-4, 151+5+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+5+self.y, 145+self.x-14, 163+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+5+self.y, 152+self.x-28, 155+5+self.y, 100+self.x+76, 175+10+self.y, 85+self.x+104, 157+10+self.y, 125+self.x+26, 155+5+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == True and self.__looking == "Left" and self.__dropping == False and self.__jumping == True: #Moving left CROUCHING FRAME #1
-            self.__y -= 3
-            canvas.coords(self.a_head, 145+self.__x-40, 135+self.__y, 170+self.__x-40, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+self.__y, 150+self.__x-24, 160+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-5, 175+self.__y, 160+self.__x-5, 183+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 115+self.__x+5, 175+self.__y, 130+self.__x+5, 183+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+self.__y, 170+self.__x-64, 150+self.__y, 170+self.__x-64, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 152+self.__y, 140+self.__x-4, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 148+self.__y, 140+self.__x-4, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+self.__y, 145+self.__x-14, 163+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+self.__y, 152+self.__x-28, 155+self.__y, 85+self.__x+76, 183+self.__y, 80+self.__x+104, 183+self.__y, 125+self.__x+26, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left CROUCHING FRAME #1
+            self.y -= 3
+            canvas.coords(self.a_head, 145+self.x-40, 135+self.y, 170+self.x-40, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+self.y, 150+self.x-24, 160+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-5, 175+self.y, 160+self.x-5, 183+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 115+self.x+5, 175+self.y, 130+self.x+5, 183+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+self.y, 170+self.x-64, 150+self.y, 170+self.x-64, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 85+self.x+76, 183+self.y, 80+self.x+104, 183+self.y, 125+self.x+26, 155+self.y)
             
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == True and self.__looking == "Left" and self.__dropping == False and self.__jumping == True: #Moving left CROUCHING FRAME #2
-            self.__y -= 3
-            canvas.coords(self.a_head, 145+self.__x-40, 135+2+self.__y, 170+self.__x-40, 160+2+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+2+self.__y, 150+self.__x-24, 160+2+self.__y, 125+self.__x+26, 170+2+self.__y, 115+self.__x+46, 160+2+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x-10, 160+2+self.__y, 145+self.__x-10, 175+2+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x-10, 160+2+self.__y, 145+self.__x-10, 175+2+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+2+self.__y, 170+self.__x-64, 150+2+self.__y, 170+self.__x-64, 160+2+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+2+self.__y, 140+self.__x-4, 152+2+self.__y, 140+self.__x-4, 160+2+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+2+self.__y, 140+self.__x-4, 148+2+self.__y, 140+self.__x-4, 151+2+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+2+self.__y, 145+self.__x-14, 163+2+self.__y, 125+self.__x+26, 170+2+self.__y, 115+self.__x+46, 160+2+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+2+self.__y, 152+self.__x-28, 155+2+self.__y, 85+self.__x+76, 183+2+self.__y, 80+self.__x+104, 183+2+self.__y, 125+self.__x+26, 155+2+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left CROUCHING FRAME #2
+            self.y -= 3
+            canvas.coords(self.a_head, 145+self.x-40, 135+2+self.y, 170+self.x-40, 160+2+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+2+self.y, 150+self.x-24, 160+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x-10, 160+2+self.y, 145+self.x-10, 175+2+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x-10, 160+2+self.y, 145+self.x-10, 175+2+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+2+self.y, 170+self.x-64, 150+2+self.y, 170+self.x-64, 160+2+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+2+self.y, 140+self.x-4, 152+2+self.y, 140+self.x-4, 160+2+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+2+self.y, 140+self.x-4, 148+2+self.y, 140+self.x-4, 151+2+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+2+self.y, 145+self.x-14, 163+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+2+self.y, 152+self.x-28, 155+2+self.y, 85+self.x+76, 183+2+self.y, 80+self.x+104, 183+2+self.y, 125+self.x+26, 155+2+self.y)
 
         #JUMP RIGHT
                     
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == False and self.__dropping == False and self.__jumping == True: #Moving right without sprinting or crouching FRAME #1
-            self.__y -= 3 #Arms and legs out self.__x    
-            canvas.coords(self.a_head, 125+self.__x, 125+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_Larm, 115+self.__x, 150+self.__y, 130+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rarm, 145+self.__x, 150+self.__y, 160+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rleg, 145+self.__x, 175+self.__y, 160+self.__x, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x, 175+self.__y, 130+self.__x, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x, 140+self.__y, 150+self.__x, 140+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x, 140+self.__y, 120+self.__x, 142+self.__y, 120+self.__x, 145+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x, 140+self.__y, 120+self.__x, 138+self.__y, 120+self.__x, 141+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 150+self.__y, 145+self.__x, 155+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_coat, 130+self.__x, 145+self.__y, 142+self.__x, 145+self.__y, 135+self.__x, 175+self.__y, 115+self.__x, 177+self.__y, 130+self.__x, 160+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right without sprinting or crouching FRAME #1
+            self.y -= 3 #Arms and legs out self.x    
+            canvas.coords(self.a_head, 125+self.x, 125+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_Larm, 115+self.x, 150+self.y, 130+self.x, 165+self.y)
+            canvas.coords(self.a_Rarm, 145+self.x, 150+self.y, 160+self.x, 165+self.y)
+            canvas.coords(self.a_Rleg, 145+self.x, 175+self.y, 160+self.x, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x, 175+self.y, 130+self.x, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x, 140+self.y, 150+self.x, 140+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x, 140+self.y, 120+self.x, 142+self.y, 120+self.x, 145+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x, 140+self.y, 120+self.x, 138+self.y, 120+self.x, 141+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 150+self.y, 145+self.x, 155+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_coat, 130+self.x, 145+self.y, 142+self.x, 145+self.y, 135+self.x, 175+self.y, 115+self.x, 177+self.y, 130+self.x, 160+self.y)
                
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == False and self.__dropping == False and self.__jumping == True: #Moving right without sprinting or crouching FRAME #2
-            self.__y -= 3    
-            canvas.coords(self.a_head, 125+self.__x, 125+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x, 140+3+self.__y, 150+self.__x, 140+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x, 140+3+self.__y, 120+self.__x, 142+3+self.__y, 120+self.__x, 145+3+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x, 140+3+self.__y, 120+self.__x, 138+3+self.__y, 120+self.__x, 141+3+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 150+3+self.__y, 145+self.__x, 155+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_coat, 130+self.__x, 145+3+self.__y, 142+self.__x, 145+3+self.__y, 135+self.__x, 175+3+self.__y, 115+self.__x, 177+6+self.__y, 130+self.__x, 160+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right without sprinting or crouching FRAME #2
+            self.y -= 3    
+            canvas.coords(self.a_head, 125+self.x, 125+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x, 140+3+self.y, 150+self.x, 140+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x, 140+3+self.y, 120+self.x, 142+3+self.y, 120+self.x, 145+3+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == True and self.__crouch == False and self.__dropping == False and self.__jumping == True: #Moving right SPRINTING FRAME #1
-            self.__y -= 3    
-            canvas.coords(self.a_head, 145+self.__x, 135+self.__y, 170+self.__x, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+self.__y, 150+self.__x, 160+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 85+self.__x, 150+self.__y, 100+self.__x, 165+self.__y) #(-30,0)
-            canvas.coords(self.a_Rarm, 175+self.__x, 150+self.__y, 190+self.__x, 165+self.__y) #(+30,0)
-            canvas.coords(self.a_Rleg, 150+self.__x, 170+self.__y, 165+self.__x, 178+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 110+self.__x, 170+self.__y, 125+self.__x, 178+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+self.__y, 170+self.__x, 150+self.__y, 170+self.__x, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+self.__y, 140+self.__x, 152+self.__y, 140+self.__x, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+self.__y, 140+self.__x, 148+self.__y, 140+self.__x, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+self.__y, 145+self.__x, 163+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+self.__y, 152+self.__x, 155+self.__y, 100+self.__x, 175+self.__y, 85+self.__x, 157+self.__y, 125+self.__x, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right SPRINTING FRAME #1
+            self.y -= 3    
+            canvas.coords(self.a_head, 145+self.x, 135+self.y, 170+self.x, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+self.y, 150+self.x, 160+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 85+self.x, 150+self.y, 100+self.x, 165+self.y) #(-30,0)
+            canvas.coords(self.a_Rarm, 175+self.x, 150+self.y, 190+self.x, 165+self.y) #(+30,0)
+            canvas.coords(self.a_Rleg, 150+self.x, 170+self.y, 165+self.x, 178+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 110+self.x, 170+self.y, 125+self.x, 178+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+self.y, 170+self.x, 150+self.y, 170+self.x, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == True and self.__crouch == False and self.__dropping == False and self.__jumping == True: #Moving right SPRINTING FRAME #2
-            self.__y -= 3    
-            canvas.coords(self.a_head, 145+self.__x, 135+5+self.__y, 170+self.__x, 160+5+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+5+self.__y, 150+self.__x, 160+5+self.__y, 125+self.__x, 170+5+self.__y, 115+self.__x, 160+5+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+5+self.__y, 170+self.__x, 150+5+self.__y, 170+self.__x, 160+5+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+5+self.__y, 140+self.__x, 152+5+self.__y, 140+self.__x, 155+5+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+5+self.__y, 140+self.__x, 148+5+self.__y, 140+self.__x, 151+5+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+5+self.__y, 145+self.__x, 163+5+self.__y, 125+self.__x, 170+5+self.__y, 115+self.__x, 160+5+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+5+self.__y, 152+self.__x, 155+5+self.__y, 100+self.__x, 175+10+self.__y, 85+self.__x, 157+10+self.__y, 125+self.__x, 155+5+self.__y)
+        elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right SPRINTING FRAME #2
+            self.y -= 3    
+            canvas.coords(self.a_head, 145+self.x, 135+5+self.y, 170+self.x, 160+5+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+5+self.y, 150+self.x, 160+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+5+self.y, 170+self.x, 150+5+self.y, 170+self.x, 160+5+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+5+self.y, 140+self.x, 152+5+self.y, 140+self.x, 155+5+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+5+self.y, 140+self.x, 148+5+self.y, 140+self.x, 151+5+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+5+self.y, 145+self.x, 163+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+5+self.y, 152+self.x, 155+5+self.y, 100+self.x, 175+10+self.y, 85+self.x, 157+10+self.y, 125+self.x, 155+5+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == True and self.__dropping == False and self.__jumping == True: #Moving right CROUCHING FRAMe #1
-            self.__y -= 3    
-            canvas.coords(self.a_head, 145+self.__x, 135+self.__y, 170+self.__x, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+self.__y, 150+self.__x, 160+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-5, 175+self.__y, 160+self.__x-5, 183+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 115+self.__x+5, 175+self.__y, 130+self.__x+5, 183+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+self.__y, 170+self.__x, 150+self.__y, 170+self.__x, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+self.__y, 140+self.__x, 152+self.__y, 140+self.__x, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+self.__y, 140+self.__x, 148+self.__y, 140+self.__x, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+self.__y, 145+self.__x, 163+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+self.__y, 152+self.__x, 155+self.__y, 115+self.__x, 183+self.__y, 92+self.__x, 183+self.__y, 125+self.__x, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.dropping == False and self.jumping == True: #Moving right CROUCHING FRAMe #1
+            self.y -= 3    
+            canvas.coords(self.a_head, 145+self.x, 135+self.y, 170+self.x, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+self.y, 150+self.x, 160+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-5, 175+self.y, 160+self.x-5, 183+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 115+self.x+5, 175+self.y, 130+self.x+5, 183+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+self.y, 170+self.x, 150+self.y, 170+self.x, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 115+self.x, 183+self.y, 92+self.x, 183+self.y, 125+self.x, 155+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == True and self.__dropping == False and self.__jumping == True: #Moving right CROUCHING FRAMe #2
-            self.__y -= 3
-            canvas.coords(self.a_head, 145+self.__x, 135+2+self.__y, 170+self.__x, 160+2+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+2+self.__y, 150+self.__x, 160+2+self.__y, 125+self.__x, 170+2+self.__y, 115+self.__x, 160+2+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x+10, 160+2+self.__y, 145+self.__x+10, 175+2+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+10, 160+2+self.__y, 145+self.__x+10, 175+2+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+2+self.__y, 170+self.__x, 150+2+self.__y, 170+self.__x, 160+2+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+2+self.__y, 140+self.__x, 152+2+self.__y, 140+self.__x, 155+2+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+2+self.__y, 140+self.__x, 148+2+self.__y, 140+self.__x, 151+2+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+2+self.__y, 145+self.__x, 163+2+self.__y, 125+self.__x, 170+2+self.__y, 115+self.__x, 160+2+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+2+self.__y, 152+self.__x, 155+2+self.__y, 115+self.__x, 183+2+self.__y, 92+self.__x, 183+2+self.__y, 125+self.__x, 155+2+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.dropping == False and self.jumping == True: #Moving right CROUCHING FRAMe #2
+            self.y -= 3
+            canvas.coords(self.a_head, 145+self.x, 135+2+self.y, 170+self.x, 160+2+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+2+self.y, 150+self.x, 160+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x+10, 160+2+self.y, 145+self.x+10, 175+2+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+10, 160+2+self.y, 145+self.x+10, 175+2+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+2+self.y, 170+self.x, 150+2+self.y, 170+self.x, 160+2+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+2+self.y, 140+self.x, 152+2+self.y, 140+self.x, 155+2+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+2+self.y, 140+self.x, 148+2+self.y, 140+self.x, 151+2+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+2+self.y, 145+self.x, 163+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)
 
         #DROPPING LEFT
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == False and self.__looking == "Left" and self.__dropping == True: #Moving left without sprint or crouch FRAME #1
-            self.__y += 3
-            canvas.coords(self.a_head, 125+self.__x, 125+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_Larm, 115+self.__x, 150+self.__y, 130+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rarm, 145+self.__x, 150+self.__y, 160+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rleg, 145+self.__x, 175+self.__y, 160+self.__x, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x, 175+self.__y, 130+self.__x, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x+25, 140+self.__y, 150+self.__x-25, 140+self.__y, 150+self.__x-25, 150+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x+25, 140+self.__y, 120+self.__x+35, 142+self.__y, 120+self.__x+35, 145+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x+25, 140+self.__y, 120+self.__x+35, 138+self.__y, 120+self.__x+35, 141+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 155+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_coat, 145+self.__x, 145+self.__y, 133+self.__x, 145+self.__y, 140+self.__x, 175+self.__y, 160+self.__x, 177+self.__y, 145+self.__x, 160+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left without sprint or crouch FRAME #1
+            self.y += 3
+            canvas.coords(self.a_head, 125+self.x, 125+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_Larm, 115+self.x, 150+self.y, 130+self.x, 165+self.y)
+            canvas.coords(self.a_Rarm, 145+self.x, 150+self.y, 160+self.x, 165+self.y)
+            canvas.coords(self.a_Rleg, 145+self.x, 175+self.y, 160+self.x, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x, 175+self.y, 130+self.x, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x+25, 140+self.y, 150+self.x-25, 140+self.y, 150+self.x-25, 150+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x+25, 140+self.y, 120+self.x+35, 142+self.y, 120+self.x+35, 145+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x+25, 140+self.y, 120+self.x+35, 138+self.y, 120+self.x+35, 141+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 155+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_coat, 145+self.x, 145+self.y, 133+self.x, 145+self.y, 140+self.x, 175+self.y, 160+self.x, 177+self.y, 145+self.x, 160+self.y)
   
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == False and self.__looking == "Left" and self.__dropping == True: #Moving left without sprint or crouch FRAME #2
-            self.__y += 3    
-            canvas.coords(self.a_head, 125+self.__x, 125+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x+25, 140+3+self.__y, 150+self.__x-25, 140+3+self.__y, 150+self.__x-25, 150+3+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x+25, 140+3+self.__y, 120+self.__x+35, 142+3+self.__y, 120+self.__x+35, 145+3+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x+25, 140+3+self.__y, 120+self.__x+35, 138+3+self.__y, 120+self.__x+35, 141+3+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 155+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_coat, 145+self.__x, 145+3+self.__y, 133+self.__x, 145+3+self.__y, 140+self.__x, 175+3+self.__y, 160+self.__x, 177+6+self.__y, 145+self.__x, 160+3+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left without sprint or crouch FRAME #2
+            self.y += 3    
+            canvas.coords(self.a_head, 125+self.x, 125+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x+25, 140+3+self.y, 150+self.x-25, 140+3+self.y, 150+self.x-25, 150+3+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x+25, 140+3+self.y, 120+self.x+35, 142+3+self.y, 120+self.x+35, 145+3+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == True and self.__crouch == False and self.__looking == "Left" and self.__dropping == True: #Moving left SPRINTING FRAME #1
-            self.__y += 3    
-            canvas.coords(self.a_head, 145+self.__x-40, 135+self.__y, 170+self.__x-40, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+self.__y, 150+self.__x-24, 160+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 85+self.__x+106, 150+self.__y, 100+self.__x+76, 165+self.__y) #(-30,0)
-            canvas.coords(self.a_Rarm, 175+self.__x-74, 150+self.__y, 190+self.__x-104, 165+self.__y) #(+30,0)
-            canvas.coords(self.a_Rleg, 150+self.__x-24, 170+self.__y, 165+self.__x-54, 178+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 110+self.__x+56, 170+self.__y, 125+self.__x+26, 178+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+self.__y, 170+self.__x-64, 150+self.__y, 170+self.__x-64, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 152+self.__y, 140+self.__x-4, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 148+self.__y, 140+self.__x-4, 151+self.__y) 
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+self.__y, 145+self.__x-14, 163+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+self.__y, 152+self.__x-28, 155+self.__y, 100+self.__x+76, 175+self.__y, 85+self.__x+104, 157+self.__y, 125+self.__x+26, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left SPRINTING FRAME #1
+            self.y += 3    
+            canvas.coords(self.a_head, 145+self.x-40, 135+self.y, 170+self.x-40, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+self.y, 150+self.x-24, 160+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 85+self.x+106, 150+self.y, 100+self.x+76, 165+self.y) #(-30,0)
+            canvas.coords(self.a_Rarm, 175+self.x-74, 150+self.y, 190+self.x-104, 165+self.y) #(+30,0)
+            canvas.coords(self.a_Rleg, 150+self.x-24, 170+self.y, 165+self.x-54, 178+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 110+self.x+56, 170+self.y, 125+self.x+26, 178+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+self.y, 170+self.x-64, 150+self.y, 170+self.x-64, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y) 
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == True and self.__crouch == False and self.__looking == "Left" and self.__dropping == True: #Moving left SPRINTING FRAME #2
-            self.__y += 3    
-            canvas.coords(self.a_head, 145+self.__x-40, 135+5+self.__y, 170+self.__x-40, 160+5+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+5+self.__y, 150+self.__x-24, 160+5+self.__y, 125+self.__x+26, 170+5+self.__y, 115+self.__x+46, 160+5+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+5+self.__y, 170+self.__x-64, 150+5+self.__y, 170+self.__x-64, 160+5+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+5+self.__y, 140+self.__x-4, 152+5+self.__y, 140+self.__x-4, 160+5+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+5+self.__y, 140+self.__x-4, 148+5+self.__y, 140+self.__x-4, 151+5+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+5+self.__y, 145+self.__x-14, 163+5+self.__y, 125+self.__x+26, 170+5+self.__y, 115+self.__x+46, 160+5+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+5+self.__y, 152+self.__x-28, 155+5+self.__y, 100+self.__x+76, 175+10+self.__y, 85+self.__x+104, 157+10+self.__y, 125+self.__x+26, 155+5+self.__y)
+        elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left SPRINTING FRAME #2
+            self.y += 3    
+            canvas.coords(self.a_head, 145+self.x-40, 135+5+self.y, 170+self.x-40, 160+5+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+5+self.y, 150+self.x-24, 160+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+5+self.y, 170+self.x-64, 150+5+self.y, 170+self.x-64, 160+5+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+5+self.y, 140+self.x-4, 152+5+self.y, 140+self.x-4, 160+5+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+5+self.y, 140+self.x-4, 148+5+self.y, 140+self.x-4, 151+5+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+5+self.y, 145+self.x-14, 163+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+5+self.y, 152+self.x-28, 155+5+self.y, 100+self.x+76, 175+10+self.y, 85+self.x+104, 157+10+self.y, 125+self.x+26, 155+5+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == True and self.__looking == "Left" and self.__dropping == True: #Moving left CROUCHING FRAME #1
-            self.__y += 3
-            canvas.coords(self.a_head, 145+self.__x-40, 135+self.__y, 170+self.__x-40, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+self.__y, 150+self.__x-24, 160+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-5, 175+self.__y, 160+self.__x-5, 183+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 115+self.__x+5, 175+self.__y, 130+self.__x+5, 183+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+self.__y, 170+self.__x-64, 150+self.__y, 170+self.__x-64, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 152+self.__y, 140+self.__x-4, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 148+self.__y, 140+self.__x-4, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+self.__y, 145+self.__x-14, 163+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+self.__y, 152+self.__x-28, 155+self.__y, 85+self.__x+76, 183+self.__y, 80+self.__x+104, 183+self.__y, 125+self.__x+26, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == True: #Moving left CROUCHING FRAME #1
+            self.y += 3
+            canvas.coords(self.a_head, 145+self.x-40, 135+self.y, 170+self.x-40, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+self.y, 150+self.x-24, 160+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-5, 175+self.y, 160+self.x-5, 183+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 115+self.x+5, 175+self.y, 130+self.x+5, 183+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+self.y, 170+self.x-64, 150+self.y, 170+self.x-64, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 85+self.x+76, 183+self.y, 80+self.x+104, 183+self.y, 125+self.x+26, 155+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == True and self.__looking == "Left" and self.__dropping == True: #Moving left CROUCHING FRAME #2
-            self.__y += 3
-            canvas.coords(self.a_head, 145+self.__x-40, 135+2+self.__y, 170+self.__x-40, 160+2+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+2+self.__y, 150+self.__x-24, 160+2+self.__y, 125+self.__x+26, 170+2+self.__y, 115+self.__x+46, 160+2+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x-10, 160+2+self.__y, 145+self.__x-10, 175+2+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x-10, 160+2+self.__y, 145+self.__x-10, 175+2+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+2+self.__y, 170+self.__x-64, 150+2+self.__y, 170+self.__x-64, 160+2+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+2+self.__y, 140+self.__x-4, 152+2+self.__y, 140+self.__x-4, 160+2+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+2+self.__y, 140+self.__x-4, 148+2+self.__y, 140+self.__x-4, 151+2+self.__y) 
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+2+self.__y, 145+self.__x-14, 163+2+self.__y, 125+self.__x+26, 170+2+self.__y, 115+self.__x+46, 160+2+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+2+self.__y, 152+self.__x-28, 155+2+self.__y, 85+self.__x+76, 183+2+self.__y, 80+self.__x+104, 183+2+self.__y, 125+self.__x+26, 155+2+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == True: #Moving left CROUCHING FRAME #2
+            self.y += 3
+            canvas.coords(self.a_head, 145+self.x-40, 135+2+self.y, 170+self.x-40, 160+2+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+2+self.y, 150+self.x-24, 160+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x-10, 160+2+self.y, 145+self.x-10, 175+2+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x-10, 160+2+self.y, 145+self.x-10, 175+2+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+2+self.y, 170+self.x-64, 150+2+self.y, 170+self.x-64, 160+2+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+2+self.y, 140+self.x-4, 152+2+self.y, 140+self.x-4, 160+2+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+2+self.y, 140+self.x-4, 148+2+self.y, 140+self.x-4, 151+2+self.y) 
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+2+self.y, 145+self.x-14, 163+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+2+self.y, 152+self.x-28, 155+2+self.y, 85+self.x+76, 183+2+self.y, 80+self.x+104, 183+2+self.y, 125+self.x+26, 155+2+self.y)
         #Moving Right DROPPING       
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == False and self.__dropping == True: #Moving right without sprinting or crouching FRAME #1
-            self.__y += 3 #Arms and legs out self.__x    
-            canvas.coords(self.a_head, 125+self.__x, 125+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_Larm, 115+self.__x, 150+self.__y, 130+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rarm, 145+self.__x, 150+self.__y, 160+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rleg, 145+self.__x, 175+self.__y, 160+self.__x, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x, 175+self.__y, 130+self.__x, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x, 140+self.__y, 150+self.__x, 140+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x, 140+self.__y, 120+self.__x, 142+self.__y, 120+self.__x, 145+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x, 140+self.__y, 120+self.__x, 138+self.__y, 120+self.__x, 141+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 150+self.__y, 145+self.__x, 155+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_coat, 130+self.__x, 145+self.__y, 142+self.__x, 145+self.__y, 135+self.__x, 175+self.__y, 115+self.__x, 177+self.__y, 130+self.__x, 160+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.dropping == True: #Moving right without sprinting or crouching FRAME #1
+            self.y += 3 #Arms and legs out self.x    
+            canvas.coords(self.a_head, 125+self.x, 125+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_Larm, 115+self.x, 150+self.y, 130+self.x, 165+self.y)
+            canvas.coords(self.a_Rarm, 145+self.x, 150+self.y, 160+self.x, 165+self.y)
+            canvas.coords(self.a_Rleg, 145+self.x, 175+self.y, 160+self.x, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x, 175+self.y, 130+self.x, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x, 140+self.y, 150+self.x, 140+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x, 140+self.y, 120+self.x, 142+self.y, 120+self.x, 145+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x, 140+self.y, 120+self.x, 138+self.y, 120+self.x, 141+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 150+self.y, 145+self.x, 155+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_coat, 130+self.x, 145+self.y, 142+self.x, 145+self.y, 135+self.x, 175+self.y, 115+self.x, 177+self.y, 130+self.x, 160+self.y)
                
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == False and self.__dropping == True: #Moving right without sprinting or crouching FRAME #2
-            self.__y += 3    
-            canvas.coords(self.a_head, 125+self.__x, 125+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x, 140+3+self.__y, 150+self.__x, 140+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x, 140+3+self.__y, 120+self.__x, 142+3+self.__y, 120+self.__x, 145+3+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x, 140+3+self.__y, 120+self.__x, 138+3+self.__y, 120+self.__x, 141+3+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 150+3+self.__y, 145+self.__x, 155+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_coat, 130+self.__x, 145+3+self.__y, 142+self.__x, 145+3+self.__y, 135+self.__x, 175+3+self.__y, 115+self.__x, 177+6+self.__y, 130+self.__x, 160+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.dropping == True: #Moving right without sprinting or crouching FRAME #2
+            self.y += 3    
+            canvas.coords(self.a_head, 125+self.x, 125+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x, 140+3+self.y, 150+self.x, 140+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x, 140+3+self.y, 120+self.x, 142+3+self.y, 120+self.x, 145+3+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
             
-        elif self.__Frame == 0 and self.__sprint == True and self.__crouch == False and self.__dropping == True: #Moving right SPRINTING FRAME #1
-            self.__y += 3    
-            canvas.coords(self.a_head, 145+self.__x, 135+self.__y, 170+self.__x, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+self.__y, 150+self.__x, 160+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 85+self.__x, 150+self.__y, 100+self.__x, 165+self.__y) #(-30,0)
-            canvas.coords(self.a_Rarm, 175+self.__x, 150+self.__y, 190+self.__x, 165+self.__y) #(+30,0)
-            canvas.coords(self.a_Rleg, 150+self.__x, 170+self.__y, 165+self.__x, 178+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 110+self.__x, 170+self.__y, 125+self.__x, 178+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+self.__y, 170+self.__x, 150+self.__y, 170+self.__x, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+self.__y, 140+self.__x, 152+self.__y, 140+self.__x, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+self.__y, 140+self.__x, 148+self.__y, 140+self.__x, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+self.__y, 145+self.__x, 163+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+self.__y, 152+self.__x, 155+self.__y, 100+self.__x, 175+self.__y, 85+self.__x, 157+self.__y, 125+self.__x, 155+self.__y)             
-        elif self.__Frame == 1 and self.__sprint == True and self.__crouch == False and self.__dropping == True: #Moving right SPRINTING FRAME #2
-            self.__y += 3    
-            canvas.coords(self.a_head, 145+self.__x, 135+5+self.__y, 170+self.__x, 160+5+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+5+self.__y, 150+self.__x, 160+5+self.__y, 125+self.__x, 170+5+self.__y, 115+self.__x, 160+5+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+5+self.__y, 170+self.__x, 150+5+self.__y, 170+self.__x, 160+5+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+5+self.__y, 140+self.__x, 152+5+self.__y, 140+self.__x, 155+5+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+5+self.__y, 140+self.__x, 148+5+self.__y, 140+self.__x, 151+5+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+5+self.__y, 145+self.__x, 163+5+self.__y, 125+self.__x, 170+5+self.__y, 115+self.__x, 160+5+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+5+self.__y, 152+self.__x, 155+5+self.__y, 100+self.__x, 175+10+self.__y, 85+self.__x, 157+10+self.__y, 125+self.__x, 155+5+self.__y)
+        elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.dropping == True: #Moving right SPRINTING FRAME #1
+            self.y += 3    
+            canvas.coords(self.a_head, 145+self.x, 135+self.y, 170+self.x, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+self.y, 150+self.x, 160+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 85+self.x, 150+self.y, 100+self.x, 165+self.y) #(-30,0)
+            canvas.coords(self.a_Rarm, 175+self.x, 150+self.y, 190+self.x, 165+self.y) #(+30,0)
+            canvas.coords(self.a_Rleg, 150+self.x, 170+self.y, 165+self.x, 178+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 110+self.x, 170+self.y, 125+self.x, 178+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+self.y, 170+self.x, 150+self.y, 170+self.x, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)             
+        elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.dropping == True: #Moving right SPRINTING FRAME #2
+            self.y += 3    
+            canvas.coords(self.a_head, 145+self.x, 135+5+self.y, 170+self.x, 160+5+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+5+self.y, 150+self.x, 160+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+5+self.y, 170+self.x, 150+5+self.y, 170+self.x, 160+5+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+5+self.y, 140+self.x, 152+5+self.y, 140+self.x, 155+5+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+5+self.y, 140+self.x, 148+5+self.y, 140+self.x, 151+5+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+5+self.y, 145+self.x, 163+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+5+self.y, 152+self.x, 155+5+self.y, 100+self.x, 175+10+self.y, 85+self.x, 157+10+self.y, 125+self.x, 155+5+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == True and self.__dropping == True: #Moving right CROUCHING FRAMe #1
-            self.__y += 3    
-            canvas.coords(self.a_head, 145+self.__x, 135+self.__y, 170+self.__x, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+self.__y, 150+self.__x, 160+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-5, 175+self.__y, 160+self.__x-5, 183+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 115+self.__x+5, 175+self.__y, 130+self.__x+5, 183+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+self.__y, 170+self.__x, 150+self.__y, 170+self.__x, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+self.__y, 140+self.__x, 152+self.__y, 140+self.__x, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+self.__y, 140+self.__x, 148+self.__y, 140+self.__x, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+self.__y, 145+self.__x, 163+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+self.__y, 152+self.__x, 155+self.__y, 115+self.__x, 183+self.__y, 92+self.__x, 183+self.__y, 125+self.__x, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.dropping == True: #Moving right CROUCHING FRAMe #1
+            self.y += 3    
+            canvas.coords(self.a_head, 145+self.x, 135+self.y, 170+self.x, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+self.y, 150+self.x, 160+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-5, 175+self.y, 160+self.x-5, 183+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 115+self.x+5, 175+self.y, 130+self.x+5, 183+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+self.y, 170+self.x, 150+self.y, 170+self.x, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 115+self.x, 183+self.y, 92+self.x, 183+self.y, 125+self.x, 155+self.y)
               
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == True and self.__dropping == True: #Moving right CROUCHING FRAMe #2
-            self.__y += 3
-            canvas.coords(self.a_head, 145+self.__x, 135+2+self.__y, 170+self.__x, 160+2+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+2+self.__y, 150+self.__x, 160+2+self.__y, 125+self.__x, 170+2+self.__y, 115+self.__x, 160+2+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x+10, 160+2+self.__y, 145+self.__x+10, 175+2+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+10, 160+2+self.__y, 145+self.__x+10, 175+2+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+2+self.__y, 170+self.__x, 150+2+self.__y, 170+self.__x, 160+2+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+2+self.__y, 140+self.__x, 152+2+self.__y, 140+self.__x, 155+2+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+2+self.__y, 140+self.__x, 148+2+self.__y, 140+self.__x, 151+2+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+2+self.__y, 145+self.__x, 163+2+self.__y, 125+self.__x, 170+2+self.__y, 115+self.__x, 160+2+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+2+self.__y, 152+self.__x, 155+2+self.__y, 115+self.__x, 183+2+self.__y, 92+self.__x, 183+2+self.__y, 125+self.__x, 155+2+self.__y)     
+        elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.dropping == True: #Moving right CROUCHING FRAMe #2
+            self.y += 3
+            canvas.coords(self.a_head, 145+self.x, 135+2+self.y, 170+self.x, 160+2+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+2+self.y, 150+self.x, 160+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x+10, 160+2+self.y, 145+self.x+10, 175+2+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+10, 160+2+self.y, 145+self.x+10, 175+2+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+2+self.y, 170+self.x, 150+2+self.y, 170+self.x, 160+2+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+2+self.y, 140+self.x, 152+2+self.y, 140+self.x, 155+2+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+2+self.y, 140+self.x, 148+2+self.y, 140+self.x, 151+2+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+2+self.y, 145+self.x, 163+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)     
 
         #MOVING LEFT NOT IN AIR
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == False and self.__looking == "Left": #Moving left without sprint or crouch FRAME #1
-            self.__x -= 1 #Arms and leg out
-            canvas.coords(self.a_head, 125+self.__x, 125+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_Larm, 115+self.__x, 150+self.__y, 130+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rarm, 145+self.__x, 150+self.__y, 160+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rleg, 145+self.__x, 175+self.__y, 160+self.__x, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x, 175+self.__y, 130+self.__x, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x+25, 140+self.__y, 150+self.__x-25, 140+self.__y, 150+self.__x-25, 150+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x+25, 140+self.__y, 120+self.__x+35, 142+self.__y, 120+self.__x+35, 145+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x+25, 140+self.__y, 120+self.__x+35, 138+self.__y, 120+self.__x+35, 141+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 155+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_coat, 145+self.__x, 145+self.__y, 133+self.__x, 145+self.__y, 140+self.__x, 175+self.__y, 160+self.__x, 177+self.__y, 145+self.__x, 160+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.looking == "Left": #Moving left without sprint or crouch FRAME #1
+            self.x -= 1 #Arms and leg out
+            canvas.coords(self.a_head, 125+self.x, 125+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_Larm, 115+self.x, 150+self.y, 130+self.x, 165+self.y)
+            canvas.coords(self.a_Rarm, 145+self.x, 150+self.y, 160+self.x, 165+self.y)
+            canvas.coords(self.a_Rleg, 145+self.x, 175+self.y, 160+self.x, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x, 175+self.y, 130+self.x, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x+25, 140+self.y, 150+self.x-25, 140+self.y, 150+self.x-25, 150+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x+25, 140+self.y, 120+self.x+35, 142+self.y, 120+self.x+35, 145+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x+25, 140+self.y, 120+self.x+35, 138+self.y, 120+self.x+35, 141+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 155+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_coat, 145+self.x, 145+self.y, 133+self.x, 145+self.y, 140+self.x, 175+self.y, 160+self.x, 177+self.y, 145+self.x, 160+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == False and self.__looking == "Left": #Moving left without sprint or crouch FRAME #2
-            self.__x -= 1 #Arms and legs in
-            canvas.coords(self.a_head, 125+self.__x, 125+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x+25, 140+3+self.__y, 150+self.__x-25, 140+3+self.__y, 150+self.__x-25, 150+3+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x+25, 140+3+self.__y, 120+self.__x+35, 142+3+self.__y, 120+self.__x+35, 145+3+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x+25, 140+3+self.__y, 120+self.__x+35, 138+3+self.__y, 120+self.__x+35, 141+3+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 155+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_coat, 145+self.__x, 145+3+self.__y, 133+self.__x, 145+3+self.__y, 140+self.__x, 175+3+self.__y, 160+self.__x, 177+6+self.__y, 145+self.__x, 160+3+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Left": #Moving left without sprint or crouch FRAME #2
+            self.x -= 1 #Arms and legs in
+            canvas.coords(self.a_head, 125+self.x, 125+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x+25, 140+3+self.y, 150+self.x-25, 140+3+self.y, 150+self.x-25, 150+3+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x+25, 140+3+self.y, 120+self.x+35, 142+3+self.y, 120+self.x+35, 145+3+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == True and self.__crouch == False and self.__looking == "Left": #Moving left SPRINTING FRAME #1
-            self.__x -= 1 #Arms and legs out
-            canvas.coords(self.a_head, 145+self.__x-40, 135+self.__y, 170+self.__x-40, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+self.__y, 150+self.__x-24, 160+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 85+self.__x+106, 150+self.__y, 100+self.__x+76, 165+self.__y) #(-30,0)
-            canvas.coords(self.a_Rarm, 175+self.__x-74, 150+self.__y, 190+self.__x-104, 165+self.__y) #(+30,0)
-            canvas.coords(self.a_Rleg, 150+self.__x-24, 170+self.__y, 165+self.__x-54, 178+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 110+self.__x+56, 170+self.__y, 125+self.__x+26, 178+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+self.__y, 170+self.__x-64, 150+self.__y, 170+self.__x-64, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 152+self.__y, 140+self.__x-4, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 148+self.__y, 140+self.__x-4, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+self.__y, 145+self.__x-14, 163+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+self.__y, 152+self.__x-28, 155+self.__y, 100+self.__x+76, 175+self.__y, 85+self.__x+104, 157+self.__y, 125+self.__x+26, 155+self.__y)
-            self.__x -= 3
+        elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Left": #Moving left SPRINTING FRAME #1
+            self.x -= 1 #Arms and legs out
+            canvas.coords(self.a_head, 145+self.x-40, 135+self.y, 170+self.x-40, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+self.y, 150+self.x-24, 160+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 85+self.x+106, 150+self.y, 100+self.x+76, 165+self.y) #(-30,0)
+            canvas.coords(self.a_Rarm, 175+self.x-74, 150+self.y, 190+self.x-104, 165+self.y) #(+30,0)
+            canvas.coords(self.a_Rleg, 150+self.x-24, 170+self.y, 165+self.x-54, 178+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 110+self.x+56, 170+self.y, 125+self.x+26, 178+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+self.y, 170+self.x-64, 150+self.y, 170+self.x-64, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)
+            self.x -= 3
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
                 
-        elif self.__Frame == 1 and self.__sprint == True and self.__crouch == False and self.__looking == "Left": #Moving left SPRINTING FRAME #2
-            self.__x -= 1 #Arms and legs in
-            canvas.coords(self.a_head, 145+self.__x-40, 135+5+self.__y, 170+self.__x-40, 160+5+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+5+self.__y, 150+self.__x-24, 160+5+self.__y, 125+self.__x+26, 170+5+self.__y, 115+self.__x+46, 160+5+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+5+self.__y, 170+self.__x-64, 150+5+self.__y, 170+self.__x-64, 160+5+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+5+self.__y, 140+self.__x-4, 152+5+self.__y, 140+self.__x-4, 160+5+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+5+self.__y, 140+self.__x-4, 148+5+self.__y, 140+self.__x-4, 151+5+self.__y) 
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+5+self.__y, 145+self.__x-14, 163+5+self.__y, 125+self.__x+26, 170+5+self.__y, 115+self.__x+46, 160+5+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+5+self.__y, 152+self.__x-28, 155+5+self.__y, 100+self.__x+76, 175+10+self.__y, 85+self.__x+104, 157+10+self.__y, 125+self.__x+26, 155+5+self.__y)
+        elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.looking == "Left": #Moving left SPRINTING FRAME #2
+            self.x -= 1 #Arms and legs in
+            canvas.coords(self.a_head, 145+self.x-40, 135+5+self.y, 170+self.x-40, 160+5+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+5+self.y, 150+self.x-24, 160+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+5+self.y, 170+self.x-64, 150+5+self.y, 170+self.x-64, 160+5+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+5+self.y, 140+self.x-4, 152+5+self.y, 140+self.x-4, 160+5+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+5+self.y, 140+self.x-4, 148+5+self.y, 140+self.x-4, 151+5+self.y) 
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+5+self.y, 145+self.x-14, 163+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+5+self.y, 152+self.x-28, 155+5+self.y, 100+self.x+76, 175+10+self.y, 85+self.x+104, 157+10+self.y, 125+self.x+26, 155+5+self.y)
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
-            self.__x -= 3
+            self.x -= 3
 
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == True and self.__looking == "Left": #Moving left CROUCHING FRAME #1
-            self.__x -= 0.5 #Arms and legs out self.__x 
-            canvas.coords(self.a_head, 145+self.__x-40, 135+self.__y, 170+self.__x-40, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+self.__y, 150+self.__x-24, 160+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+16, 160+self.__y, 145+self.__x-14, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-5, 175+self.__y, 160+self.__x-5, 183+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 115+self.__x+5, 175+self.__y, 130+self.__x+5, 183+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+self.__y, 170+self.__x-64, 150+self.__y, 170+self.__x-64, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 152+self.__y, 140+self.__x-4, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+self.__y, 140+self.__x-4, 148+self.__y, 140+self.__x-4, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+self.__y, 145+self.__x-14, 163+self.__y, 125+self.__x+26, 170+self.__y, 115+self.__x+46, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+self.__y, 152+self.__x-28, 155+self.__y, 85+self.__x+76, 183+self.__y, 80+self.__x+104, 183+self.__y, 125+self.__x+26, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.looking == "Left": #Moving left CROUCHING FRAME #1
+            self.x -= 0.5 #Arms and legs out self.x 
+            canvas.coords(self.a_head, 145+self.x-40, 135+self.y, 170+self.x-40, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+self.y, 150+self.x-24, 160+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+16, 160+self.y, 145+self.x-14, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-5, 175+self.y, 160+self.x-5, 183+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 115+self.x+5, 175+self.y, 130+self.x+5, 183+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+self.y, 170+self.x-64, 150+self.y, 170+self.x-64, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 85+self.x+76, 183+self.y, 80+self.x+104, 183+self.y, 125+self.x+26, 155+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == True and self.__looking == "Left": #Moving left CROUCHING FRAME #2
-            self.__x -= 0.5 #Arms and legs in
-            canvas.coords(self.a_head, 145+self.__x-40, 135+2+self.__y, 170+self.__x-40, 160+2+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x-4, 150+2+self.__y, 150+self.__x-24, 160+2+self.__y, 125+self.__x+26, 170+2+self.__y, 115+self.__x+46, 160+2+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x-10, 160+2+self.__y, 145+self.__x-10, 175+2+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x-10, 160+2+self.__y, 145+self.__x-10, 175+2+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x-14, 150+2+self.__y, 170+self.__x-64, 150+2+self.__y, 170+self.__x-64, 160+2+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x-14, 150+2+self.__y, 140+self.__x-4, 152+2+self.__y, 140+self.__x-4, 160+2+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x-14, 150+2+self.__y, 140+self.__x-4, 148+2+self.__y, 140+self.__x-4, 151+2+self.__y) 
-            canvas.coords(self.a_vneck, 140+self.__x-4, 150+2+self.__y, 145+self.__x-14, 163+2+self.__y, 125+self.__x+26, 170+2+self.__y, 115+self.__x+46, 160+2+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x-8, 145+2+self.__y, 152+self.__x-28, 155+2+self.__y, 85+self.__x+76, 183+2+self.__y, 80+self.__x+104, 183+2+self.__y, 125+self.__x+26, 155+2+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Left": #Moving left CROUCHING FRAME #2
+            self.x -= 0.5 #Arms and legs in
+            canvas.coords(self.a_head, 145+self.x-40, 135+2+self.y, 170+self.x-40, 160+2+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x-4, 150+2+self.y, 150+self.x-24, 160+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x-10, 160+2+self.y, 145+self.x-10, 175+2+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x-10, 160+2+self.y, 145+self.x-10, 175+2+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x-14, 150+2+self.y, 170+self.x-64, 150+2+self.y, 170+self.x-64, 160+2+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x-14, 150+2+self.y, 140+self.x-4, 152+2+self.y, 140+self.x-4, 160+2+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x-14, 150+2+self.y, 140+self.x-4, 148+2+self.y, 140+self.x-4, 151+2+self.y) 
+            canvas.coords(self.a_vneck, 140+self.x-4, 150+2+self.y, 145+self.x-14, 163+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x-8, 145+2+self.y, 152+self.x-28, 155+2+self.y, 85+self.x+76, 183+2+self.y, 80+self.x+104, 183+2+self.y, 125+self.x+26, 155+2+self.y)
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
 
 
         #MOVING RIGHT NOT IN AIR
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == False and self.__looking == "Right": #Moving right without sprinting or crouching FRAME #1
-            self.__x += 1 #Arms and legs out self.__x 
-            canvas.coords(self.a_head, 125+self.__x, 125+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+self.__y, 145+self.__x, 150+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_Larm, 115+self.__x, 150+self.__y, 130+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rarm, 145+self.__x, 150+self.__y, 160+self.__x, 165+self.__y)
-            canvas.coords(self.a_Rleg, 145+self.__x, 175+self.__y, 160+self.__x, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x, 175+self.__y, 130+self.__x, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x, 140+self.__y, 150+self.__x, 140+self.__y, 150+self.__x, 150+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x, 140+self.__y, 120+self.__x, 142+self.__y, 120+self.__x, 145+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x, 140+self.__y, 120+self.__x, 138+self.__y, 120+self.__x, 141+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 150+self.__y, 145+self.__x, 155+self.__y, 145+self.__x, 175+self.__y, 130+self.__x, 175+self.__y)
-            canvas.coords(self.a_coat, 130+self.__x, 145+self.__y, 142+self.__x, 145+self.__y, 135+self.__x, 175+self.__y, 115+self.__x, 177+self.__y, 130+self.__x, 160+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.looking == "Right": #Moving right without sprinting or crouching FRAME #1
+            self.x += 1 #Arms and legs out self.x 
+            canvas.coords(self.a_head, 125+self.x, 125+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_Larm, 115+self.x, 150+self.y, 130+self.x, 165+self.y)
+            canvas.coords(self.a_Rarm, 145+self.x, 150+self.y, 160+self.x, 165+self.y)
+            canvas.coords(self.a_Rleg, 145+self.x, 175+self.y, 160+self.x, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x, 175+self.y, 130+self.x, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x, 140+self.y, 150+self.x, 140+self.y, 150+self.x, 150+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x, 140+self.y, 120+self.x, 142+self.y, 120+self.x, 145+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x, 140+self.y, 120+self.x, 138+self.y, 120+self.x, 141+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 150+self.y, 145+self.x, 155+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
+            canvas.coords(self.a_coat, 130+self.x, 145+self.y, 142+self.x, 145+self.y, 135+self.x, 175+self.y, 115+self.x, 177+self.y, 130+self.x, 160+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == False and self.__looking == "Right": #Moving right without sprinting or crouching FRAME #2
-            self.__x += 1 #Arms and legs in
-            canvas.coords(self.a_head, 125+self.__x, 125+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 130+self.__x, 150+3+self.__y, 145+self.__x, 150+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 125+self.__x, 140+3+self.__y, 150+self.__x, 140+3+self.__y, 150+self.__x, 150+3+self.__y)
-            canvas.coords(self.a_bandana2, 125+self.__x, 140+3+self.__y, 120+self.__x, 142+3+self.__y, 120+self.__x, 145+3+self.__y)
-            canvas.coords(self.a_bandana3, 125+self.__x, 140+3+self.__y, 120+self.__x, 138+3+self.__y, 120+self.__x, 141+3+self.__y)
-            canvas.coords(self.a_vneck, 130+self.__x, 150+3+self.__y, 145+self.__x, 155+3+self.__y, 145+self.__x, 175+3+self.__y, 130+self.__x, 175+3+self.__y)
-            canvas.coords(self.a_coat, 130+self.__x, 145+3+self.__y, 142+self.__x, 145+3+self.__y, 135+self.__x, 175+3+self.__y, 115+self.__x, 177+6+self.__y, 130+self.__x, 160+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Right": #Moving right without sprinting or crouching FRAME #2
+            self.x += 1 #Arms and legs in
+            canvas.coords(self.a_head, 125+self.x, 125+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 130+self.x, 150+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 125+self.x, 140+3+self.y, 150+self.x, 140+3+self.y, 150+self.x, 150+3+self.y)
+            canvas.coords(self.a_bandana2, 125+self.x, 140+3+self.y, 120+self.x, 142+3+self.y, 120+self.x, 145+3+self.y)
+            canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
+            canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
+            canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
 
-        elif self.__Frame == 0 and self.__sprint == True and self.__crouch == False and self.__looking == "Right": #Moving right SPRINTING FRAME #1
-            self.__x += 1 #Arms and legs out
-            canvas.coords(self.a_head, 145+self.__x, 135+self.__y, 170+self.__x, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+self.__y, 150+self.__x, 160+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 85+self.__x, 150+self.__y, 100+self.__x, 165+self.__y) #(-30,0)
-            canvas.coords(self.a_Rarm, 175+self.__x, 150+self.__y, 190+self.__x, 165+self.__y) #(+30,0)
-            canvas.coords(self.a_Rleg, 150+self.__x, 170+self.__y, 165+self.__x, 178+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 110+self.__x, 170+self.__y, 125+self.__x, 178+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+self.__y, 170+self.__x, 150+self.__y, 170+self.__x, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+self.__y, 140+self.__x, 152+self.__y, 140+self.__x, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+self.__y, 140+self.__x, 148+self.__y, 140+self.__x, 151+self.__y) 
-            canvas.coords(self.a_vneck, 140+self.__x, 150+self.__y, 145+self.__x, 163+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+self.__y, 152+self.__x, 155+self.__y, 100+self.__x, 175+self.__y, 85+self.__x, 157+self.__y, 125+self.__x, 155+self.__y)
-            self.__x += 3
+        elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Right": #Moving right SPRINTING FRAME #1
+            self.x += 1 #Arms and legs out
+            canvas.coords(self.a_head, 145+self.x, 135+self.y, 170+self.x, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+self.y, 150+self.x, 160+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 85+self.x, 150+self.y, 100+self.x, 165+self.y) #(-30,0)
+            canvas.coords(self.a_Rarm, 175+self.x, 150+self.y, 190+self.x, 165+self.y) #(+30,0)
+            canvas.coords(self.a_Rleg, 150+self.x, 170+self.y, 165+self.x, 178+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 110+self.x, 170+self.y, 125+self.x, 178+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+self.y, 170+self.x, 150+self.y, 170+self.x, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y) 
+            canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)
+            self.x += 3
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
                 
-        elif self.__Frame == 1 and self.__sprint == True and self.__crouch == False and self.__looking == "Right": #Moving right SPRINTING FRAME #2
-            self.__x += 1 #Arms and legs in
-            canvas.coords(self.a_head, 145+self.__x, 135+5+self.__y, 170+self.__x, 160+5+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+5+self.__y, 150+self.__x, 160+5+self.__y, 125+self.__x, 170+5+self.__y, 115+self.__x, 160+5+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+5+self.__y, 170+self.__x, 150+5+self.__y, 170+self.__x, 160+5+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+5+self.__y, 140+self.__x, 152+5+self.__y, 140+self.__x, 155+5+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+5+self.__y, 140+self.__x, 148+5+self.__y, 140+self.__x, 151+5+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+5+self.__y, 145+self.__x, 163+5+self.__y, 125+self.__x, 170+5+self.__y, 115+self.__x, 160+5+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+5+self.__y, 152+self.__x, 155+5+self.__y, 100+self.__x, 175+10+self.__y, 85+self.__x, 157+10+self.__y, 125+self.__x, 155+5+self.__y)
+        elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.looking == "Right": #Moving right SPRINTING FRAME #2
+            self.x += 1 #Arms and legs in
+            canvas.coords(self.a_head, 145+self.x, 135+5+self.y, 170+self.x, 160+5+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+5+self.y, 150+self.x, 160+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+5+self.y, 170+self.x, 150+5+self.y, 170+self.x, 160+5+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+5+self.y, 140+self.x, 152+5+self.y, 140+self.x, 155+5+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+5+self.y, 140+self.x, 148+5+self.y, 140+self.x, 151+5+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+5+self.y, 145+self.x, 163+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+5+self.y, 152+self.x, 155+5+self.y, 100+self.x, 175+10+self.y, 85+self.x, 157+10+self.y, 125+self.x, 155+5+self.y)
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
-            self.__x += 3
+            self.x += 3
 
-        elif self.__Frame == 0 and self.__sprint == False and self.__crouch == True and self.__looking == "Right": #Moving right CROUCHING FRAMe #1
-            self.__x += 0.5 #Arms and legs in
-            canvas.coords(self.a_head, 145+self.__x, 135+self.__y, 170+self.__x, 160+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+self.__y, 150+self.__x, 160+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10, 0), (5,10), (-20,-5), (-15,-15)
-            canvas.coords(self.a_Larm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x, 160+self.__y, 145+self.__x, 175+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-5, 175+self.__y, 160+self.__x-5, 183+self.__y) #(+5,-5), (+5,-5)
-            canvas.coords(self.a_Lleg, 115+self.__x+5, 175+self.__y, 130+self.__x+5, 183+self.__y) #(-5,-5), (-5,-5)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+self.__y, 170+self.__x, 150+self.__y, 170+self.__x, 160+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+self.__y, 140+self.__x, 152+self.__y, 140+self.__x, 160+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+self.__y, 140+self.__x, 148+self.__y, 140+self.__x, 151+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+self.__y, 145+self.__x, 163+self.__y, 125+self.__x, 170+self.__y, 115+self.__x, 160+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+self.__y, 152+self.__x, 155+self.__y, 115+self.__x, 183+self.__y, 92+self.__x, 183+self.__y, 125+self.__x, 155+self.__y)
+        elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.looking == "Right": #Moving right CROUCHING FRAMe #1
+            self.x += 0.5 #Arms and legs in
+            canvas.coords(self.a_head, 145+self.x, 135+self.y, 170+self.x, 160+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+self.y, 150+self.x, 160+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10, 0), (5,10), (-20,-5), (-15,-15)
+            canvas.coords(self.a_Larm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x, 160+self.y, 145+self.x, 175+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-5, 175+self.y, 160+self.x-5, 183+self.y) #(+5,-5), (+5,-5)
+            canvas.coords(self.a_Lleg, 115+self.x+5, 175+self.y, 130+self.x+5, 183+self.y) #(-5,-5), (-5,-5)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+self.y, 170+self.x, 150+self.y, 170+self.x, 160+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 115+self.x, 183+self.y, 92+self.x, 183+self.y, 125+self.x, 155+self.y)
                 
-        elif self.__Frame == 1 and self.__sprint == False and self.__crouch == True and self.__looking == "Right": #Moving right CROUCHING FRAMe #2
-            self.__x += 0.5 #Arms and legs in
-            canvas.coords(self.a_head, 145+self.__x, 135+2+self.__y, 170+self.__x, 160+2+self.__y) #(+20, +10) difference from walking
-            canvas.coords(self.a_name, 138+self.__x, 110+self.__y)
-            canvas.coords(self.a_torso, 140+self.__x, 150+2+self.__y, 150+self.__x, 160+2+self.__y, 125+self.__x, 170+2+self.__y, 115+self.__x, 160+2+self.__y) #(20, 10), (5,10)
-            canvas.coords(self.a_Larm, 130+self.__x+10, 160+2+self.__y, 145+self.__x+10, 175+2+self.__y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
-            canvas.coords(self.a_Rarm, 130+self.__x+10, 160+2+self.__y, 145+self.__x+10, 175+2+self.__y) #Arm hides behind torso (+30,0)
-            canvas.coords(self.a_Rleg, 145+self.__x-10, 175+self.__y, 160+self.__x-10, 183+self.__y)
-            canvas.coords(self.a_Lleg, 115+self.__x+10, 175+self.__y, 130+self.__x+10, 183+self.__y)
-            canvas.coords(self.a_bandana1, 145+self.__x, 150+2+self.__y, 170+self.__x, 150+2+self.__y, 170+self.__x, 160+2+self.__y) #(+20,10) for all bandana
-            canvas.coords(self.a_bandana2, 145+self.__x, 150+2+self.__y, 140+self.__x, 152+2+self.__y, 140+self.__x, 155+2+self.__y)
-            canvas.coords(self.a_bandana3, 145+self.__x, 150+2+self.__y, 140+self.__x, 148+2+self.__y, 140+self.__x, 151+2+self.__y)
-            canvas.coords(self.a_vneck, 140+self.__x, 150+2+self.__y, 145+self.__x, 163+2+self.__y, 125+self.__x, 170+2+self.__y, 115+self.__x, 160+2+self.__y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.__x, 145+2+self.__y, 152+self.__x, 155+2+self.__y, 115+self.__x, 183+2+self.__y, 92+self.__x, 183+2+self.__y, 125+self.__x, 155+2+self.__y)
+        elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Right": #Moving right CROUCHING FRAMe #2
+            self.x += 0.5 #Arms and legs in
+            canvas.coords(self.a_head, 145+self.x, 135+2+self.y, 170+self.x, 160+2+self.y) #(+20, +10) difference from walking
+            canvas.coords(self.a_name, 138+self.x, 110+self.y)
+            canvas.coords(self.a_torso, 140+self.x, 150+2+self.y, 150+self.x, 160+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(20, 10), (5,10)
+            canvas.coords(self.a_Larm, 130+self.x+10, 160+2+self.y, 145+self.x+10, 175+2+self.y) #LEft arm here (back arm) THIS ARM IS ABOVE TORSO (-30,0)
+            canvas.coords(self.a_Rarm, 130+self.x+10, 160+2+self.y, 145+self.x+10, 175+2+self.y) #Arm hides behind torso (+30,0)
+            canvas.coords(self.a_Rleg, 145+self.x-10, 175+self.y, 160+self.x-10, 183+self.y)
+            canvas.coords(self.a_Lleg, 115+self.x+10, 175+self.y, 130+self.x+10, 183+self.y)
+            canvas.coords(self.a_bandana1, 145+self.x, 150+2+self.y, 170+self.x, 150+2+self.y, 170+self.x, 160+2+self.y) #(+20,10) for all bandana
+            canvas.coords(self.a_bandana2, 145+self.x, 150+2+self.y, 140+self.x, 152+2+self.y, 140+self.x, 155+2+self.y)
+            canvas.coords(self.a_bandana3, 145+self.x, 150+2+self.y, 140+self.x, 148+2+self.y, 140+self.x, 151+2+self.y)
+            canvas.coords(self.a_vneck, 140+self.x, 150+2+self.y, 145+self.x, 163+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
+            canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)
 
 
-        self.__checkerFrame += 1 #Add one to checkerFrame (Starts at 0)
+        self.checkerFrame += 1 #Add one to checkerFrame (Starts at 0)
         
-        if self.__checkerFrame <= 25: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
-            self.__Frame = 0
-        else: #if self.__checkerFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
-            self.__Frame = 1
+        if self.checkerFrame <= 25: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+            self.Frame = 0
+        else: #if self.checkerFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+            self.Frame = 1
             
-        if self.__checkerFrame == 50: #Reset the counter after 50 so that the cycle repeats over and over again.
-            self.__checkerFrame = 0
+        if self.checkerFrame == 50: #Reset the counter after 50 so that the cycle repeats over and over again.
+            self.checkerFrame = 0
 
-        if self.__jumping == True:
-            self.__dropping = False
+        if self.jumping == True:
+            self.dropping = False
 
-        if self.__dropping == True:
-            self.__jumping = False
+        if self.dropping == True:
+            self.jumping = False
 
-        if self.__jumping == True or self.__dropping == True:
-            self.__inAirCounter += 1
+        if self.jumping == True or self.dropping == True:
+            self.inAirCounter += 1
 
-        if self.__inAirCounter == 30:
-            self.__jumping = False
-            self.__dropping = False
-            self.__inAirCounter = 0
+        if self.inAirCounter == 30:
+            self.jumping = False
+            self.dropping = False
+            self.inAirCounter = 0
             canvas.after(100, self.rebindS) #2000 ms = 2 seconds Later will need to redo this part because not all falling is going to be 2 seconds long.
             canvas.after(100, self.rebindW) #2000 ms = 2 seconds Later will need to redo this part because not all falling is going to be 2 seconds long.
 
         canvas.update()
             
     def aKey(self, evt):
-        self.__looking = "Left"
-        self.__checker = 0
-        self.__notMoving = False
+        self.looking = "Left"
+        self.checker = 0
+        self.notMoving = False
         
     def dKey(self,evt):
-        self.__looking = "Right"
-        self.__checker = 0
-        self.__notMoving = False
+        self.looking = "Right"
+        self.checker = 0
+        self.notMoving = False
         
     def spaceKey(self, evt): #Special ability: Voice
-        print("Spacebar pressed")
+        #canvas.unbind("<space>", self.b_space)
+        global voiceOn
+        if voiceOn == True:
+            print("Special on cooldown!")
+            return
+        else:
+            print("Special activated.")
+        voiceOn = True
+        #canvas.after(100, self.rebindSpace) #MOVED TO BOTTOM OF VOICE.DRAW()
+        
+    def rebindSpace(self):
+        global voiceOn
+        self.b_space = canvas.bind("<space>", self.spaceKey)
 
     def eKey(self, evt): #Block
         print("'e' key pressed")
@@ -723,36 +835,34 @@ class Player:
         print("'q' key pressed")
 
     def sKey(self, evt): #Drop down
-        print("'s' key pressed")
-        print("Making inAir equal True")
-        self.__inAir = True
-        self.__dropping = True
-        print("Disabling 's' binding") #Makes sure the user does not spam this animation DURING the animation.
-        canvas.unbind("<s>", self.__b_s)
-        canvas.unbind("<w>", self.__b_w)
+        #print("'s' key pressed")
+        #print("Making inAir equal True")
+        self.inAir = True
+        self.dropping = True
+        #print("Disabling 's' binding") #Makes sure the user does not spam this animation DURING the animation.
+        canvas.unbind("<s>", self.b_s)
+        canvas.unbind("<w>", self.b_w)
         #canvas.after(100, self.rebindS) #2000 ms = 2 seconds Later will need to redo this part because not all falling is going to be 2 seconds long.
 
     def rebindS(self): #Rebinds S (falling should be done and can fall again)
-        self.__b_s = canvas.bind("<s>", self.sKey)
-        print("Rebinding 's' and making inAir=False")
-        self.__inAir=False
-        #self.__dropping = False
+        self.b_s = canvas.bind("<s>", self.sKey)
+        #print("Rebinding 's' and making inAir=False")
+        self.inAir=False
 
     def wKey(self, evt): #Jump
-        print("'w' key pressed")
-        print("Making inAir equal True")
-        self.__inAir = True
-        self.__jumping = True
-        print("Disabling 'w' binding") #Makes sure the user does not spam this animation DURING the animation.
-        canvas.unbind("<w>", self.__b_w)
-        canvas.unbind("<s>", self.__b_s)
+        #print("'w' key pressed")
+        #print("Making inAir equal True")
+        self.inAir = True
+        self.jumping = True
+        #print("Disabling 'w' binding") #Makes sure the user does not spam this animation DURING the animation.
+        canvas.unbind("<w>", self.b_w)
+        canvas.unbind("<s>", self.b_s)
         #canvas.after(100, self.rebindW) #2000 ms = 2 seconds Later will need to redo this part because not all falling is going to be 2 seconds long.
 
     def rebindW(self): #Rebinds W (falling should be done and can fall again)
-        self.__b_w = canvas.bind("<w>", self.wKey)
-        print("Rebinding 'w' and making inAir=False")
-        self.__inAir=False
-        #self.__jumping = False
+        self.b_w = canvas.bind("<w>", self.wKey)
+        #print("Rebinding 'w' and making inAir=False")
+        self.inAir=False
         
     def leftClick(self, evt): #Basic attack
         print("Left Click")
@@ -764,39 +874,31 @@ class Player:
         print("Scroll Click")
 
     def shiftKey(self, evt): #Sprint/Walk toggle
-        if self.__voiceOn == True:
-            canvas.delete(self.__a_VoR1, self.__a_VoR2, self.__a_VoR3)
-            self.__voiceOn = False
-            
-        if self.__sprint == True and self.__crouch == False:
-            self.__sprint = False
-        elif self.__sprint == False and self.__crouch == False:
-            self.__sprint = True
+        if self.sprint == True and self.crouch == False:
+            self.sprint = False
+        elif self.sprint == False and self.crouch == False:
+            self.sprint = True
         else:
             print("Cannot toggle sprint! Must be out of crouch!")
 
     def ctrlKey(self, evt): #crouch
-        if self.__voiceOn == True:
-            canvas.delete(self.__a_VoR1, self.__a_VoR2, self.__a_VoR3)
-            self.__voiceOn = False
-        
-        if self.__crouch == True and self.__sprint == False:
-            self.__crouch = False
-        elif self.__crouch == False and self.__sprint == False:
-            self.__crouch = True
+        if self.crouch == True and self.sprint == False:
+            self.crouch = False
+        elif self.crouch == False and self.sprint == False:
+            self.crouch = True
         else:
             print("Cannot toggle crouch! Must be out of sprint!")
-
+                
 background = Background(canvas)
 sword = Sword(canvas)
 player = Player(canvas)
-#voice = Voice(canvas)
+voice = Voice(canvas,player)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
 
 while 1:
     player.draw()
     #sword.draw()
-    #voice.draw()
+    voice.draw()
     tk.update_idletasks()
     tk.update()
     time.sleep(0.01)
