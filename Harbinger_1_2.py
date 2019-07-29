@@ -125,12 +125,17 @@ class Voice():
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 0, text="""Press spacebar to activate special ability. You can use the ability in any stance and even mid-air!\n"""
+        self.a_description = canvas.create_text(0, 550, text="""Update 1.9 - Special Ability\n"""
+                                                """Press spacebar to activate special ability. You can use the ability in any stance and even mid-air!\n"""
                                                   """There is a cooldown on the ability. I wanted to sure the orb makes it across the entire screen before activating again."""
                                                 """\nTry spamming your spacebar and checking the interpreter. Any feedback would be nice."""
                                                 """\nPlease help design two swords and the special attack (some voice particles)."""
                                                   """ \nNext update will implement basic attacks.""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
+        self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
+                                                                 """Cannot crouch stance while in sprint stance. Vise versa. Click on other window to view details.\n"""
+                                                                 """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable.""",
+                                                 width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text)
         #Creating ground1
         self.a_ground1 = canvas.create_rectangle(0,183,1500,190, outline="black",fill="green")
 
