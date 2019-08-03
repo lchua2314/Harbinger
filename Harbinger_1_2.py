@@ -8,7 +8,7 @@ voiceOn = False #When this is True, Voice class activates.
 basic_attack = False #When this is True, basic attack animation activates and locks the player in the animation until it is over.
 
 tk = Tk()
-tk.title("Harbinger - Alpha 2.0: Basic Attack")
+tk.title("Harbinger - Alpha 2.1: Voice Visual Update")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
@@ -44,13 +44,22 @@ class Voice():
         self.x, self.y = 0,0
         self.vLooking = ""
         self.counter = 0
-        self.xMove = 0
 
         #CREATE VOICE DESIGN HERE! I WILL ANIMATE!
-        self.voice1 = canvas.create_oval(125+self.player.x, 125+self.player.y, 150+self.player.x, 150+self.player.y)
+        #self.voiceTEST = canvas.create_oval(125+self.player.x, 125+self.player.y, 150+self.player.x, 150+self.player.y)
+        self.voice1 = canvas.create_polygon(137, 130, 146, 136, 147, 142, 146, 149, 137, 155, 143, 149, 144, 142, 143, 136, fill="grey", outline="black")
+        self.voice2 = canvas.create_polygon(130, 135, 139, 140, 140, 142, 139, 146, 130, 150, 137, 144, 137, 142, 137, 141, fill="grey", outline="black") #(-7, -5 or +5) (+3, 0) (-3,0
+        self.voice3 = canvas.create_polygon(129, 140, 131, 142, 129, 146, 128, 144, 130, 142, 128, 141, fill="grey", outline="black") #(-9, 0)
 
-        
+        #Mirroring the above over y-axis. Needed for player looking left.
+        #125-150 = 25/2 = 12.5- > 13 + 125 = 138
+        #self.voice1 = canvas.create_polygon(137+2, 130, 146-16, 136, 147-18, 142, 146-16, 149, 137+2, 155, 143-10, 149, 144-12, 142, 143-10, 136, fill="grey", outline="black")
+        #self.voice2 = canvas.create_polygon(130+16, 135, 139-2, 140, 140-4, 142, 139-2, 146, 130+16, 150, 137+2, 144, 137+2, 142, 137+2, 141, fill="grey", outline="black") #(-7, -5 or +5) (+3, 0) (-3,0
+        #self.voice3 = canvas.create_polygon(129+18, 140, 131+14, 142, 129+18, 146, 128+20, 144, 130+16, 142, 128+20, 141, fill="grey", outline="black") #(-9, 0)
+
         canvas.move(self.voice1, -10000, -10000)
+        canvas.move(self.voice2, -10000, -10000)
+        canvas.move(self.voice3, -10000, -10000)
 
     def draw(self):
         global voiceOn
@@ -58,52 +67,88 @@ class Voice():
             #print("I can hear you")
             #MOVING LEFT NOT IN AIR. INITIALIZED VOICE
             if self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left without sprint or crouch FRAME #1
-                canvas.coords(self.voice1, 125+self.player.x-20+self.x, 125+self.player.y, 150+self.player.x-20+self.x, 150+self.player.y)
+                #canvas.coords(self.voice1, 125+self.player.x-20+self.x, 125+self.player.y, 150+self.player.x-20+self.x, 150+self.player.y)
+                canvas.coords(self.voice1, 137+2+self.player.x-30, 130+self.player.y, 146-16+self.player.x-30, 136+self.player.y, 147-18+self.player.x-30, 142+self.player.y, 146-16+self.player.x-30, 149+self.player.y, 137+2+self.player.x-30, 155+self.player.y, 143-10+self.player.x-30, 149+self.player.y, 144-12+self.player.x-30, 142+self.player.y, 143-10+self.player.x-30, 136+self.player.y)
+                canvas.coords(self.voice2, 130+16+self.player.x-30, 135+self.player.y, 139-2+self.player.x-30, 140+self.player.y, 140-4+self.player.x-30, 142+self.player.y, 139-2+self.player.x-30, 146+self.player.y, 130+16+self.player.x-30, 150+self.player.y, 137+2+self.player.x-30, 144+self.player.y, 137+2+self.player.x-30, 142+self.player.y, 137+2+self.player.x-30, 141+self.player.y)
+                canvas.coords(self.voice3, 129+18+self.player.x-30, 140+self.player.y, 131+14+self.player.x-30, 142+self.player.y, 129+18+self.player.x-30, 146+self.player.y, 128+20+self.player.x-30, 144+self.player.y, 130+16+self.player.x-30, 142+self.player.y, 128+20+self.player.x-30, 141+self.player.y)
                 self.vLooking = "Left"
                 
             elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left without sprint or crouch FRAME #2
-                canvas.coords(self.voice1, 125+self.player.x-20+self.x, 125+3+self.player.y, 150+self.player.x-20+self.x, 150+3+self.player.y)
+                #canvas.coords(self.voice1, 125+self.player.x-20+self.x, 125+3+self.player.y, 150+self.player.x-20+self.x, 150+3+self.player.y)
+                canvas.coords(self.voice1, 137+2+self.player.x-30, 130+self.player.y+3, 146-16+self.player.x-30, 136+self.player.y+3, 147-18+self.player.x-30, 142+self.player.y+3, 146-16+self.player.x-30, 149+self.player.y+3, 137+2+self.player.x-30, 155+self.player.y+3, 143-10+self.player.x-30, 149+self.player.y+3, 144-12+self.player.x-30, 142+self.player.y+3, 143-10+self.player.x-30, 136+self.player.y+3)
+                canvas.coords(self.voice2, 130+16+self.player.x-30, 135+self.player.y+3, 139-2+self.player.x-30, 140+self.player.y+3, 140-4+self.player.x-30, 142+self.player.y+3, 139-2+self.player.x-30, 146+self.player.y+3, 130+16+self.player.x-30, 150+self.player.y+3, 137+2+self.player.x-30, 144+self.player.y+3, 137+2+self.player.x-30, 142+self.player.y+3, 137+2+self.player.x-30, 141+self.player.y+3)
+                canvas.coords(self.voice3, 129+18+self.player.x-30, 140+self.player.y+3, 131+14+self.player.x-30, 142+self.player.y+3, 129+18+self.player.x-30, 146+self.player.y+3, 128+20+self.player.x-30, 144+self.player.y+3, 130+16+self.player.x-30, 142+self.player.y+3, 128+20+self.player.x-30, 141+self.player.y+3)
                 self.vLooking = "Left"
             
             elif self.player.Frame == 0 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left SPRINTING FRAME #1
-                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+self.player.y, 170+self.player.x-20+self.x-40, 160+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+self.player.y, 170+self.player.x-20+self.x-40, 160+self.player.y) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+2+self.player.x-30-20, 130+self.player.y+10, 146-16+self.player.x-30-20, 136+self.player.y+10, 147-18+self.player.x-30-20, 142+self.player.y+10, 146-16+self.player.x-30-20, 149+self.player.y+10, 137+2+self.player.x-30-20, 155+self.player.y+10, 143-10+self.player.x-30-20, 149+self.player.y+10, 144-12+self.player.x-30-20, 142+self.player.y+10, 143-10+self.player.x-30-20, 136+self.player.y+10)
+                canvas.coords(self.voice2, 130+16+self.player.x-30-20, 135+self.player.y+10, 139-2+self.player.x-30-20, 140+self.player.y+10, 140-4+self.player.x-30-20, 142+self.player.y+10, 139-2+self.player.x-30-20, 146+self.player.y+10, 130+16+self.player.x-30-20, 150+self.player.y+10, 137+2+self.player.x-30-20, 144+self.player.y+10, 137+2+self.player.x-30-20, 142+self.player.y+10, 137+2+self.player.x-30-20, 141+self.player.y+10)
+                canvas.coords(self.voice3, 129+18+self.player.x-30-20, 140+self.player.y+10, 131+14+self.player.x-30-20, 142+self.player.y+10, 129+18+self.player.x-30-20, 146+self.player.y+10, 128+20+self.player.x-30-20, 144+self.player.y+10, 130+16+self.player.x-30-20, 142+self.player.y+10, 128+20+self.player.x-30-20, 141+self.player.y+10)
                 self.vLooking = "Left"
                 
             elif self.player.Frame == 1 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Left" and self.vLooking == "": #Moving left SPRINTING FRAME #2
-                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+5+self.player.y, 170+self.player.x-20+self.x-40, 160+5+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+5+self.player.y+10, 170+self.player.x-20+self.x-40, 160+5+self.player.y+10) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+2+self.player.x-30-20, 130+self.player.y+10+5, 146-16+self.player.x-30-20, 136+self.player.y+10+5, 147-18+self.player.x-30-20, 142+self.player.y+10+5, 146-16+self.player.x-30-20, 149+self.player.y+10+5, 137+2+self.player.x-30-20, 155+self.player.y+10+5, 143-10+self.player.x-30-20, 149+self.player.y+10+5, 144-12+self.player.x-30-20, 142+self.player.y+10+5, 143-10+self.player.x-30-20, 136+self.player.y+10+5)
+                canvas.coords(self.voice2, 130+16+self.player.x-30-20, 135+self.player.y+10+5, 139-2+self.player.x-30-20, 140+self.player.y+10+5, 140-4+self.player.x-30-20, 142+self.player.y+10+5, 139-2+self.player.x-30-20, 146+self.player.y+10+5, 130+16+self.player.x-30-20, 150+self.player.y+10+5, 137+2+self.player.x-30-20, 144+self.player.y+10+5, 137+2+self.player.x-30-20, 142+self.player.y+10+5, 137+2+self.player.x-30-20, 141+self.player.y+10+5)
+                canvas.coords(self.voice3, 129+18+self.player.x-30-20, 140+self.player.y+10+5, 131+14+self.player.x-30-20, 142+self.player.y+10+5, 129+18+self.player.x-30-20, 146+self.player.y+10+5, 128+20+self.player.x-30-20, 144+self.player.y+10+5, 130+16+self.player.x-30-20, 142+self.player.y+10+5, 128+20+self.player.x-30-20, 141+self.player.y+10+5)
                 self.vLooking = "Left"
                 
             elif self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Left" and self.vLooking == "": #Moving left CROUCHING FRAME #1
-                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+self.player.y, 170+self.player.x-20+self.x-40, 160+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+self.player.y+10, 170+self.player.x-20+self.x-40, 160+self.player.y+10) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+2+self.player.x-30-20, 130+self.player.y+10, 146-16+self.player.x-30-20, 136+self.player.y+10, 147-18+self.player.x-30-20, 142+self.player.y+10, 146-16+self.player.x-30-20, 149+self.player.y+10, 137+2+self.player.x-30-20, 155+self.player.y+10, 143-10+self.player.x-30-20, 149+self.player.y+10, 144-12+self.player.x-30-20, 142+self.player.y+10, 143-10+self.player.x-30-20, 136+self.player.y+10)
+                canvas.coords(self.voice2, 130+16+self.player.x-30-20, 135+self.player.y+10, 139-2+self.player.x-30-20, 140+self.player.y+10, 140-4+self.player.x-30-20, 142+self.player.y+10, 139-2+self.player.x-30-20, 146+self.player.y+10, 130+16+self.player.x-30-20, 150+self.player.y+10, 137+2+self.player.x-30-20, 144+self.player.y+10, 137+2+self.player.x-30-20, 142+self.player.y+10, 137+2+self.player.x-30-20, 141+self.player.y+10)
+                canvas.coords(self.voice3, 129+18+self.player.x-30-20, 140+self.player.y+10, 131+14+self.player.x-30-20, 142+self.player.y+10, 129+18+self.player.x-30-20, 146+self.player.y+10, 128+20+self.player.x-30-20, 144+self.player.y+10, 130+16+self.player.x-30-20, 142+self.player.y+10, 128+20+self.player.x-30-20, 141+self.player.y+10)
                 self.vLooking = "Left"
                 
             elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Left" and self.vLooking == "": #Moving left CROUCHING FRAME #2
-                canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+2+self.player.y, 170+self.player.x-20+self.x-40, 160+2+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x-20+self.x-40, 135+2+self.player.y+10, 170+self.player.x-20+self.x-40, 160+2+self.player.y+10) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+2+self.player.x-30-20, 130+self.player.y+10+2, 146-16+self.player.x-30-20, 136+self.player.y+10+2, 147-18+self.player.x-30-20, 142+self.player.y+10+2, 146-16+self.player.x-30-20, 149+self.player.y+10+2, 137+2+self.player.x-30-20, 155+self.player.y+10+2, 143-10+self.player.x-30-20, 149+self.player.y+10+2, 144-12+self.player.x-30-20, 142+self.player.y+10+2, 143-10+self.player.x-30-20, 136+self.player.y+10+2)
+                canvas.coords(self.voice2, 130+16+self.player.x-30-20, 135+self.player.y+10+2, 139-2+self.player.x-30-20, 140+self.player.y+10+2, 140-4+self.player.x-30-20, 142+self.player.y+10+2, 139-2+self.player.x-30-20, 146+self.player.y+10+2, 130+16+self.player.x-30-20, 150+self.player.y+10+2, 137+2+self.player.x-30-20, 144+self.player.y+10+2, 137+2+self.player.x-30-20, 142+self.player.y+10+2, 137+2+self.player.x-30-20, 141+self.player.y+10+2)
+                canvas.coords(self.voice3, 129+18+self.player.x-30-20, 140+self.player.y+10+2, 131+14+self.player.x-30-20, 142+self.player.y+10+2, 129+18+self.player.x-30-20, 146+self.player.y+10+2, 128+20+self.player.x-30-20, 144+self.player.y+10+2, 130+16+self.player.x-30-20, 142+self.player.y+10+2, 128+20+self.player.x-30-20, 141+self.player.y+10+2)
                 self.vLooking = "Left"
 
             #MOVING RIGHT NOT IN AIR. INITIALIZED VOICE
             elif self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right without sprinting or crouching FRAME #1
-                canvas.coords(self.voice1, 125+self.player.x+20+self.x, 125+self.player.y, 150+self.player.x+20+self.x, 150+self.player.y)
+                #canvas.coords(self.voice1, 125+self.player.x+20+self.x, 125+self.player.y, 150+self.player.x+20+self.x, 150+self.player.y)
+                canvas.coords(self.voice1, 137+self.player.x+30, 130+self.player.y, 146+self.player.x+30, 136+self.player.y, 147+self.player.x+30, 142+self.player.y, 146+self.player.x+30, 149+self.player.y, 137+self.player.x+30, 155+self.player.y, 143+self.player.x+30, 149+self.player.y, 144+self.player.x+30, 142+self.player.y, 143+self.player.x+30, 136+self.player.y)
+                canvas.coords(self.voice2, 130+self.player.x+30, 135+self.player.y, 139+self.player.x+30, 140+self.player.y, 140+self.player.x+30, 142+self.player.y, 139+self.player.x+30, 146+self.player.y, 130+self.player.x+30, 150+self.player.y, 137+self.player.x+30, 144+self.player.y, 137+self.player.x+30, 142+self.player.y, 137+self.player.x+30, 141+self.player.y)
+                canvas.coords(self.voice3, 129+self.player.x+30, 140+self.player.y, 131+self.player.x+30, 142+self.player.y, 129+self.player.x+30, 146+self.player.y, 128+self.player.x+30, 144+self.player.y, 130+self.player.x+30, 142+self.player.y, 128+self.player.x+30, 141+self.player.y)
                 self.vLooking = "Right"
                 
             elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right without sprinting or crouching FRAME #2
-                canvas.coords(self.voice1, 125+self.player.x+20+self.x, 125+3+self.player.y, 150+self.player.x+20+self.x, 150+3+self.player.y)
+                #canvas.coords(self.voice1, 125+self.player.x+20+self.x, 125+3+self.player.y, 150+self.player.x+20+self.x, 150+3+self.player.y)
+                canvas.coords(self.voice1, 137+self.player.x+30, 130+self.player.y+3, 146+self.player.x+30, 136+self.player.y+3, 147+self.player.x+30, 142+self.player.y+3, 146+self.player.x+30, 149+self.player.y+3, 137+self.player.x+30, 155+self.player.y+3, 143+self.player.x+30, 149+self.player.y+3, 144+self.player.x+30, 142+self.player.y+3, 143+self.player.x+30, 136+self.player.y)
+                canvas.coords(self.voice2, 130+self.player.x+30, 135+self.player.y+3, 139+self.player.x+30, 140+self.player.y+3, 140+self.player.x+30, 142+self.player.y+3, 139+self.player.x+30, 146+self.player.y+3, 130+self.player.x+30, 150+self.player.y+3, 137+self.player.x+30, 144+self.player.y+3, 137+self.player.x+30, 142+self.player.y+3, 137+self.player.x+30, 141+self.player.y)
+                canvas.coords(self.voice3, 129+self.player.x+30, 140+self.player.y+3, 131+self.player.x+30, 142+self.player.y+3, 129+self.player.x+30, 146+self.player.y+3, 128+self.player.x+30, 144+self.player.y+3, 130+self.player.x+30, 142+self.player.y+3, 128+self.player.x+30, 141+self.player.y)
                 self.vLooking = "Right"
             
             elif self.player.Frame == 0 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right SPRINTING FRAME #1
-                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+self.player.y, 170+self.player.x+20+self.x, 160+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+self.player.y, 170+self.player.x+20+self.x, 160+self.player.y) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+self.player.x+30+20, 130+self.player.y+10, 146+self.player.x+30+20, 136+self.player.y+10, 147+self.player.x+30+20, 142+self.player.y+10, 146+self.player.x+30+20, 149+self.player.y+10, 137+self.player.x+30+20, 155+self.player.y+10, 143+self.player.x+30+20, 149+self.player.y+10, 144+self.player.x+30+20, 142+self.player.y+10, 143+self.player.x+30+20, 136+self.player.y+10)
+                canvas.coords(self.voice2, 130+self.player.x+30+20, 135+self.player.y+10, 139+self.player.x+30+20, 140+self.player.y+10, 140+self.player.x+30+20, 142+self.player.y+10, 139+self.player.x+30+20, 146+self.player.y+10, 130+self.player.x+30+20, 150+self.player.y+10, 137+self.player.x+30+20, 144+self.player.y+10, 137+self.player.x+30+20, 142+self.player.y+10, 137+self.player.x+30+20, 141+self.player.y+10)
+                canvas.coords(self.voice3, 129+self.player.x+30+20, 140+self.player.y+10, 131+self.player.x+30+20, 142+self.player.y+10, 129+self.player.x+30+20, 146+self.player.y+10, 128+self.player.x+30+20, 144+self.player.y+10, 130+self.player.x+30+20, 142+self.player.y+10, 128+self.player.x+30+20, 141+self.player.y+10)
                 self.vLooking = "Right"
                 
             elif self.player.Frame == 1 and self.player.sprint == True and self.player.crouch == False and self.player.looking == "Right" and self.vLooking == "": #Moving right SPRINTING FRAME #2
-                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+5+self.player.y, 170+self.player.x+20+self.x, 160+5+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+5+self.player.y+10, 170+self.player.x+20+self.x, 160+5+self.player.y+10) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+self.player.x+30+20, 130+self.player.y+10+5, 146+self.player.x+30+20, 136+self.player.y+10+5, 147+self.player.x+30+20, 142+self.player.y+10+5, 146+self.player.x+30+20, 149+self.player.y+10+5, 137+self.player.x+30+20, 155+self.player.y+10+5, 143+self.player.x+30+20, 149+self.player.y+10+5, 144+self.player.x+30+20, 142+self.player.y+10+5, 143+self.player.x+30+20, 136+self.player.y+10+5)
+                canvas.coords(self.voice2, 130+self.player.x+30+20, 135+self.player.y+10+5, 139+self.player.x+30+20, 140+self.player.y+10+5, 140+self.player.x+30+20, 142+self.player.y+10+5, 139+self.player.x+30+20, 146+self.player.y+10+5, 130+self.player.x+30+20, 150+self.player.y+10+5, 137+self.player.x+30+20, 144+self.player.y+10+5, 137+self.player.x+30+20, 142+self.player.y+10+5, 137+self.player.x+30+20, 141+self.player.y+10+5)
+                canvas.coords(self.voice3, 129+self.player.x+30+20, 140+self.player.y+10+5, 131+self.player.x+30+20, 142+self.player.y+10+5, 129+self.player.x+30+20, 146+self.player.y+10+5, 128+self.player.x+30+20, 144+self.player.y+10+5, 130+self.player.x+30+20, 142+self.player.y+10+5, 128+self.player.x+30+20, 141+self.player.y+10+5)
                 self.vLooking = "Right"
                 
             elif self.player.Frame == 0 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Right" and self.vLooking == "": #Moving right CROUCHING FRAMe #1
-                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+self.player.y, 170+self.player.x+20+self.x, 160+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+self.player.y+10, 170+self.player.x+20+self.x, 160+self.player.y+10) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+self.player.x+30+20, 130+self.player.y+10, 146+self.player.x+30+20, 136+self.player.y+10, 147+self.player.x+30+20, 142+self.player.y+10, 146+self.player.x+30+20, 149+self.player.y+10, 137+self.player.x+30+20, 155+self.player.y+10, 143+self.player.x+30+20, 149+self.player.y+10, 144+self.player.x+30+20, 142+self.player.y+10, 143+self.player.x+30+20, 136+self.player.y+10)
+                canvas.coords(self.voice2, 130+self.player.x+30+20, 135+self.player.y+10, 139+self.player.x+30+20, 140+self.player.y+10, 140+self.player.x+30+20, 142+self.player.y+10, 139+self.player.x+30+20, 146+self.player.y+10, 130+self.player.x+30+20, 150+self.player.y+10, 137+self.player.x+30+20, 144+self.player.y+10, 137+self.player.x+30+20, 142+self.player.y+10, 137+self.player.x+30+20, 141+self.player.y+10)
+                canvas.coords(self.voice3, 129+self.player.x+30+20, 140+self.player.y+10, 131+self.player.x+30+20, 142+self.player.y+10, 129+self.player.x+30+20, 146+self.player.y+10, 128+self.player.x+30+20, 144+self.player.y+10, 130+self.player.x+30+20, 142+self.player.y+10, 128+self.player.x+30+20, 141+self.player.y+10)
                 self.vLooking = "Right"
                 
             elif self.player.Frame == 1 and self.player.sprint == False and self.player.crouch == True and self.player.looking == "Right" and self.vLooking == "": #Moving right CROUCHING FRAMe #2
-                canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+2+self.player.y, 170+self.player.x+20+self.x, 160+2+self.player.y) #(+20, +10) difference from walking
+                #canvas.coords(self.voice1, 145+self.player.x+20+self.x, 135+2+self.player.y+10, 170+self.player.x+20+self.x, 160+2+self.player.y+10) #(+20, +10) difference from walking
+                canvas.coords(self.voice1, 137+self.player.x+30+20, 130+self.player.y+10+2, 146+self.player.x+30+20, 136+self.player.y+10+2, 147+self.player.x+30+20, 142+self.player.y+10+2, 146+self.player.x+30+20, 149+self.player.y+10+2, 137+self.player.x+30+20, 155+self.player.y+10+2, 143+self.player.x+30+20, 149+self.player.y+10+2, 144+self.player.x+30+20, 142+self.player.y+10+2, 143+self.player.x+30+20, 136+self.player.y+10)
+                canvas.coords(self.voice2, 130+self.player.x+30+20, 135+self.player.y+10+2, 139+self.player.x+30+20, 140+self.player.y+10+2, 140+self.player.x+30+20, 142+self.player.y+10+2, 139+self.player.x+30+20, 146+self.player.y+10+2, 130+self.player.x+30+20, 150+self.player.y+10+2, 137+self.player.x+30+20, 144+self.player.y+10+2, 137+self.player.x+30+20, 142+self.player.y+10+2, 137+self.player.x+30+20, 141+self.player.y+10)
+                canvas.coords(self.voice3, 129+self.player.x+30+20, 140+self.player.y+10+2, 131+self.player.x+30+20, 142+self.player.y+10+2, 129+self.player.x+30+20, 146+self.player.y+10+2, 128+self.player.x+30+20, 144+self.player.y+10+2, 130+self.player.x+30+20, 142+self.player.y+10+2, 128+self.player.x+30+20, 141+self.player.y+10)
                 self.vLooking = "Right"
 
             self.counter += 1
@@ -111,25 +156,31 @@ class Voice():
             if self.vLooking == "Left" and self.counter == 10:
                 self.counter = 0
                 self.x -= 20
-                self.xMove = -50
-                canvas.move(self.voice1, self.xMove, 0)
+                canvas.move(self.voice1, -50, 0)
+                canvas.move(self.voice2, -50, 0)
+                canvas.move(self.voice3, -50, 0)
                 if self.x == -520:
                     self.x = 0
                     voiceOn = False
                     self.vLooking = ""
                     canvas.move(self.voice1, -1000000, -1000000)
+                    canvas.move(self.voice2, -1000000, -1000000)
+                    canvas.move(self.voice3, -1000000, -1000000)
                     print("Special Ready.")
                     
             elif self.vLooking == "Right" and self.counter == 10:
                 self.counter = 0
                 self.x += 20
-                self.xMove = 50
-                canvas.move(self.voice1, self.xMove, 0)
+                canvas.move(self.voice1, 50, 0)
+                canvas.move(self.voice2, 50, 0)
+                canvas.move(self.voice3, 50, 0)
                 if self.x == 520:
                     self.x = 0
                     voiceOn = False
                     self.vLooking = ""
                     canvas.move(self.voice1, -1000000, -1000000)
+                    canvas.move(self.voice2, -1000000, -1000000)
+                    canvas.move(self.voice3, -1000000, -1000000)
                     print("Special Ready.")
 
 class Nathaniel2010: #Refernce to Heavy Rain's AVI 
@@ -142,7 +193,7 @@ class Nathaniel2010: #Refernce to Heavy Rain's AVI
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update 2.0 - Basic Attack Update\n"""
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.1: Voice Visual Update\n"""
                                                 """Use left click on your mouse to basic attack. Basic attacks for sprint are the same as normal walking."""
                                                   """"""
                                                 """\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
@@ -182,7 +233,7 @@ class Player:
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="Pathfinder Zekryss", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="Harbinger", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
