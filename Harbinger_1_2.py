@@ -28,9 +28,10 @@ class Sword:
 
         #I need help creating designs with a crappy sword AND an OP sword. No animating. I'll do that.
 
+
         #Crappy sword
-        self.s_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Sword Name1", font=("Fixedsys", 16)) #The "s_" means sword for short.
-        self.s_blade1 = canvas.create_polygon(495, 110, 505, 110, 505, 160, 495, 160, fill="silver", outline="black") #Follow the format of naming please.
+        self.s_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Rusty Sword (Tier 0)", font=("Fixedsys", 16)) #The "s_" means sword for short.
+        self.s_blade1 = canvas.create_polygon(493, 165, 498, 165, 498, 140, 500, 130, 502, 140, 502, 165, 507, 165, 507, 168, 502, 168, 502, 180, 498, 180, 498, 168, 493, 168, fill="gray50", outline="black") #Follow the format of naming please.
 
         #OP Sword
         self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Sword Name2", font=("Fixedsys", 16)) 
@@ -894,10 +895,9 @@ class Player:
         global voiceOn
         if voiceOn == True:
             print("Special on cooldown!")
-            return
         else:
             print("Special activated.")
-        voiceOn = True
+            voiceOn = True
         #canvas.after(100, self.rebindSpace) #MOVED TO BOTTOM OF VOICE.DRAW()
         
     def rebindSpace(self):
