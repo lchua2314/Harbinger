@@ -37,8 +37,12 @@ class Sword:
         self.s_hilt1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 493, 168, fill="brown", outline="black")
         #OP Sword
         self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Porous Sword (Tier Unknown)", font=("Fixedsys", 16)) 
-        self.s_blade2 = canvas.create_polygon(995, 110, 1005, 110, 1005, 160, 995, 160, fill="silver", outline="black")
-
+        self.s_blade2 = canvas.create_polygon(998, 160, 1002, 160, 1002, 180, 998, 180, fill="silver", outline="black")
+        self.canvas.create_arc(993, 130, 1007, 210, start = 0, 
+                          extent = 180, outline = "black", 
+                          fill = "pink", width = 1)
+        #An  unusual sword that is riddled with little holes on its surface. Upon closer inspection the holes seem to be.. pulsating?
+        
 class Voice():
     def __init__(self,canvas,player):
         self.canvas = canvas
