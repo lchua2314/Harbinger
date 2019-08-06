@@ -8,21 +8,22 @@ voiceOn = False #When this is True, Voice class activates.
 basic_attack = False #When this is True, basic attack animation activates and locks the player in the animation until it is over.
 
 tk = Tk()
-tk.title("Harbinger - Alpha 2.1: Voice Visual Update")
+tk.title("Harbinger - Alpha 2.2: HP, MP, and Sprint Bars Update (and a bit of Movement)")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
+
+
 class Enemy2:
     def __init__(self,canvas):
         self.canvas = canvas
-
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
-
         self.e1_name1 = canvas.create_text(790, 70, anchor="center", fill="red", text="Enemy2", font=("Fixedsys", 16))
-       #self.e1_body1 = canvas.create_polygon(780,150 fill="red", outline="black")
+        #self.e1_body1 = canvas.create_polygon(780,150 fill="red", outline="black")
 
         def draw(self):
             global voiceOn
+
 class Enemy:
     def __init__(self,canvas):
         self.canvas = canvas
@@ -45,18 +46,16 @@ class Enemy:
         self.el_leftHand1=canvas.create_oval(700,130,720,160,fill="tan")
         # feet
         self.el_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black")
-
         #cannon maybe future levels. Don't want to instant kill player in tutorial.
         #self.el_cannon1=canvas.create_oval(600,130,695,180, fill="grey")
+
         def draw(self):
             global voiceOn
 
 class Sword: 
     def __init__(self,canvas):
         self.canvas = canvas
-
         #I need help creating designs with a crappy sword AND an OP sword. No animating. I'll do that.
-
 
         #Crappy sword
         self.s_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Rusty Sword (Tier 0)", font=("Fixedsys", 16)) #The "s_" means sword for short.
@@ -65,6 +64,111 @@ class Sword:
         #OP Sword
         self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Sword Name2", font=("Fixedsys", 16)) 
         self.s_blade2 = canvas.create_polygon(995, 110, 1005, 110, 1005, 160, 995, 160, fill="silver", outline="black")
+
+        #Don't mess with my eye.
+        self.s_eyelid1 = canvas.create_oval(1155, 10, 1295, 100, fill="black")
+        #self.s_eye1 = canvas.create_oval(1155, 20, 1295, 90, fill="white") #EYE OPEN
+        self.s_eye1 = canvas.create_oval(1155, 55, 1295, 55, fill="white") #Eye closed
+        self.s_pupil1 = canvas.create_oval(1213, 42, 1238, 68, fill="black")
+
+        canvas.move(self.s_eyelid1, 0, -140)
+        canvas.move(self.s_eye1, 0, -140)
+        canvas.move(self.s_pupil1, 0, -140)
+        
+        self.x_eye1, self.y_eye1 = 0,0
+        self.x_pupil1, self.y_pupil1 = 0,0
+        self.x_eyelid1, self.y_eyelid1 = 0,0
+        self.checker = -70
+        self.checker2 = 0
+        
+    def drawEye(self):
+        if self.checker >= -70 and self.checker < 0:
+            if self.checker == -1:
+                canvas.move(self.s_eye1, 0, 140)
+                canvas.move(self.s_pupil1, 0, 140)
+            self.checker += 1
+            canvas.move(self.s_eyelid1, 0, 2)
+            #print("if 0")
+            #self.y_eyelid1 += 2 
+            #canvas.coords(self.s_eyelid1, 1155, 10+self.y_eyelid1, 1295, 100+self.y_eyelid1)
+        elif self.checker >= 0 and self.checker <= 25: #Opens eye
+            self.y_eye1 += 1 #25
+            self.checker += 1
+            canvas.coords(self.s_eye1, 1155, 55-self.y_eye1, 1295, 55+self.y_eye1)
+            #print("First if")
+        elif self.checker > 25 and self.checker <= 85: #Eye blinks once and remains open
+            self.y_eye1 -= 1 #-65+25 = -40
+            self.checker += 1
+            canvas.coords(self.s_eye1, 1155, 55-self.y_eye1, 1295, 55+self.y_eye1)
+            #print("Second if")
+        elif self.checker >= 86 and self.checker <= 100 and self.checker2 == 1: #Pupil moves down
+            self.x_pupil1 += 2
+            self.y_pupil1 += 1
+            self.checker += 1
+            canvas.coords(self.s_pupil1, 1213-self.x_pupil1, 42+self.y_pupil1, 1238-self.x_pupil1, 68+self.y_pupil1)
+            #print("Third if")
+        elif self.checker > 100 and self.checker <= 124 and self.checker2 == 1: #Pupil rests for a few seconds
+            self.checker += 1
+        elif self.checker > 124 and self.checker <= 140 and self.checker2 == 1: #Pupil moves back to middle
+            #print("Fourth if")
+            self.x_pupil1 -= 2
+            self.y_pupil1 -= 1
+            self.checker += 1
+            canvas.coords(self.s_pupil1, 1213-self.x_pupil1, 42+self.y_pupil1, 1238-self.x_pupil1, 68+self.y_pupil1)
+        elif self.checker >= 140 and self.checker <= 174: #Eye closes
+            self.y_eye1 += 1
+            self.checker += 1
+            canvas.coords(self.s_eye1, 1155, 55-self.y_eye1, 1295, 55+self.y_eye1)
+            #print("5 if")
+        elif self.checker == 175: #Move pupil and the white in the eye out so only the eyelid is visible
+            #print("6 if")
+            self.checker += 1
+            canvas.move(self.s_eye1, -100000, -100000)
+            canvas.move(self.s_pupil1, -100000, -100000)
+        elif self.checker >= 176 and self.checker < 246: #Shift eye upwards out of screen
+            #print("7 if")
+            self.checker += 1
+            canvas.move(self.s_eyelid1, 0, -2)
+            
+        if self.checker2 <= 1:
+            self.checker2 += 1
+        else:               
+            self.checker2 = 0
+
+class Bars:
+    def __init__(self,canvas):
+        self.canvas = canvas
+        self.h_hp = canvas.create_arc(1130-50, 610-50, 1145+50, 625+50, extent=359, style=ARC, fill="white")
+        self.h_mp = canvas.create_arc(130, 160, 145, 175, extent=90, style=ARC, fill="green")
+
+class Nathaniel2010: #Refernce to Heavy Rain's AVI 
+    def __init__(self,canvas):
+        self.canvas = canvas
+        #self.n_glove = canvas.create_polyon(fill="black")
+        #self.n_glasses = canvas.create_polygon(fill="black")
+
+class Background:
+    def __init__(self,canvas):
+        self.canvas = canvas
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2: Bars and Movement Update\n"""
+                                                """Can toggle from sprint to crouching vise versa now. After you press the toggle for both keys, stance now changes."""
+                                                  """"""
+                                                """\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
+                                                """\n"""
+                                                  """ \n""",
+                                                  width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
+        self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
+                                                                 """Cannot crouch stance while in sprint stance. Vise versa. Click on other window to view details.\n"""
+                                                                 """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable.""",
+                                                 width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text)
+        #Creating ground1
+        self.a_ground1 = canvas.create_rectangle(0,183,1500,190, outline="black",fill="green")
+
+        #Creating ground2
+        self.a_ground2 = canvas.create_rectangle(0,273,1500,280, outline="black",fill="green")
+
+        #Creating lava pool to test hitboxes when implemented.
+        self.a_lava1 = canvas.create_rectangle(0,273,100,280, outline="black",fill="red")
 
 class Voice():
     def __init__(self,canvas,player):
@@ -211,34 +315,7 @@ class Voice():
                     canvas.move(self.voice1, -1000000, -1000000)
                     canvas.move(self.voice2, -1000000, -1000000)
                     canvas.move(self.voice3, -1000000, -1000000)
-                    print("Special Ready.")
-
-class Nathaniel2010: #Refernce to Heavy Rain's AVI 
-    def __init__(self,canvas):
-        self.canvas = canvas
-        #self.n_glove = canvas.create_polyon(fill="black")
-        #self.n_glasses = canvas.create_polygon(fill="black")
-        
-    
-class Background:
-    def __init__(self,canvas):
-        self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.1: Voice Visual Update\n"""
-                                                """Use left click on your mouse to basic attack. Basic attacks for sprint are the same as normal walking."""
-                                                  """"""
-                                                """\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
-                                                """\nPlease help design two swords, the special attack (some voice particles), first enemy, background."""
-                                                  """ \nNext update will implement more basic attacks or something else.""",
-                                                  width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
-        self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
-                                                                 """Cannot crouch stance while in sprint stance. Vise versa. Click on other window to view details.\n"""
-                                                                 """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable.""",
-                                                 width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text)
-        #Creating ground1
-        self.a_ground1 = canvas.create_rectangle(0,183,1500,190, outline="black",fill="green")
-
-        #Creating ground2
-        self.a_ground1 = canvas.create_rectangle(0,273,1500,280, outline="black",fill="green")
+                    print("Special Ready.")        
 
 class Player:
     def __init__(self,canvas):
@@ -263,7 +340,7 @@ class Player:
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="Harbinger", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
@@ -935,6 +1012,7 @@ class Player:
 
     def eKey(self, evt): #Action Key
         print("'e' key pressed")
+        
 
     def qKey(self, evt): #Switch weapons
         print("'q' key pressed")
@@ -1289,6 +1367,8 @@ class Player:
             print("Initialing basic attack")
         else:
             print("Basic attack still in animation!")
+
+            #I forgot what was the below.
         #elif basic_attack == True: #Will never reach
          #   print("Basic attack still in aniamtion!")
         #elif basic_attack == True and basic_attack_counter == 30:
@@ -1308,23 +1388,40 @@ class Player:
     def shiftKey(self, evt): #Sprint/Walk toggle
         if self.sprint == True and self.crouch == False:
             self.sprint = False
+            self.checker = 9 #This line and the next allows one frame of the player.draw() method to change the stance of the character. The character moves a bit due to 1 draw() frame but it is almost unoticeable.
+            self.notMoving = False
         elif self.sprint == False and self.crouch == False:
             self.sprint = True
-        else:
-            print("Cannot toggle sprint! Must be out of crouch!")
+            self.checker = 9
+            self.notMoving = False
+        else: #If you are crouching, pressing shift will change that to sprinting
+            #print("Toggling sprint to True and making crouch False")
+            self.sprint = True
+            self.crouch = False
+            self.checker = 9
+            self.notMoving = False
 
     def ctrlKey(self, evt): #crouch
         if self.crouch == True and self.sprint == False:
             self.crouch = False
+            self.checker = 9
+            self.notMoving = False
         elif self.crouch == False and self.sprint == False:
             self.crouch = True
-        else:
-            print("Cannot toggle crouch! Must be out of sprint!")
+            self.checker = 9
+            self.notMoving = False
+        else: #If you are sprinting, pressing shift will change that to crouching
+            #print("Toggling crouch to True and making sprint False")
+            self.sprint = False
+            self.crouch = True
+            self.checker = 9
+            self.notMoving = False
                 
 background = Background(canvas)
 enemy = Enemy(canvas)
 sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
+bars = Bars(canvas)
 player = Player(canvas)
 voice = Voice(canvas,player)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
@@ -1334,7 +1431,9 @@ while 1:
         player.draw()
     else:
         player.drawAttack()
+    #bars.draw()
     #sword.draw()
+    sword.drawEye()
     #enemy.draw()
     #nathaniel2010.draw()
     voice.draw()
