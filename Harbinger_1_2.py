@@ -129,6 +129,19 @@ class Sword:
             #print("7 if")
             self.checker += 1
             canvas.move(self.s_eyelid1, 0, -2)
+        elif self.checker == 246: #Resets all eye movement and such.
+            self.s_eyelid1 = canvas.create_oval(1155, 10, 1295, 100, fill="black")
+            self.s_eye1 = canvas.create_oval(1155, 55, 1295, 55, fill="white") #Eye closed
+            self.s_pupil1 = canvas.create_oval(1213, 42, 1238, 68, fill="black")
+            canvas.move(self.s_eyelid1, 0, -140)
+            canvas.move(self.s_eye1, 0, -140)
+            canvas.move(self.s_pupil1, 0, -140)
+        
+            self.x_eye1, self.y_eye1 = 0,0
+            self.x_pupil1, self.y_pupil1 = 0,0
+            self.x_eyelid1, self.y_eyelid1 = 0,0
+            self.checker = -70
+            self.checker2 = 0
             
         if self.checker2 <= 1:
             self.checker2 += 1
