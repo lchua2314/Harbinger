@@ -12,15 +12,44 @@ tk.title("Harbinger - Alpha 2.1: Voice Visual Update")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
+class Enemy2:
+    def __init__(self,canvas):
+        self.canvas = canvas
 
+        #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
+
+        self.e1_name1 = canvas.create_text(790, 70, anchor="center", fill="red", text="Enemy2", font=("Fixedsys", 16))
+       #self.e1_body1 = canvas.create_polygon(780,150 fill="red", outline="black")
+
+        def draw(self):
+            global voiceOn
 class Enemy:
     def __init__(self,canvas):
         self.canvas = canvas
 
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
 
-        self.e1_name1 = canvas.create_text(750, 100, anchor="center", fill="red", text="Enemy1", font=("Fixedsys", 16))
-        self.e1_body1 = canvas.create_polygon(725, 110, 775, 110, 775, 160, 725, 160, fill="red", outline="black")
+        self.e1_name1 = canvas.create_text(750, 70, anchor="center", fill="red", text="Enemy1", font=("Fixedsys", 16))
+        #shoulder
+        self.e1_neck1 = canvas.create_polygon(758, 110, 730,120,780,120, fill="saddle brown")
+        #body
+        self.el_body1 = canvas.create_polygon(730,120,730,160,780,160,780,120,fill="saddle brown")
+        #arms
+        self.el_leftArm1 = canvas.create_polygon(730,120,710,140,710,160,730,140,fill="tan")
+        self.el_rightArm1 = canvas.create_polygon(780, 120, 800, 140, 800, 160, 780, 140, fill="tan")
+        #head
+        self.el_head1 = canvas.create_oval(745, 80, 765, 120, fill="tan")
+        #pants
+        self.el_pants1= canvas.create_polygon(730,160,730,180,780,180,780,160,fill="dim grey")
+        #hands
+        self.el_leftHand1=canvas.create_oval(700,130,720,160,fill="tan")
+        # feet
+        self.el_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black")
+
+        #cannon maybe future levels. Don't want to instant kill player in tutorial.
+        #self.el_cannon1=canvas.create_oval(600,130,695,180, fill="grey")
+        def draw(self):
+            global voiceOn
 
 class Sword: 
     def __init__(self,canvas):
