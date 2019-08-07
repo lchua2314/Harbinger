@@ -46,6 +46,9 @@ class Enemy:
         self.el_leftHand1=canvas.create_oval(700,130,720,160,fill="tan")
         # feet
         self.el_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black")
+        #eye
+        self.el_eye = canvas.create_oval(750,90,760,100, fill="white")
+        self.el_pupil = canvas.create_oval(754, 93, 757, 97, fill="black")
         #cannon maybe future levels. Don't want to instant kill player in tutorial.
         #self.el_cannon1=canvas.create_oval(600,130,695,180, fill="grey")
 
