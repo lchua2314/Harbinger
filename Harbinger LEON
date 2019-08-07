@@ -62,6 +62,7 @@ class Sword:
         self.s_blade1 = canvas.create_polygon(493, 165, 498, 165, 498, 140, 500, 138, 502, 140, 502, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="gray50", outline="black") #Follow the format of naming please.
         self.s_handle1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="saddle brown", outline="black")
         self.s_hilt1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 493, 168, fill="brown", outline="black")
+        self.s_rust1 = canvas.create_line(500, 139, 501, 140, 501, 165, fill="brown")
         #OP Sword
         #An  unusual sword that is riddled with little holes on its surface. Upon closer inspection the holes seem to be.. pulsating?
         self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Porous Sword (Tier Unknown)", font=("Fixedsys", 16)) 
