@@ -6,6 +6,8 @@ import time
 
 voiceOn = False #When this is True, Voice class activates.
 basic_attack = False #When this is True, basic attack animation activates and locks the player in the animation until it is over.
+takeDamage = 0 #Testing this will remove later probably
+takeDamageOn = False
 
 tk = Tk()
 tk.title("Harbinger - Alpha 2.2: HP, MP, and Sprint Bars Update (and a bit of Movement)")
@@ -30,7 +32,7 @@ class Enemy:
 
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
 
-        self.e1_name1 = canvas.create_text(750, 70, anchor="center", fill="red", text="Enemy1", font=("Fixedsys", 16))
+        self.e1_name1 = canvas.create_text(750, 70, anchor="center", fill="red", text="One-Eyed Freak", font=("Fixedsys", 16))
         #shoulder
         self.e1_neck1 = canvas.create_polygon(758, 110, 730,120,780,120, fill="saddle brown")
         #body
@@ -45,7 +47,7 @@ class Enemy:
         #hands
         self.el_leftHand1=canvas.create_oval(700,130,720,160,fill="tan")
         # feet
-        self.el_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black")
+        self.el_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black")     
         #eye
         self.el_eye = canvas.create_oval(750,90,760,100, fill="white")
         self.el_pupil = canvas.create_oval(754, 93, 757, 97, fill="black")
@@ -62,13 +64,65 @@ class Sword:
 
         #Crappy sword
         self.s_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Rusty Sword (Tier 0)", font=("Fixedsys", 16)) #The "s_" means sword for short.
-        self.s_blade1 = canvas.create_polygon(493, 165, 498, 165, 498, 140, 500, 130, 502, 140, 502, 165, 507, 165, 507, 168, 502, 168, 502, 180, 498, 180, 498, 168, 493, 168, fill="gray50", outline="black") #Follow the format of naming please.
+        self.s_blade1 = canvas.create_polygon(493, 165, 498, 165, 498, 140, 500, 138, 502, 140, 502, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="gray50", outline="black") #Follow the format of naming please.
+        self.s_handle1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="saddle brown", outline="black")
+        self.s_hilt1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 493, 168, fill="brown", outline="black")
+        self.s_rust1 = canvas.create_line(500, 139, 501, 140, 501, 165, fill="brown")
 
         #OP Sword
-        self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Sword Name2", font=("Fixedsys", 16)) 
-        self.s_blade2 = canvas.create_polygon(995, 110, 1005, 110, 1005, 160, 995, 160, fill="silver", outline="black")
+        #An  unusual sword that is riddled with little holes on its surface. Upon closer inspection the holes seem to be.. pulsating?
+        self.s_name2 = canvas.create_text(1000, 100, anchor="center", fill="green", text="Porous Sword (Tier Unknown)", font=("Fixedsys", 16)) 
+        self.s_handle2 = canvas.create_polygon(999, 160, 1001, 160, 1001, 180, 999, 180, fill="brown", outline="black")
+        self.s_blade2a = canvas.create_arc(993, 130, 1007, 210, start = 0, extent = 180, outline ="red", fill = "pink", width = 1)
+        self.s_blade2b = canvas.create_polygon(1000, 170, 1008, 170, 1008, 187, outline="red", fill="pink")
+        self.s_blade2c = canvas.create_polygon(1000, 170, 1007, 170, 1007, 187, fill="pink")
+        self.s_hole1 = canvas.create_oval(999, 135, 1001, 137, outline="red", fill="black")
+        self.s_hole2 = canvas.create_oval(997, 142, 999, 144, outline="red", fill="black")
+        self.s_hole3 = canvas.create_oval(1001, 144, 1003, 146, outline="red", fill="black")
+        self.s_hole4 = canvas.create_oval(996, 150, 998, 152, outline="red", fill="black")
+        self.s_hole5 = canvas.create_oval(1002, 156, 1004, 158, outline="red", fill="black")
+        self.s_hole6 = canvas.create_oval(995, 159, 997, 161, outline="red", fill="black")
 
-        #Don't mess with my eye.
+        #True Blood
+        #A sword forged with the most wicked souls from hell.
+        #Obtained by feeding your sword enough to fill it's hunger, making mostly evil decisions, and being controlling towards the blade around half the time.
+        #Your actions make you as sinister as the blade itself, but bold enough to challenge the demonic sword.
+        #Due to this the blade respects you and sees you worthy as it's user.
+        #The blade treats you as an equal and therefore rewards you with it's true form.
+        #Abilities:
+        #- Summon the damned souls you have executed (major bosses) and they will fight for you.
+        #- All swipe attacks have lingering blood.
+        #- Increased damage 
+        #- Create portals to hell to suck enemies in (or cracks the ground and drops them in)
+        #- Feeds sword after kill.
+        #- All lethal abilities now deal x3 damage.
+        
+        #self.s_TBeyelid1 = canvas.create_oval(430, 190, 570, 280, fill="black")
+        #self.s_TBeye1 = canvas.create_oval(430, 200, 570, 270, fill="firebrick4") #EYE OPEN
+        #self.s_TBpupil1 = canvas.create_oval(488, 222, 513, 248, fill="black")
+        self.s_bgBlood3 = canvas.create_polygon(485-25, 220-10, 520-25, 240-10, 570-25, 280-10, fill="firebrick4")
+        #self.s_bgSkelArm1 = canvas.create_polygon(485-25+10, 220-10, fill="white", outline="black")
+        #self.s_bgSkelHand1 = canvas.create_oval(485-25, 220-10+10, 485-25+15, 220-10+10+15, fill="white", outline="black")
+        #self.s_bloodbgb3 = canvas.create_polygon(485, 220, 520, 240, 525, 250, fill="firebrick4")
+        self.s_name3 = canvas.create_text(500, 100, anchor="center", fill="red", text="True Blood (Tier: Endgame)", font=("Fixedsys", 16)) #The "s_" means sword for short.
+        self.s_blade3 = canvas.create_polygon(500, 118, 506, 140, 506, 165, 500, 165, fill="black", outline="indian red") #Follow the format of naming please. 500
+        self.s_bladeb3 = canvas.create_polygon(494, 165, 494, 140, 500, 118, 500, 165, fill="black", outline="red") #Follow the format of naming please. 500
+        self.s_hilt3 = canvas.create_polygon(489, 165, 511, 165, 511, 168, 489, 168, fill="grey1", outline="black")
+        self.s_hiltb3 = canvas.create_polygon(491, 165, 509, 165, 509, 168, 491, 168, fill="red2", outline="black")
+        self.s_handle3 = canvas.create_polygon(503, 180, 497, 180, 497, 168, 503, 168, fill="black", outline="black")
+        self.s_sash3 = canvas.create_polygon(503, 180+90-10, 497, 180+90-10, 497, 168+90, 503, 168+90, fill="firebrick4", outline="black")
+        self.s_sashb3 = canvas.create_polygon(503, 180+90, 497, 180+90, 497, 168+90+11, 503, 168+90+11, fill="firebrick4", outline="black")
+        self.s_bottomOfSword = canvas.create_oval(495, 165+90+15, 505, 170+90+15, fill="red") #EYE OPEN
+        self.s_blackMiddle = canvas.create_oval(500, 165+90+1, 500, 168+90-1, fill="black")
+
+        canvas.move(self.s_name3, 0, 100)
+        canvas.move(self.s_blade3, 0, 90)
+        canvas.move(self.s_bladeb3, 0, 90)
+        canvas.move(self.s_handle3, 0, 90)
+        canvas.move(self.s_hilt3, 0, 90)
+        canvas.move(self.s_hiltb3, 0, 90)
+
+        #Conscience of the Blade
         self.s_eyelid1 = canvas.create_oval(1155, 10, 1295, 100, fill="black")
         #self.s_eye1 = canvas.create_oval(1155, 20, 1295, 90, fill="white") #EYE OPEN
         self.s_eye1 = canvas.create_oval(1155, 55, 1295, 55, fill="white") #Eye closed
@@ -154,8 +208,164 @@ class Sword:
 class Bars:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.h_hp = canvas.create_arc(1130-50, 610-50, 1145+50, 625+50, extent=359, style=ARC, fill="white")
-        self.h_mp = canvas.create_arc(130, 160, 145, 175, extent=90, style=ARC, fill="green")
+        self.h_sprintBorder = canvas.create_rectangle(1130-50+25+13-100-50-2, 679-2, 1145+50-25-13, 697+2, fill="black", outline="black")
+        self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
+        self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="green")
+        self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
+        self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
+        self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
+        self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="red2")
+        self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
+        self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="blue")
+        self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+        self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
+        self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
+        self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="Class: Vampire", fill="green", anchor="center", font=("Fixedsys", 16))
+        self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
+
+        #Really small bars
+        #self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
+        #self.h_hp = canvas.create_arc(1130-50-25+13+13+13, 610-50-25+13+13+13, 1145+50+25-13-13-13, 625+50+25-13-13-13, width=13, start=0, extent=359, style="arc", outline="red")
+        #self.h_mp = canvas.create_arc(1130-50+13+13, 610-50+13+13, 1145+50-13-13, 625+50-13-13, width=13, start=0, extent=359, style=ARC, outline="blue")
+        #self.h_mp2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=13, start=0, extent=359, style=ARC, outline="grey")
+
+        canvas.move(self.h_bg, 75, -10)
+        canvas.move(self.h_hp, 75, -10)
+        canvas.move(self.h_mp, 75, -10)
+        canvas.move(self.h_mpGrey, 75, -10)
+        canvas.move(self.h_hpGrey, 75, -10)
+        canvas.move(self.h_sprintGrey, 71, -10)
+        canvas.move(self.h_bg2, 75, -10)
+        canvas.move(self.h_hand1, 75, -10)
+        canvas.move(self.h_hand2, 75, -10)
+        canvas.move(self.h_weaponName, 75, -10)
+        canvas.move(self.h_hpName, 75, -10)
+        canvas.move(self.h_mpName, 75, -10)
+        canvas.move(self.h_playerClassName, 75, -10)
+        canvas.move(self.h_mpAbilityName, 75, -10)
+        canvas.move(self.h_hpFill, 75, -10)
+        canvas.move(self.h_sprintName, 71, -10)
+        canvas.move(self.h_sprint, 71, -10)
+        canvas.move(self.h_sprintBorder, 71, -10)
+
+    def draw(self):
+        global takeDamage
+        global takeDamageOn
+        if takeDamageOn == False:
+            pass
+        elif takeDamage == 0:
+            canvas.move(self.h_hp, 75, -10000)
+            canvas.move(self.h_mp, 75, -10000)
+            canvas.move(self.h_sprint, 71, -10000)
+            
+            self.h_sprintBorder = canvas.create_rectangle(1130-50+25+13-100-50-2, 679-2, 1145+50-25-13, 697+2, fill="black", outline="black")
+            self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
+            self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50+50, 679, 1145+50-25-13, 697, fill="green")
+            self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
+            self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
+            self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
+            self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=200, style=ARC, outline="red2")
+            self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
+            self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=300, style=ARC, outline="blue")
+            self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+            self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
+            self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
+            self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="Class: Vampire", fill="green", anchor="center", font=("Fixedsys", 16))
+            self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
+
+        #Really small bars
+        #self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
+        #self.h_hp = canvas.create_arc(1130-50-25+13+13+13, 610-50-25+13+13+13, 1145+50+25-13-13-13, 625+50+25-13-13-13, width=13, start=0, extent=359, style="arc", outline="red")
+        #self.h_mp = canvas.create_arc(1130-50+13+13, 610-50+13+13, 1145+50-13-13, 625+50-13-13, width=13, start=0, extent=359, style=ARC, outline="blue")
+        #self.h_mp2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=13, start=0, extent=359, style=ARC, outline="grey")
+
+            canvas.move(self.h_bg, 75, -10)
+            canvas.move(self.h_hp, 75, -10)
+            canvas.move(self.h_mp, 75, -10)
+            canvas.move(self.h_mpGrey, 75, -10)
+            canvas.move(self.h_hpGrey, 75, -10)
+            canvas.move(self.h_sprintGrey, 71, -10)
+            canvas.move(self.h_bg2, 75, -10)
+            canvas.move(self.h_hand1, 75, -10)
+            canvas.move(self.h_hand2, 75, -10)
+            canvas.move(self.h_weaponName, 75, -10)
+            canvas.move(self.h_hpName, 75, -10)
+            canvas.move(self.h_mpName, 75, -10)
+            canvas.move(self.h_playerClassName, 75, -10)
+            canvas.move(self.h_mpAbilityName, 75, -10)
+            canvas.move(self.h_hpFill, 75, -10)
+            canvas.move(self.h_sprintName, 71, -10)
+            canvas.move(self.h_sprint, 71, -10)
+            canvas.move(self.h_sprintBorder, 71, -10)
+            
+            takeDamageOn = False
+            takeDamage = 1
+        elif takeDamage == 1:
+            canvas.move(self.h_hp, 75, -10000)
+            canvas.move(self.h_mp, 75, -10000)
+            canvas.move(self.h_sprint, 71, -10000)
+            
+            self.h_sprintBorder = canvas.create_rectangle(1130-50+25+13-100-50-2, 679-2, 1145+50-25-13, 697+2, fill="black", outline="black")
+            self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
+            self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="green")
+            self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
+            self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
+            self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
+            self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="red2")
+            self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
+            self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="blue")
+            self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+            self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
+            self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
+            self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="Class: Vampire", fill="green", anchor="center", font=("Fixedsys", 16))
+            self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
+
+        #Really small bars
+        #self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
+        #self.h_hp = canvas.create_arc(1130-50-25+13+13+13, 610-50-25+13+13+13, 1145+50+25-13-13-13, 625+50+25-13-13-13, width=13, start=0, extent=359, style="arc", outline="red")
+        #self.h_mp = canvas.create_arc(1130-50+13+13, 610-50+13+13, 1145+50-13-13, 625+50-13-13, width=13, start=0, extent=359, style=ARC, outline="blue")
+        #self.h_mp2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=13, start=0, extent=359, style=ARC, outline="grey")
+
+            canvas.move(self.h_bg, 75, -10)
+            canvas.move(self.h_hp, 75, -10)
+            canvas.move(self.h_mp, 75, -10)
+            canvas.move(self.h_mpGrey, 75, -10)
+            canvas.move(self.h_hpGrey, 75, -10)
+            canvas.move(self.h_sprintGrey, 71, -10)
+            canvas.move(self.h_bg2, 75, -10)
+            canvas.move(self.h_hand1, 75, -10)
+            canvas.move(self.h_hand2, 75, -10)
+            canvas.move(self.h_weaponName, 75, -10)
+            canvas.move(self.h_hpName, 75, -10)
+            canvas.move(self.h_mpName, 75, -10)
+            canvas.move(self.h_playerClassName, 75, -10)
+            canvas.move(self.h_mpAbilityName, 75, -10)
+            canvas.move(self.h_hpFill, 75, -10)
+            canvas.move(self.h_sprintName, 71, -10)
+            canvas.move(self.h_sprint, 71, -10)
+            canvas.move(self.h_sprintBorder, 71, -10)
+            takeDamageOn = False
+            takeDamage = 0
+            
+class PhotoTest: #Testing to see if we can print images onto the program
+    def __init__(self,canvas):
+        #canvas = tkinter.Canvas(master)
+        #canvas.grid(row = 0, column = 0)
+        #photoTest = tkinter.PhotoImage(file = './test.gif')
+        #canvas.create_image(0,0, image=photoTest, anchor=center)
+        pass
 
 class Nathaniel2010: #Refernce to Heavy Rain's AVI 
     def __init__(self,canvas):
@@ -166,16 +376,17 @@ class Nathaniel2010: #Refernce to Heavy Rain's AVI
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2: Bars and Movement Update\n"""
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2.2: Bars and Movement Update\n"""
                                                 """Can toggle from sprint to crouching vise versa now. After you press the toggle for both keys, stance now changes."""
-                                                  """"""
+                                                  """Player has an hp and mp bar. The HUI also shows current ability and weapon. Later will make it usable. Can make other bars."""
+                                                """Press Q to view the bars unfilled. \nYou can press Q again to fill them back up."""
                                                 """\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
                                                 """\n"""
                                                   """ \n""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
                                                                  """Cannot crouch stance while in sprint stance. Vise versa. Click on other window to view details.\n"""
-                                                                 """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable.""",
+                                                                 """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable. Did I mention you can left click?""",
                                                  width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text)
         #Creating ground1
         self.a_ground1 = canvas.create_rectangle(0,183,1500,190, outline="black",fill="green")
@@ -356,7 +567,7 @@ class Player:
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="Falmer", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
@@ -1031,7 +1242,14 @@ class Player:
         
 
     def qKey(self, evt): #Switch weapons
-        print("'q' key pressed")
+        #print("'q' key pressed")
+        #print("TESTS TO TAKE DAMAGE IN THIS UPDATE")
+        global takeDamage
+        global takeDamageOn
+        if takeDamageOn == False and takeDamage == 0:
+            takeDamageOn = True
+        elif takeDamageOn == False and takeDamage == 1:
+            takeDamageOn = True
 
     def sKey(self, evt): #Drop down
         #print("'s' key pressed")
@@ -1437,6 +1655,7 @@ background = Background(canvas)
 enemy = Enemy(canvas)
 sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
+#photoTest = PhotoTest(canvas)
 bars = Bars(canvas)
 player = Player(canvas)
 voice = Voice(canvas,player)
@@ -1447,7 +1666,7 @@ while 1:
         player.draw()
     else:
         player.drawAttack()
-    #bars.draw()
+    bars.draw()
     #sword.draw()
     sword.drawEye()
     #enemy.draw()
