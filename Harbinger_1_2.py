@@ -32,7 +32,7 @@ class Enemy:
 
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
 
-        self.e1_name1 = canvas.create_text(750, 70, anchor="center", fill="red", text="One-Eyed Freak", font=("Fixedsys", 16))
+        self.e1_name1 = canvas.create_text(750, 70, anchor="center", fill="red", text="Emperor Luckily-I-Am-Not-Called-King", font=("Fixedsys", 16))
         #shoulder
         self.e1_neck1 = canvas.create_polygon(758, 110, 730,120,780,120, fill="saddle brown")
         #body
@@ -224,7 +224,7 @@ class Bars:
         self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
         self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
         self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-        self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="Class: Vampire", fill="green", anchor="center", font=("Fixedsys", 16))
+        self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
         self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
         #Really small bars
@@ -278,7 +278,7 @@ class Bars:
             self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
             self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
             self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-            self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="Class: Vampire", fill="green", anchor="center", font=("Fixedsys", 16))
+            self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
             self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
         #Really small bars
@@ -329,7 +329,7 @@ class Bars:
             self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
             self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
             self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-            self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="Class: Vampire", fill="green", anchor="center", font=("Fixedsys", 16))
+            self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
             self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
         #Really small bars
@@ -376,13 +376,13 @@ class Nathaniel2010: #Refernce to Heavy Rain's AVI
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2.2: Bars and Movement Update\n"""
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2.3: Bars and Movement and Hitboxes Update\n"""
                                                 """Can toggle from sprint to crouching vise versa now. After you press the toggle for both keys, stance now changes."""
                                                   """Player has an hp and mp bar. The HUI also shows current ability and weapon. Later will make it usable. Can make other bars."""
                                                 """Press Q to view the bars unfilled. \nYou can press Q again to fill them back up."""
-                                                """\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
-                                                """\n"""
-                                                  """ \n""",
+                                                #"""\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
+                                                """\nHitbox is the line. This line should follow the player around the whole time. We can use the x and y coordinates and figure out"""
+                                                  """ a rectangle which is the hitbox.""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
                                                                  """Cannot crouch stance while in sprint stance. Vise versa. Click on other window to view details.\n"""
@@ -567,7 +567,7 @@ class Player:
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="Falmer", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="Hand of The King", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
@@ -597,6 +597,10 @@ class Player:
 
         #HIS left arm PLACED HERE BC NEEDED FOR ANIMATION (BACK ARM)
         self.a_Larm = canvas.create_oval(130, 160, 145, 175, fill="white")
+
+        #Hitbox
+        self.a_hitbox = canvas.create_line(150, 125, 125, 183)
+        #canvas.itemconfigure(self.a_hitbox, state='hidden')
 
         #IDK HOW TO CREATE A BUTTON IN THE MAIN WINDOW WILL DO LATER
         #button1=Button(main_frame,text="Click Me")
@@ -644,6 +648,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+self.y, 120+self.x+35, 138+self.y, 120+self.x+35, 141+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+self.y, 133+self.x, 145+self.y, 140+self.x, 175+self.y, 160+self.x, 177+self.y, 145+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left without sprint or crouch FRAME #2
             self.y -= 3
@@ -659,6 +664,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left SPRINTING FRAME #1
             self.y -= 3    
@@ -673,7 +679,8 @@ class Player:
             canvas.coords(self.a_bandana2, 145+self.x-14, 150+self.y, 140+self.x-4, 152+self.y, 140+self.x-4, 160+self.y)
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)   
+            canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left SPRINTING FRAME #2
             self.y -= 3    
@@ -689,6 +696,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+5+self.y, 140+self.x-4, 148+5+self.y, 140+self.x-4, 151+5+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+5+self.y, 145+self.x-14, 163+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+5+self.y, 152+self.x-28, 155+5+self.y, 100+self.x+76, 175+10+self.y, 85+self.x+104, 157+10+self.y, 125+self.x+26, 155+5+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left CROUCHING FRAME #1
             self.y -= 3
@@ -704,6 +712,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 85+self.x+76, 183+self.y, 80+self.x+104, 183+self.y, 125+self.x+26, 155+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
             
         elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == False and self.jumping == True: #Moving left CROUCHING FRAME #2
             self.y -= 3
@@ -719,6 +728,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+2+self.y, 140+self.x-4, 148+2+self.y, 140+self.x-4, 151+2+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+2+self.y, 145+self.x-14, 163+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+2+self.y, 152+self.x-28, 155+2+self.y, 85+self.x+76, 183+2+self.y, 80+self.x+104, 183+2+self.y, 125+self.x+26, 155+2+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
 
         #JUMP RIGHT
                     
@@ -736,6 +746,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+self.y, 120+self.x, 138+self.y, 120+self.x, 141+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+self.y, 145+self.x, 155+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+self.y, 142+self.x, 145+self.y, 135+self.x, 175+self.y, 115+self.x, 177+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
                
         elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right without sprinting or crouching FRAME #2
             self.y -= 3    
@@ -751,6 +762,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right SPRINTING FRAME #1
             self.y -= 3    
@@ -766,6 +778,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.dropping == False and self.jumping == True: #Moving right SPRINTING FRAME #2
             self.y -= 3    
@@ -781,6 +794,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+5+self.y, 140+self.x, 148+5+self.y, 140+self.x, 151+5+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+5+self.y, 145+self.x, 163+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+5+self.y, 152+self.x, 155+5+self.y, 100+self.x, 175+10+self.y, 85+self.x, 157+10+self.y, 125+self.x, 155+5+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.dropping == False and self.jumping == True: #Moving right CROUCHING FRAMe #1
             self.y -= 3    
@@ -796,6 +810,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 115+self.x, 183+self.y, 92+self.x, 183+self.y, 125+self.x, 155+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.dropping == False and self.jumping == True: #Moving right CROUCHING FRAMe #2
             self.y -= 3
@@ -811,6 +826,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+2+self.y, 140+self.x, 148+2+self.y, 140+self.x, 151+2+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+2+self.y, 145+self.x, 163+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
 
         #DROPPING LEFT
         elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left without sprint or crouch FRAME #1
@@ -827,6 +843,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+self.y, 120+self.x+35, 138+self.y, 120+self.x+35, 141+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+self.y, 133+self.x, 145+self.y, 140+self.x, 175+self.y, 160+self.x, 177+self.y, 145+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
   
         elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left without sprint or crouch FRAME #2
             self.y += 3    
@@ -842,6 +859,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left SPRINTING FRAME #1
             self.y += 3    
@@ -857,6 +875,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y) 
             canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.looking == "Left" and self.dropping == True: #Moving left SPRINTING FRAME #2
             self.y += 3    
@@ -872,6 +891,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+5+self.y, 140+self.x-4, 148+5+self.y, 140+self.x-4, 151+5+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+5+self.y, 145+self.x-14, 163+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+5+self.y, 152+self.x-28, 155+5+self.y, 100+self.x+76, 175+10+self.y, 85+self.x+104, 157+10+self.y, 125+self.x+26, 155+5+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == True: #Moving left CROUCHING FRAME #1
             self.y += 3
@@ -887,6 +907,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 85+self.x+76, 183+self.y, 80+self.x+104, 183+self.y, 125+self.x+26, 155+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Left" and self.dropping == True: #Moving left CROUCHING FRAME #2
             self.y += 3
@@ -902,6 +923,8 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+2+self.y, 140+self.x-4, 148+2+self.y, 140+self.x-4, 151+2+self.y) 
             canvas.coords(self.a_vneck, 140+self.x-4, 150+2+self.y, 145+self.x-14, 163+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+2+self.y, 152+self.x-28, 155+2+self.y, 85+self.x+76, 183+2+self.y, 80+self.x+104, 183+2+self.y, 125+self.x+26, 155+2+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
+            
         #Moving Right DROPPING       
         elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.dropping == True: #Moving right without sprinting or crouching FRAME #1
             self.y += 3 #Arms and legs out self.x    
@@ -917,6 +940,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+self.y, 120+self.x, 138+self.y, 120+self.x, 141+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+self.y, 145+self.x, 155+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+self.y, 142+self.x, 145+self.y, 135+self.x, 175+self.y, 115+self.x, 177+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
                
         elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.dropping == True: #Moving right without sprinting or crouching FRAME #2
             self.y += 3    
@@ -932,6 +956,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
             
         elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.dropping == True: #Moving right SPRINTING FRAME #1
             self.y += 3    
@@ -946,7 +971,9 @@ class Player:
             canvas.coords(self.a_bandana2, 145+self.x, 150+self.y, 140+self.x, 152+self.y, 140+self.x, 160+self.y)
             canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)             
+            canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
+            
         elif self.Frame == 1 and self.sprint == True and self.crouch == False and self.dropping == True: #Moving right SPRINTING FRAME #2
             self.y += 3    
             canvas.coords(self.a_head, 145+self.x, 135+5+self.y, 170+self.x, 160+5+self.y) #(+20, +10) difference from walking
@@ -961,6 +988,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+5+self.y, 140+self.x, 148+5+self.y, 140+self.x, 151+5+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+5+self.y, 145+self.x, 163+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+5+self.y, 152+self.x, 155+5+self.y, 100+self.x, 175+10+self.y, 85+self.x, 157+10+self.y, 125+self.x, 155+5+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == False and self.crouch == True and self.dropping == True: #Moving right CROUCHING FRAMe #1
             self.y += 3    
@@ -976,6 +1004,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 115+self.x, 183+self.y, 92+self.x, 183+self.y, 125+self.x, 155+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
               
         elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.dropping == True: #Moving right CROUCHING FRAMe #2
             self.y += 3
@@ -990,7 +1019,8 @@ class Player:
             canvas.coords(self.a_bandana2, 145+self.x, 150+2+self.y, 140+self.x, 152+2+self.y, 140+self.x, 155+2+self.y)
             canvas.coords(self.a_bandana3, 145+self.x, 150+2+self.y, 140+self.x, 148+2+self.y, 140+self.x, 151+2+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+2+self.y, 145+self.x, 163+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
-            canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)     
+            canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
 
         #MOVING LEFT NOT IN AIR
         elif self.Frame == 0 and self.sprint == False and self.crouch == False and self.looking == "Left": #Moving left without sprint or crouch FRAME #1
@@ -1007,6 +1037,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+self.y, 120+self.x+35, 138+self.y, 120+self.x+35, 141+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+self.y, 145+self.x, 150+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+self.y, 133+self.x, 145+self.y, 140+self.x, 175+self.y, 160+self.x, 177+self.y, 145+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Left": #Moving left without sprint or crouch FRAME #2
             self.x -= 1 #Arms and legs in
@@ -1022,6 +1053,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Left": #Moving left SPRINTING FRAME #1
             self.x -= 1 #Arms and legs out
@@ -1037,6 +1069,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 100+self.x+76, 175+self.y, 85+self.x+104, 157+self.y, 125+self.x+26, 155+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
             self.x -= 3
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
                 
@@ -1054,6 +1087,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+5+self.y, 140+self.x-4, 148+5+self.y, 140+self.x-4, 151+5+self.y) 
             canvas.coords(self.a_vneck, 140+self.x-4, 150+5+self.y, 145+self.x-14, 163+5+self.y, 125+self.x+26, 170+5+self.y, 115+self.x+46, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+5+self.y, 152+self.x-28, 155+5+self.y, 100+self.x+76, 175+10+self.y, 85+self.x+104, 157+10+self.y, 125+self.x+26, 155+5+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
             self.x -= 3
 
@@ -1071,6 +1105,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+self.y, 140+self.x-4, 148+self.y, 140+self.x-4, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x-4, 150+self.y, 145+self.x-14, 163+self.y, 125+self.x+26, 170+self.y, 115+self.x+46, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+self.y, 152+self.x-28, 155+self.y, 85+self.x+76, 183+self.y, 80+self.x+104, 183+self.y, 125+self.x+26, 155+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Left": #Moving left CROUCHING FRAME #2
             self.x -= 0.5 #Arms and legs in
@@ -1086,6 +1121,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x-14, 150+2+self.y, 140+self.x-4, 148+2+self.y, 140+self.x-4, 151+2+self.y) 
             canvas.coords(self.a_vneck, 140+self.x-4, 150+2+self.y, 145+self.x-14, 163+2+self.y, 125+self.x+26, 170+2+self.y, 115+self.x+46, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x-8, 145+2+self.y, 152+self.x-28, 155+2+self.y, 85+self.x+76, 183+2+self.y, 80+self.x+104, 183+2+self.y, 125+self.x+26, 155+2+self.y)
+            canvas.coords(self.a_hitbox, 145+self.x-40, 135+self.y, 150+self.x, 183+self.y)
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
 
 
@@ -1104,6 +1140,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+self.y, 120+self.x, 138+self.y, 120+self.x, 141+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+self.y, 145+self.x, 155+self.y, 145+self.x, 175+self.y, 130+self.x, 175+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+self.y, 142+self.x, 145+self.y, 135+self.x, 175+self.y, 115+self.x, 177+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == False and self.crouch == False and self.looking == "Right": #Moving right without sprinting or crouching FRAME #2
             self.x += 1 #Arms and legs in
@@ -1119,6 +1156,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 0 and self.sprint == True and self.crouch == False and self.looking == "Right": #Moving right SPRINTING FRAME #1
             self.x += 1 #Arms and legs out
@@ -1134,6 +1172,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y) 
             canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 100+self.x, 175+self.y, 85+self.x, 157+self.y, 125+self.x, 155+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
             self.x += 3
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
                 
@@ -1151,6 +1190,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+5+self.y, 140+self.x, 148+5+self.y, 140+self.x, 151+5+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+5+self.y, 145+self.x, 163+5+self.y, 125+self.x, 170+5+self.y, 115+self.x, 160+5+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+5+self.y, 152+self.x, 155+5+self.y, 100+self.x, 175+10+self.y, 85+self.x, 157+10+self.y, 125+self.x, 155+5+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
             #(12,0) (10,10), (-35,0), (-30,-20), (-5,-5)
             self.x += 3
 
@@ -1168,6 +1208,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+self.y, 140+self.x, 148+self.y, 140+self.x, 151+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+self.y, 145+self.x, 163+self.y, 125+self.x, 170+self.y, 115+self.x, 160+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+self.y, 152+self.x, 155+self.y, 115+self.x, 183+self.y, 92+self.x, 183+self.y, 125+self.x, 155+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
                 
         elif self.Frame == 1 and self.sprint == False and self.crouch == True and self.looking == "Right": #Moving right CROUCHING FRAMe #2
             self.x += 0.5 #Arms and legs in
@@ -1183,6 +1224,7 @@ class Player:
             canvas.coords(self.a_bandana3, 145+self.x, 150+2+self.y, 140+self.x, 148+2+self.y, 140+self.x, 151+2+self.y)
             canvas.coords(self.a_vneck, 140+self.x, 150+2+self.y, 145+self.x, 163+2+self.y, 125+self.x, 170+2+self.y, 115+self.x, 160+2+self.y) #(10,0), (0,8), (-20,-5), (-15,-15)
             canvas.coords(self.a_coat, 142+self.x, 145+2+self.y, 152+self.x, 155+2+self.y, 115+self.x, 183+2+self.y, 92+self.x, 183+2+self.y, 125+self.x, 155+2+self.y)
+            canvas.coords(self.a_hitbox, 170+self.x, 135+self.y, 125+self.x, 183+self.y)
 
 
         self.checkerFrame += 1 #Add one to checkerFrame (Starts at 0)
@@ -1307,6 +1349,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
             canvas.update()
 
         elif self.Frame == 1  and self.looking == "Left" and self.forward == False: #Moving left without sprint or crouch 
@@ -1323,6 +1366,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
             canvas.update()
         
         elif self.Frame == 0  and self.looking == "Left" and self.forward == True: #Moving left without sprint or crouch 
@@ -1339,6 +1383,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
             canvas.update()
 
         elif self.Frame == 0  and self.looking == "Left" and self.forward == False: #Moving left without sprint or crouch 
@@ -1355,6 +1400,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x+25, 140+3+self.y, 120+self.x+35, 138+3+self.y, 120+self.x+35, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 155+3+self.y, 145+self.x, 150+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 145+self.x, 145+3+self.y, 133+self.x, 145+3+self.y, 140+self.x, 175+3+self.y, 160+self.x, 177+6+self.y, 145+self.x, 160+3+self.y)
+            canvas.coords(self.a_hitbox, 125+self.x, 125+self.y, 150+self.x, 183+self.y)
             canvas.update()
             
         #elif self.Frame == 0 and self.crouch == False and self.looking == "Left" and self.forward == True: #Moving left SPRINTING FRAME #1
@@ -1439,6 +1485,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 0  and self.looking == "Right" and self.forward == False: #Moving right without sprinting or crouching FRAME #2
             self.moveFists -= 2
@@ -1454,6 +1501,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 1  and self.looking == "Right" and self.forward == True: #Moving right without sprinting or crouching FRAME #2
             self.moveFists += 2
@@ -1469,6 +1517,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
 
         elif self.Frame == 1  and self.looking == "Right" and self.forward == False: #Moving right without sprinting or crouching FRAME #2
             self.moveFists -= 2
@@ -1484,6 +1533,7 @@ class Player:
             canvas.coords(self.a_bandana3, 125+self.x, 140+3+self.y, 120+self.x, 138+3+self.y, 120+self.x, 141+3+self.y)
             canvas.coords(self.a_vneck, 130+self.x, 150+3+self.y, 145+self.x, 155+3+self.y, 145+self.x, 175+3+self.y, 130+self.x, 175+3+self.y)
             canvas.coords(self.a_coat, 130+self.x, 145+3+self.y, 142+self.x, 145+3+self.y, 135+self.x, 175+3+self.y, 115+self.x, 177+6+self.y, 130+self.x, 160+self.y)
+            canvas.coords(self.a_hitbox, 150+self.x, 125+self.y, 125+self.x, 183+self.y)
 
         #elif self.Frame == 0 and self.crouch == False and self.looking == "Right" and self.forward == True: #Moving right SPRINTING FRAME #1
             #self.x += 1 #Arms and legs out
