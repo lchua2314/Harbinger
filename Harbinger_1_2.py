@@ -100,37 +100,26 @@ class Sword:
         #self.s_TBeyelid1 = canvas.create_oval(430, 190, 570, 280, fill="black")
         #self.s_TBeye1 = canvas.create_oval(430, 200, 570, 270, fill="firebrick4") #EYE OPEN
         #self.s_TBpupil1 = canvas.create_oval(488, 222, 513, 248, fill="black")
-        self.s_bgBlood3 = canvas.create_polygon(485-25, 220-10, 520-25, 240-10, 570-25, 280-10, fill="firebrick4")
+        self.s_bgBlood3 = canvas.create_polygon(460, 210, 495, 230, 545, 270, fill="firebrick4")
         #self.s_bgSkelArm1 = canvas.create_polygon(485-25+10, 220-10, fill="white", outline="black")
         #self.s_bgSkelHand1 = canvas.create_oval(485-25, 220-10+10, 485-25+15, 220-10+10+15, fill="white", outline="black")
         #self.s_bloodbgb3 = canvas.create_polygon(485, 220, 520, 240, 525, 250, fill="firebrick4")
-        self.s_name3 = canvas.create_text(500, 100, anchor="center", fill="red", text="True Blood (Tier: Endgame)", font=("Fixedsys", 16)) #The "s_" means sword for short.
-        self.s_blade3 = canvas.create_polygon(500, 118, 506, 140, 506, 165, 500, 165, fill="black", outline="indian red") #Follow the format of naming please. 500
-        self.s_bladeb3 = canvas.create_polygon(494, 165, 494, 140, 500, 118, 500, 165, fill="black", outline="red") #Follow the format of naming please. 500
-        self.s_hilt3 = canvas.create_polygon(489, 165, 511, 165, 511, 168, 489, 168, fill="grey1", outline="black")
-        self.s_hiltb3 = canvas.create_polygon(491, 165, 509, 165, 509, 168, 491, 168, fill="red2", outline="black")
-        self.s_handle3 = canvas.create_polygon(503, 180, 497, 180, 497, 168, 503, 168, fill="black", outline="black")
-        self.s_sash3 = canvas.create_polygon(503, 180+90-10, 497, 180+90-10, 497, 168+90, 503, 168+90, fill="firebrick4", outline="black")
-        self.s_sashb3 = canvas.create_polygon(503, 180+90, 497, 180+90, 497, 168+90+11, 503, 168+90+11, fill="firebrick4", outline="black")
-        self.s_bottomOfSword = canvas.create_oval(495, 165+90+15, 505, 170+90+15, fill="red") #EYE OPEN
-        self.s_blackMiddle = canvas.create_oval(500, 165+90+1, 500, 168+90-1, fill="black")
-
-        canvas.move(self.s_name3, 0, 100)
-        canvas.move(self.s_blade3, 0, 90)
-        canvas.move(self.s_bladeb3, 0, 90)
-        canvas.move(self.s_handle3, 0, 90)
-        canvas.move(self.s_hilt3, 0, 90)
-        canvas.move(self.s_hiltb3, 0, 90)
+        self.s_name3 = canvas.create_text(500, 200, anchor="center", fill="red", text="True Blood (Tier: Endgame)", font=("Fixedsys", 16)) #The "s_" means sword for short.
+        self.s_blade3 = canvas.create_polygon(500, 208, 506, 230, 506, 255, 500, 255, fill="black", outline="indian red") #Follow the format of naming please. 500
+        self.s_bladeb3 = canvas.create_polygon(494, 255, 494, 230, 500, 208, 500, 255, fill="black", outline="red") #Follow the format of naming please. 500
+        self.s_hilt3 = canvas.create_polygon(489, 255, 511, 255, 511, 258, 489, 258, fill="grey1", outline="black")
+        self.s_hiltb3 = canvas.create_polygon(491, 255, 509, 255, 509, 258, 491, 258, fill="red2", outline="black")
+        self.s_handle3 = canvas.create_polygon(503, 270, 497, 270, 497, 258, 503, 258, fill="black", outline="black")
+        self.s_sash3 = canvas.create_polygon(503, 260, 497, 260, 497, 258, 503, 258, fill="firebrick4", outline="black")
+        self.s_sashb3 = canvas.create_polygon(503, 270, 497, 270, 497, 269, 503, 269, fill="firebrick4", outline="black")
+        self.s_bottomOfSword = canvas.create_oval(495, 270, 505, 275, fill="red") #EYE OPEN
+        self.s_blackMiddle = canvas.create_oval(500, 256, 500, 257, fill="black")
 
         #Conscience of the Blade
-        self.s_eyelid1 = canvas.create_oval(1155, 10, 1295, 100, fill="black")
-        #self.s_eye1 = canvas.create_oval(1155, 20, 1295, 90, fill="white") #EYE OPEN
-        self.s_eye1 = canvas.create_oval(1155, 55, 1295, 55, fill="white") #Eye closed
-        self.s_pupil1 = canvas.create_oval(1213, 42, 1238, 68, fill="black")
-
-        canvas.move(self.s_eyelid1, 0, -140)
-        canvas.move(self.s_eye1, 0, -140)
-        canvas.move(self.s_pupil1, 0, -140)
+        self.s_eyelid1 = canvas.create_oval(1155, -130, 1295, -40, fill="black")
+        #self.s_eye1 = canvas.create_oval(1155, 20-140, 1295, 90-140, fill="white") #EYE OPEN
+        self.s_eye1 = canvas.create_oval(1155, -85, 1295, -85, fill="white") #Eye closed
+        self.s_pupil1 = canvas.create_oval(1213, -98, 1238, -72, fill="black")
         
         self.x_eye1, self.y_eye1 = 0,0
         self.x_pupil1, self.y_pupil1 = 0,0
@@ -208,6 +197,11 @@ class Sword:
 class Bars:
     def __init__(self,canvas):
         self.canvas = canvas
+
+        #Stats that change/Variables
+        self.h1_decrease = -1
+
+        #Model
         self.h_sprintBorder = canvas.create_rectangle(1130-50+25+13-100-50-2, 679-2, 1145+50-25-13, 697+2, fill="black", outline="black")
         self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
         self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="green")
@@ -545,8 +539,10 @@ class Voice():
                     print("Special Ready.")        
 
 class Player:
-    def __init__(self,canvas):
+    def __init__(self,canvas, background,bars):
         self.canvas = canvas
+        self.background = background
+        self.bars = bars
         
         self.x, self.y = 0,0 #Only one coordinate now. This coordinate is where the first shape is __init__ialized. Not the graph.
         self.Frame = 0 #Two frames-0 and 1. They alternate which makes the character move more lively.
@@ -1535,7 +1531,7 @@ class Player:
 
         #Checks if hitbox was hit.
         self.hitbox = canvas.coords(self.a_hitbox) #Saves the coordinates of self.a_hitbox
-        print(self.hitbox) #Prints coordinates of the hitbox.
+        #print(self.hitbox) #Prints coordinates of the hitbox.
         #print(self.canvas_height)
         #print(self.canvas_width)
 
@@ -1572,6 +1568,36 @@ class Player:
             self.pastBorderRightKeepAnimation = False
             #self.pastBorderRight = False
             #self.notMoving = False
+
+        self.hitboxLegRight = canvas.coords(self.a_Rleg)
+        self.hitboxLegLeft = canvas.coords(self.a_Lleg)
+        self.hitLava = canvas.coords(self.background.a_lava1)
+        #print("LAVA:", self.hitLava) #LAVA: [0.0, 273.0, 100.0, 280.0]
+        #print("RIGHT:",self.hitboxLegRight)
+        #print("LEFT:",self.hitboxLegLeft)
+        #LAVA:
+        #RIGHT: [115.0, 265.0, 130.0, 273.0]
+        #LEFT: [85.0, 265.0, 100.0, 273.0]
+        #0,273,100,280, Lava coords
+
+        if self.hitboxLegLeft[0] <= self.hitLava[2] and self.hitboxLegLeft[3] == self.hitLava[1]:
+            #print("HOT LAVA BOI")
+            if self.checkerFrame == 25 and self.bars.h1_decrease >= -358: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+                self.bars.h1_decrease -= 20
+                canvas.delete(self.bars.h_hp)
+                self.bars.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359+self.bars.h1_decrease, style=ARC, outline="red2")
+                #print("Decrease hp now (25 checkerFrame)")
+                canvas.move(self.bars.h_hp, 75, -10)
+                self.bars.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+                canvas.move(self.bars.h_hpName, 75, -10)
+            elif self.bars.h1_decrease <= -359: #if self.checkerFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+                #print("YOU ARE DEAD")
+                canvas.delete(self.bars.h_hpFill)
+                canvas.delete(self.bars.h_hp)
+
+
+        #if self.hitbox[2] and self.hitbox[3]:
+            
 
         #if self.hit_paddle(self.hitbox) == True: #Hitbox stuff
         #    self.y=-3
@@ -2061,7 +2087,7 @@ sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
 #photoTest = PhotoTest(canvas)
 bars = Bars(canvas)
-player = Player(canvas)
+player = Player(canvas,background, bars)
 voice = Voice(canvas,player)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
 
