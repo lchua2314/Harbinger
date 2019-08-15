@@ -33,9 +33,10 @@ class Enemy2:
 class Enemy1:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.counter = 0 # Every 25 iterations moves eye, every 50 reset to 0
+        self.counter1 = -150 # Every 25 iterations moves eye, every 50 reset to 0
         self.counter2 = 0
         #self.counter3 = 0
+        self.x, self.y = 0, 0
         self.yEye = 0 # keeps track of how far eye moves
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
 
@@ -60,25 +61,36 @@ class Enemy1:
         self.e1_pupil = canvas.create_oval(754, 93, 757, 97, fill="black")
         #cannon maybe future levels. Don't want to instant kill player in tutorial.
         #self.el_cannon1=canvas.create_oval(600,130,695,180, fill="grey")
-    def draw(self):  #MOVE LE EYE
-        if self.counter == 10 and 0 <= self.counter2 <= 5:
-            self.yEye += 1
-            canvas.coords(self.e1_eye, 750,90+self.yEye,760,100-self.yEye)
-            self.counter = 0
-            self.counter2 += 1 #tracks counter
-            print("if")
-        elif self.counter == 10 and 5 < self.counter2 <= 10:
-            self.yEye -= 1
-            canvas.coords(self.e1_eye, 750,90+self.yEye,760,100-self.yEye) #eye goes up
-            self.counter = 0
-            self.counter2 += 1
-            print("first elif")
-        #if self.counter == 50:
-        elif self.counter2 > 10:
-            print("first else")
+    def draw(self):  #MOVE BOI
+    
+        if self.counter1 == 10:
+            if 0 <= self.counter2 <= 4:
+                self.yEye += 1
+                canvas.coords(self.e1_eye, 750+self.x,90+self.yEye+self.y,760+self.x,100-self.yEye+self.y)
+                self.counter1 = 0
+                self.counter2 += 1 #tracks counter
+                #print("if")
+                #print("counter 2:", self.counter2)
+            elif 4 < self.counter2 <= 9:
+                self.yEye -= 1
+                canvas.coords(self.e1_eye, 750+self.x,90+self.yEye+self.y,760+self.x,100-self.yEye+self.y) #eye goes up
+                self.counter1 = 0
+                self.counter2 += 1
+                #print("first elif")
+                #print("counter 2:", self.counter2)
+
+            if self.counter2 == 5:
+                canvas.move(self.e1_pupil, -10000, -10000)
+
+            if self.counter2 == 6:
+                canvas.move(self.e1_pupil, 10000, 10000)
+
+        if self.counter2 == 10:
+            #print("first else")
             self.counter2 = 0
-            self.yEye = 0 
-        self.counter += 1
+            self.yEye = 0
+            self.counter1 = -150
+        self.counter1 += 1
         
             
         
