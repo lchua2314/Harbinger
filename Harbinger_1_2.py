@@ -27,39 +27,70 @@ class Enemy2:
         self.e1_name1 = canvas.create_text(790, 70, anchor="center", fill="red", text="Enemy2", font=("Fixedsys", 16))
         #self.e1_body1 = canvas.create_polygon(780,150 fill="red", outline="black")
 
-        def draw(self):
-            global voiceOn
+    def draw(self):
+        global voiceOn
 
-class Enemy:
+class Enemy1:
     def __init__(self,canvas):
         self.canvas = canvas
+        self.x, self.y = 0, 0
+        self.yEye = 0
+        self.counter = -100
+        self.counter2 = 0
 
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
 
         self.e1_name1 = canvas.create_text(750, 70, anchor="center", fill="red", text="Emperor Luckily-I-Am-Not-Called-King", font=("Fixedsys", 16))
         #shoulder
-        self.e1_neck1 = canvas.create_polygon(758, 110, 730,120,780,120, fill="saddle brown")
+        self.e1_neck1 = canvas.create_polygon(758, 110, 730,120,780,120, fill="saddle brown", outline="black")
         #body
-        self.el_body1 = canvas.create_polygon(730,120,730,160,780,160,780,120,fill="saddle brown")
+        self.e1_body1 = canvas.create_polygon(730,120,730,160,780,160,780,120,fill="saddle brown")
         #arms
-        self.el_leftArm1 = canvas.create_polygon(730,120,710,140,710,160,730,140,fill="tan")
-        self.el_rightArm1 = canvas.create_polygon(780, 120, 800, 140, 800, 160, 780, 140, fill="tan")
+        self.e1_leftArm1 = canvas.create_polygon(730,120,710,140,710,160,730,140,fill="tan", outline="black")
+        self.e1_rightArm1 = canvas.create_polygon(780, 120, 800, 140, 800, 160, 780, 140, fill="tan", outline="black")
         #head
-        self.el_head1 = canvas.create_oval(745, 80, 765, 120, fill="tan")
+        self.e1_head1 = canvas.create_oval(745, 80, 765, 120, fill="tan", outline="black")
         #pants
-        self.el_pants1= canvas.create_polygon(730,160,730,180,780,180,780,160,fill="dim grey")
+        self.e1_pants1= canvas.create_polygon(730,160,730,180,780,180,780,160,fill="dim grey", outline="black")
         #hands
-        self.el_leftHand1=canvas.create_oval(700,130,720,160,fill="tan")
+        self.e1_leftHand1=canvas.create_oval(700,130,720,160,fill="tan", outline="black")
         # feet
-        self.el_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black")     
+        self.e1_leftFoot1 = canvas.create_oval(780, 165, 780, 175, fill="black", outline="black")     
         #eye
-        self.el_eye = canvas.create_oval(750,90,760,100, fill="white")
-        self.el_pupil = canvas.create_oval(754, 93, 757, 97, fill="black")
+        self.e1_eye = canvas.create_oval(750,90,760,100, fill="white", outline="black")
+        self.e1_pupil = canvas.create_oval(754, 93, 757, 97, fill="black")
         #cannon maybe future levels. Don't want to instant kill player in tutorial.
         #self.el_cannon1=canvas.create_oval(600,130,695,180, fill="grey")
 
-        def draw(self):
-            global voiceOn
+    def draw(self):  #MOVE BOI
+        if self.counter == 10:
+            if 0 <= self.counter2 <= 4:
+                self.yEye += 1
+                canvas.coords(self.e1_eye, 750+self.x,90+self.yEye+self.y,760+self.x,100-self.yEye+self.y)
+                self.counter = 0
+                self.counter2 += 1 #tracks counter
+                #print("if")
+                #print("counter 2:", self.counter2)
+            elif 4 < self.counter2 <= 9:
+                self.yEye -= 1
+                canvas.coords(self.e1_eye, 750+self.x,90+self.yEye+self.y,760+self.x,100-self.yEye+self.y) #eye goes up
+                self.counter = 0
+                self.counter2 += 1
+                #print("first elif")
+                #print("counter 2:", self.counter2)
+
+            if self.counter2 == 5:
+                canvas.move(self.e1_pupil, -10000, -10000)
+
+            if self.counter2 == 6:
+                canvas.move(self.e1_pupil, 10000, 10000)
+                
+        if self.counter2 == 10:
+            #print("first else")
+            self.counter2 = 0
+            self.yEye = 0
+            self.counter = -100
+        self.counter += 1
 
 class Sword: 
     def __init__(self,canvas):
@@ -132,7 +163,7 @@ class Sword:
         self.checker2 = 0
         
     def drawEye(self):
-        if self.checker >= -70 and self.checker < 0:
+        if -70 <= self.checker < 0: #Move closed eye into screen
             if self.checker == -1:
                 canvas.move(self.s_eye1, 0, 140)
                 canvas.move(self.s_pupil1, 0, 140)
@@ -141,31 +172,31 @@ class Sword:
             #print("if 0")
             #self.y_eyelid1 += 2 
             #canvas.coords(self.s_eyelid1, 1155, 10+self.y_eyelid1, 1295, 100+self.y_eyelid1)
-        elif self.checker >= 0 and self.checker <= 25: #Opens eye
+        elif 0 <= self.checker <= 25: #Opens eye
             self.y_eye1 += 1 #25
             self.checker += 1
             canvas.coords(self.s_eye1, 1155, 55-self.y_eye1, 1295, 55+self.y_eye1)
             #print("First if")
-        elif self.checker > 25 and self.checker <= 85: #Eye blinks once and remains open
+        elif 25 < self.checker <= 85: #Eye blinks once and remains open
             self.y_eye1 -= 1 #-65+25 = -40
             self.checker += 1
             canvas.coords(self.s_eye1, 1155, 55-self.y_eye1, 1295, 55+self.y_eye1)
             #print("Second if")
-        elif self.checker >= 86 and self.checker <= 100 and self.checker2 == 1: #Pupil moves down
+        elif 86 <= self.checker <= 100 and self.checker2 == 1: #Pupil moves down
             self.x_pupil1 += 2
             self.y_pupil1 += 1
             self.checker += 1
             canvas.coords(self.s_pupil1, 1213-self.x_pupil1, 42+self.y_pupil1, 1238-self.x_pupil1, 68+self.y_pupil1)
             #print("Third if")
-        elif self.checker > 100 and self.checker <= 124 and self.checker2 == 1: #Pupil rests for a few seconds
+        elif 100 < self.checker <= 124 and self.checker2 == 1: #Pupil rests for a few seconds
             self.checker += 1
-        elif self.checker > 124 and self.checker <= 140 and self.checker2 == 1: #Pupil moves back to middle
+        elif 124 < self.checker <= 140 and self.checker2 == 1: #Pupil moves back to middle
             #print("Fourth if")
             self.x_pupil1 -= 2
             self.y_pupil1 -= 1
             self.checker += 1
             canvas.coords(self.s_pupil1, 1213-self.x_pupil1, 42+self.y_pupil1, 1238-self.x_pupil1, 68+self.y_pupil1)
-        elif self.checker >= 140 and self.checker <= 174: #Eye closes
+        elif 140 <= self.checker <= 174: #Eye closes
             self.y_eye1 += 1
             self.checker += 1
             canvas.coords(self.s_eye1, 1155, 55-self.y_eye1, 1295, 55+self.y_eye1)
@@ -175,7 +206,7 @@ class Sword:
             self.checker += 1
             canvas.move(self.s_eye1, -100000, -100000)
             canvas.move(self.s_pupil1, -100000, -100000)
-        elif self.checker >= 176 and self.checker < 246: #Shift eye upwards out of screen
+        elif 176 <= self.checker < 246: #Shift eye upwards out of screen
             #print("7 if")
             self.checker += 1
             canvas.move(self.s_eyelid1, 0, -2)
@@ -214,47 +245,23 @@ class Bars:
 
         #Model
         self.h_sprintBorder = canvas.create_rectangle(1037, 667, 1228, 689, fill="black", outline="black")
-        self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
-        self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="green")
-        self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
-        self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
-        self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
-        self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
-        self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="red2")
-        self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
-        self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="blue")
-        self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
-        self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
-        self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
-        self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
-        self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
-        self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-        self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
-        self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
-
-        #Really small bars
-        #self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
-        #self.h_hp = canvas.create_arc(1130-50-25+13+13+13, 610-50-25+13+13+13, 1145+50+25-13-13-13, 625+50+25-13-13-13, width=13, start=0, extent=359, style="arc", outline="red")
-        #self.h_mp = canvas.create_arc(1130-50+13+13, 610-50+13+13, 1145+50-13-13, 625+50-13-13, width=13, start=0, extent=359, style=ARC, outline="blue")
-        #self.h_mp2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=13, start=0, extent=359, style=ARC, outline="grey")
-
-        canvas.move(self.h_bg, 75, -10)
-        canvas.move(self.h_hp, 75, -10)
-        canvas.move(self.h_mp, 75, -10)
-        canvas.move(self.h_mpGrey, 75, -10)
-        canvas.move(self.h_hpGrey, 75, -10)
-        canvas.move(self.h_sprintGrey, 71, -10)
-        canvas.move(self.h_bg2, 75, -10)
-        canvas.move(self.h_hand1, 75, -10)
-        canvas.move(self.h_hand2, 75, -10)
-        canvas.move(self.h_weaponName, 75, -10)
-        canvas.move(self.h_hpName, 75, -10)
-        canvas.move(self.h_mpName, 75, -10)
-        canvas.move(self.h_playerClassName, 75, -10)
-        canvas.move(self.h_mpAbilityName, 75, -10)
-        canvas.move(self.h_hpFill, 75, -10)
-        canvas.move(self.h_sprintName, 71, -10)
-        canvas.move(self.h_sprint, 71, -10)
+        self.h_sprintGrey = canvas.create_rectangle(1039, 669, 1228, 687, fill="grey50")
+        self.h_sprint = canvas.create_rectangle(1039, 669, 1228, 687, fill="green")      
+        self.h_sprintName = canvas.create_text(1151, 678, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))       
+        self.h_bg = canvas.create_oval(1130, 525, 1295, 690,fill="black", outline="black")       
+        self.h_hpFill = canvas.create_line(1273, 608, 1291, 608, fill="red2") 
+        self.h_hpGrey = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359, style=ARC, outline="grey")     
+        self.h_hp = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359, style=ARC, outline="red2")
+        self.h_mpGrey = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359, style=ARC, outline="grey")
+        self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359, style=ARC, outline="blue")
+        self.h_bg2 = canvas.create_arc(1193, 588, 1232, 627, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+        self.h_hand1 = canvas.create_oval(1180, 575, 1220, 615,fill="white", outline="black")
+        self.h_hand2 = canvas.create_oval(1205, 600, 1245, 640,fill="white", outline="black")
+        self.h_weaponName = canvas.create_text(1215, 610, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+        self.h_playerClassName = canvas.create_text(1215, 515, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
+        self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
     def draw(self):
 
@@ -265,11 +272,9 @@ class Bars:
             if self.checkerFrameLava == 25 and self.h1_decrease >= -358: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
                 self.h1_decrease -= 20
                 canvas.delete(self.h_hp)
-                self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
+                self.h_hp = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
                 #print("Decrease hp now (25 checkerFrameLava)")
-                canvas.move(self.h_hp, 75, -10)
-                self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
-                canvas.move(self.h_hpName, 75, -10)
+                self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
             elif self.h1_decrease <= -359: #if self.checkerFrameLava > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
                 #print("YOU ARE DEAD")
                 canvas.delete(self.h_hpFill)
@@ -286,16 +291,14 @@ class Bars:
         if manaUsed == True:
             if voiceOn == True and self.manaLoss >= -349:
                 self.manaLoss -= 50
-                print("self.manaLoss:", self.manaLoss)
+                #print("self.manaLoss:", self.manaLoss)
                 canvas.delete(self.h_mp)
-                self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
-                canvas.move(self.h_mp, 75, -10)
+                self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
             else: #Unreachable code because the player.spacebar bind method will not make manaUsed to True ever if out of mana.
-                print("YOU GOT NO MANA!")
-            self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-            self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
-            canvas.move(self.h_mpName, 75, -10)
-            canvas.move(self.h_mpAbilityName, 75, -10)
+                #print("YOU GOT NO MANA!")
+                pass
+            self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
             manaUsed = False
 
         #When mana is unused, regenerate?
@@ -309,7 +312,7 @@ class Bars:
             self.getOutOfStatement = False
             if self.sprintLoss >= -149 and self.checkerFrameSprint == 25 and moving == True:
                 self.sprintLoss -= 10
-                print("self.sprintLoss:", self.sprintLoss)
+                #print("self.sprintLoss:", self.sprintLoss)
 
                 canvas.delete(self.h_bg)
                 canvas.delete(self.h_hp)
@@ -331,44 +334,27 @@ class Bars:
                 
                 #Model
                 self.h_sprintBorder = canvas.create_rectangle(1037, 667, 1228, 689, fill="black", outline="black")
-                self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
-                self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50-self.sprintLoss, 679, 1145+50-25-13, 697, fill="green")
-                self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
-                self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
-                self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
-                self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
-                self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
-                self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
-                self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
-                self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
-                self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
-                self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
-                self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_sprintGrey = canvas.create_rectangle(1039, 669, 1228, 687, fill="grey50")
+                self.h_sprint = canvas.create_rectangle(1039-self.sprintLoss, 669, 1228, 687, fill="green")      
+                self.h_sprintName = canvas.create_text(1151, 678, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))       
+                self.h_bg = canvas.create_oval(1130, 525, 1295, 690,fill="black", outline="black")       
+                self.h_hpFill = canvas.create_line(1273, 608, 1291, 608, fill="red2") 
+                self.h_hpGrey = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359, style=ARC, outline="grey")     
+                self.h_hp = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
+                self.h_mpGrey = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359, style=ARC, outline="grey")
+                self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
+                self.h_bg2 = canvas.create_arc(1193, 588, 1232, 627, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+                self.h_hand1 = canvas.create_oval(1180, 575, 1220, 615,fill="white", outline="black")
+                self.h_hand2 = canvas.create_oval(1205, 600, 1245, 640,fill="white", outline="black")
+                self.h_weaponName = canvas.create_text(1215, 610, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_playerClassName = canvas.create_text(1215, 515, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
+                self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
-                canvas.move(self.h_bg, 75, -10)
-                canvas.move(self.h_hp, 75, -10)
-                canvas.move(self.h_mp, 75, -10)
-                canvas.move(self.h_mpGrey, 75, -10)
-                canvas.move(self.h_hpGrey, 75, -10)
-                canvas.move(self.h_sprintGrey, 71, -10)
-                canvas.move(self.h_bg2, 75, -10)
-                canvas.move(self.h_hand1, 75, -10)
-                canvas.move(self.h_hand2, 75, -10)
-                canvas.move(self.h_weaponName, 75, -10)
-                canvas.move(self.h_hpName, 75, -10)
-                canvas.move(self.h_mpName, 75, -10)
-                canvas.move(self.h_playerClassName, 75, -10)
-                canvas.move(self.h_mpAbilityName, 75, -10)
-                canvas.move(self.h_hpFill, 75, -10)
-                canvas.move(self.h_sprintName, 71, -10)
-                canvas.move(self.h_sprint, 71, -10)
                 moving = False
             elif self.checkerFrameSprint == 25 and moving == True: 
-                print("Out of SP! You must wait until sprint bar is full before sprinting again.")
+                #print("Out of SP! You must wait until sprint bar is full before sprinting again.")
                 moving = False
                 outOfSprint = True
                 sprinting = False
@@ -380,10 +366,11 @@ class Bars:
 
         if sprinting == False and outOfSprint == False and self.getOutOfStatement == False:
             if self.checkerFrameSprint2 >= -100 and self.checkerFrameSprint2 < 0:
+                #print("Might cause lag") #Doesn't
                 pass
             elif self.sprintLoss < 0 and self.checkerFrameSprint2 == 25:
                 self.sprintLoss += 10
-                print("2. Regenerating sprint... self.sprintLoss:", self.sprintLoss)
+                #print("2. Regenerating sprint... self.sprintLoss:", self.sprintLoss)
 
                 canvas.delete(self.h_bg)
                 canvas.delete(self.h_hp)
@@ -405,44 +392,26 @@ class Bars:
                 
                 #Model
                 self.h_sprintBorder = canvas.create_rectangle(1037, 667, 1228, 689, fill="black", outline="black")
-                self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
-                self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50-self.sprintLoss, 679, 1145+50-25-13, 697, fill="green")
-                self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
-                self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
-                self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
-                self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
-                self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
-                self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
-                self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
-                self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
-                self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
-                self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
-                self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
-
-                canvas.move(self.h_bg, 75, -10)
-                canvas.move(self.h_hp, 75, -10)
-                canvas.move(self.h_mp, 75, -10)
-                canvas.move(self.h_mpGrey, 75, -10)
-                canvas.move(self.h_hpGrey, 75, -10)
-                canvas.move(self.h_sprintGrey, 71, -10)
-                canvas.move(self.h_bg2, 75, -10)
-                canvas.move(self.h_hand1, 75, -10)
-                canvas.move(self.h_hand2, 75, -10)
-                canvas.move(self.h_weaponName, 75, -10)
-                canvas.move(self.h_hpName, 75, -10)
-                canvas.move(self.h_mpName, 75, -10)
-                canvas.move(self.h_playerClassName, 75, -10)
-                canvas.move(self.h_mpAbilityName, 75, -10)
-                canvas.move(self.h_hpFill, 75, -10)
-                canvas.move(self.h_sprintName, 71, -10)
-                canvas.move(self.h_sprint, 71, -10)
+                self.h_sprintGrey = canvas.create_rectangle(1039, 669, 1228, 687, fill="grey50")
+                self.h_sprint = canvas.create_rectangle(1039-self.sprintLoss, 669, 1228, 687, fill="green")      
+                self.h_sprintName = canvas.create_text(1151, 678, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))       
+                self.h_bg = canvas.create_oval(1130, 525, 1295, 690,fill="black", outline="black")       
+                self.h_hpFill = canvas.create_line(1273, 608, 1291, 608, fill="red2") 
+                self.h_hpGrey = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359, style=ARC, outline="grey")     
+                self.h_hp = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
+                self.h_mpGrey = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359, style=ARC, outline="grey")
+                self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
+                self.h_bg2 = canvas.create_arc(1193, 588, 1232, 627, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+                self.h_hand1 = canvas.create_oval(1180, 575, 1220, 615,fill="white", outline="black")
+                self.h_hand2 = canvas.create_oval(1205, 600, 1245, 640,fill="white", outline="black")
+                self.h_weaponName = canvas.create_text(1215, 610, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_playerClassName = canvas.create_text(1215, 515, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
+                self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
                 #moving = False
             elif self.checkerFrameSprint2 == 25: 
-                print("2. FULLY RENEGERATED SPRINT!")
+                #print("2. FULLY RENEGERATED SPRINT!")
                 #moving = False
                 outOfSprint = False
                 #oneIterate = True
@@ -459,7 +428,7 @@ class Bars:
         if outOfSprint == True:
             if self.sprintLoss < 0 and self.checkerFrameSprint3 == 25:
                 self.sprintLoss += 10
-                print("3. Regenerating sprint... self.sprintLoss:", self.sprintLoss)
+                #print("3. Regenerating sprint... self.sprintLoss:", self.sprintLoss)
 
                 canvas.delete(self.h_bg)
                 canvas.delete(self.h_hp)
@@ -481,44 +450,27 @@ class Bars:
                 
                 #Model
                 self.h_sprintBorder = canvas.create_rectangle(1037, 667, 1228, 689, fill="black", outline="black")
-                self.h_sprintGrey = canvas.create_rectangle(1130-50+25+13-100-50, 679, 1145+50-25-13, 697, fill="grey50")
-                self.h_sprint = canvas.create_rectangle(1130-50+25+13-100-50-self.sprintLoss, 679, 1145+50-25-13, 697, fill="green")
-                self.h_sprintName = canvas.create_text(1130-50-25+25, 679+9, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_bg = canvas.create_oval(1130-50-25, 610-50-25, 1145+50+25, 625+50+25,fill="black", outline="black")
-                self.h_hpFill = canvas.create_line(1130-25+25+10+50+8, 610-25+25+10-2, 1130-25+25+10+18+50+8, 610-25+25+10-2, fill="red2")
-                self.h_hpGrey = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359, style=ARC, outline="grey")
-                self.h_hp = canvas.create_arc(1130-50-25+13, 610-50-25+13, 1145+50+25-13, 625+50+25-13, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
-                self.h_mpGrey = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359, style=ARC, outline="grey")
-                self.h_mp = canvas.create_arc(1130-50+10, 610-50+10, 1145+50-10, 625+50-10, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
-                self.h_bg2 = canvas.create_arc(1130-50+25+13, 610-50+25+13, 1145+50-25-13, 625+50-25-13, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
-                self.h_hand1 = canvas.create_oval(1130-25, 610-25, 1145+25-25, 625+25-25,fill="white", outline="black")
-                self.h_hand2 = canvas.create_oval(1130-25+25, 610-25+25, 1145+25-25+25, 625+25-25+25,fill="white", outline="black")
-                self.h_weaponName = canvas.create_text(1130-25+25+10, 610-25+25+10, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_hpName = canvas.create_text(1130-25+25+10-20, 610-25+25+10-25-25-20, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_mpName = canvas.create_text(1130-25+25+10-10, 610-25+25+10-25-25, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-                self.h_playerClassName = canvas.create_text(1130-25+25+10, 610-25+25+10-25-25-20-25, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
-                self.h_mpAbilityName = canvas.create_text(1130-25+25+10, 610-25+25+10+25+20, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_sprintGrey = canvas.create_rectangle(1039, 669, 1228, 687, fill="grey50")
+                self.h_sprint = canvas.create_rectangle(1039-self.sprintLoss, 669, 1228, 687, fill="green")      
+                self.h_sprintName = canvas.create_text(1151, 678, text="SP", fill="black", anchor="center", font=("Fixedsys", 16))       
+                self.h_bg = canvas.create_oval(1130, 525, 1295, 690,fill="black", outline="black")       
+                self.h_hpFill = canvas.create_line(1273, 608, 1291, 608, fill="red2") 
+                self.h_hpGrey = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359, style=ARC, outline="grey")     
+                self.h_hp = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359+self.h1_decrease, style=ARC, outline="red2")
+                self.h_mpGrey = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359, style=ARC, outline="grey")
+                self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
+                self.h_bg2 = canvas.create_arc(1193, 588, 1232, 627, width=26, start=0, extent=359, style=ARC, outline="SteelBlue3")
+                self.h_hand1 = canvas.create_oval(1180, 575, 1220, 615,fill="white", outline="black")
+                self.h_hand2 = canvas.create_oval(1205, 600, 1245, 640,fill="white", outline="black")
+                self.h_weaponName = canvas.create_text(1215, 610, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+                self.h_playerClassName = canvas.create_text(1215, 515, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
+                self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
-                canvas.move(self.h_bg, 75, -10)
-                canvas.move(self.h_hp, 75, -10)
-                canvas.move(self.h_mp, 75, -10)
-                canvas.move(self.h_mpGrey, 75, -10)
-                canvas.move(self.h_hpGrey, 75, -10)
-                canvas.move(self.h_sprintGrey, 71, -10)
-                canvas.move(self.h_bg2, 75, -10)
-                canvas.move(self.h_hand1, 75, -10)
-                canvas.move(self.h_hand2, 75, -10)
-                canvas.move(self.h_weaponName, 75, -10)
-                canvas.move(self.h_hpName, 75, -10)
-                canvas.move(self.h_mpName, 75, -10)
-                canvas.move(self.h_playerClassName, 75, -10)
-                canvas.move(self.h_mpAbilityName, 75, -10)
-                canvas.move(self.h_hpFill, 75, -10)
-                canvas.move(self.h_sprintName, 71, -10)
-                canvas.move(self.h_sprint, 71, -10)
                 #moving = False
             elif self.checkerFrameSprint3 == 25: 
-                print("3. Sprint replenished! You may sprint now.")
+                #print("3. Sprint replenished! You may sprint now.")
                 #moving = False
                 outOfSprint = False
                 oneIterate = True
@@ -548,14 +500,14 @@ class Background:
         self.canvas = canvas
         self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2.3: Bars and Movement and Hitboxes Update\n"""
                                                 """Can toggle from sprint to crouching vise versa now. After you press the toggle for both keys, stance now changes."""
-                                                  """Player has an hp and mp bar. The HUI also shows current ability and weapon. Later will make it usable. Can make other bars."""
-                                                """Press Q to view the bars unfilled. \nYou can press Q again to fill them back up."""
+                                                  """Player has an hp and mp bar. The HUI also shows current ability and weapon. Can make other bars."""
+                                                """"""
                                                 #"""\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
-                                                """\nHitbox is the line. This line should follow the player around the whole time. We can use the x and y coordinates and figure out"""
+                                                """ Hitbox is the line. This line should follow the player around the whole time. We can use the x and y coordinates and figure out"""
                                                   """ a rectangle which is the hitbox.""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
-                                                                 """Cannot crouch stance while in sprint stance. Vise versa. Click on other window to view details.\n"""
+                                                                 """"""
                                                                  """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable. Did I mention you can left click?""",
                                                  width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text)
         #Creating ground1
@@ -2273,7 +2225,7 @@ class Player:
             print("YOU CANNOT SPRINT BECAUSE outOfSprint == True")
                 
 background = Background(canvas)
-enemy = Enemy(canvas)
+enemy1 = Enemy1(canvas)
 sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
 #photoTest = PhotoTest(canvas)
@@ -2285,14 +2237,16 @@ canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys wo
 while 1:
     if basic_attack == False:
         player.draw()
+        #pass
     else:
         player.drawAttack()
+        #pass
     voice.draw()
-    #enemy.draw()
+    enemy1.draw()
     bars.draw()
-    #sword.draw()
+    #sword.draw() #Incomplete
     sword.drawEye()
-    #nathaniel2010.draw()
+    #nathaniel2010.draw() #Incomplete
     tk.update_idletasks()
     tk.update()
     time.sleep(0.01)
