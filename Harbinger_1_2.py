@@ -14,20 +14,32 @@ outOfSprint = False #When the sprint bar becomes empty, make this true. This kic
 oneIterate = True #This takes effect in the Player class's draw() method. The very first if statement will kick the player out of sprint stance. This will not be flipped back on until SP is full again.
 
 tk = Tk()
-tk.title("Harbinger - Alpha 2.2: HP, MP, and Sprint Bars Update (and a bit of Movement)")
+tk.title("Harbinger - Alpha 3.1: Enemies of the East Update")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
 
-class Enemy2: #Second enemy design. Incomplete.
+
+
+class Enemy2: #the dark guard (lEon cratieosn)
     def __init__(self,canvas):
         self.canvas = canvas
+        
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
-        self.e1_name1 = canvas.create_text(790, 70, anchor="center", fill="red", text="Enemy2", font=("Fixedsys", 16))
-        #self.e1_body1 = canvas.create_polygon(780,150 fill="red", outline="black")
-
-    #def draw(self): #voiceOn is for future use. Perhaps when making the hitbox for the enemy2.
-        #global voiceOn
+        self.e2_name2 = canvas.create_text(900, 200, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
+        self.e2_body2 = canvas.create_polygon(900-10+2, 220+5+5, 900+10-2, 220+5+5, 900+10-2, 220+30+5+5, 900-10+2, 220+30+5+5, fill="gray13", outline="black")
+        self.e2_head2 = canvas.create_oval(892-3-4+3-1, 225-30+3+2-1+5, 892-3+30-4-3+1, 225-30+27+2+1+5, fill="gray", outline="black")
+        self.e2_eye2 = canvas.create_polygon(891-3, 210+2+5, 903-3, 210+2+5, 903-3, 205+2+5, fill="red")
+        self.e2_helmet2 = canvas.create_polygon(891-7, 210+2+2+5, 891-5+3, 210+2+2+5+5+5, 891-5+10+18, 210+2+2+5+5+5, 891-5+10+20, 210+2+2+5, 891-5+10+18, 210+2+2+5+5-18-2+5, 892-3-4+3-1+12, 225-30+3+2-1-1+5, 891-7, 210+2+2+5+5-18+5, 891-7+20-2, 210+2+2+5+5-18+5, 891-7+24-2, 210+2+2-4+5, 891-7+20-2, 210+2+2+5,  fill="black", outline="black")
+        self.e2_shoulder2 = canvas.create_polygon(900-10+2+2+5, 220+5+5+5, 900+10-2-2+5, 220+5+5+5, 900+10-2-2+5, 220+5+5+2+5+5+5, 900-10+2+2+5, 220+5+5+2+5+5+5, fill="black")
+        #might need to create another shoulder if the enemy moves.
+        self.e2_shoulderspike2 = canvas.create_polygon(896+5, 220+5+5+5, 900+5, 220+5+5-10+5, 904+5, 220+5+5+5, fill="gray")
+        self.e2_lefthand2 = canvas.create_oval(900-10+2+5, 220+5+5+5+5, 900+10-2+5, 220+5+5+5+5+5+5+5, fill="gray")
+        self.e2_spearshaft2 = canvas.create_polygon(900-10+2+5-10-10-5+7, 210+5, 900-10+2+5-10-10-5+7+3, 210+5, 900-10+2+5-10-10-5+7+3, 270+5, 900-10+2+5-10-10-5+7, 270+5, fill="black")
+        self.e1_spearhead2 = canvas.create_polygon(900-10+2+5-10-10-5+7-4, 210+5, 900-10+2+5-10-10-5+8, 210-10, 900-10+2+5-10-10-5+7+3+4, 210+5, fill="gray")
+        self.e2_righthand2 = canvas.create_oval(900-10+2+5-10-10-5, 220+5+5+5-10+5, 900+10-2+5-10-10-5, 220+5+5+5+5+5+5-10+5, fill="gray")
+        self.e2_Rleg2 = canvas.create_oval(900-10+2-2-4, 220+30+5+5+1, 900-10+2-2+15-4, 220+30+5+5+1+10,  fill="black") #+15, +8
+        self.e2_Rleg2 = canvas.create_oval(900-10+2-2-4+15, 220+30+5+5+1, 900-10+2-2+15-4+15, 220+30+5+5+1+10,  fill="black") #+15, +8
 
 class Enemy1: #Designs by Edward. Eye animation by Leon.
     def __init__(self,canvas):
@@ -40,7 +52,7 @@ class Enemy1: #Designs by Edward. Eye animation by Leon.
         #I need help creating an enemy. Could be anything, but I'd prefer something medieval.
 
         #Law: Made some of these shapes outlined black so it fits in with the rest of the designs.
-        self.e1_name = canvas.create_text(750, 70, anchor="center", fill="red", text="Emperor Luckily-I-Am-Not-Called-King", font=("Fixedsys", 16))
+        self.e1_name = canvas.create_text(750, 70, anchor="center", fill="red", text="Lil Baby Cyclops", font=("Fixedsys", 16))
         #shoulder
         self.e1_neck = canvas.create_polygon(758, 110, 730,120,780,120, fill="saddle brown", outline="black")
         #body
@@ -96,9 +108,15 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
     def __init__(self,canvas):
         self.canvas = canvas
 
-        self.e1_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Mac-In-Fries 2000", font=("Fixedsys", 16))
+        #Variables
+        self.Frame = 0 #0, 1 ,2
+        self.x, self.y = 0,0
+        self.counterFrame = 0
+        self.Looking = "Left"
+        self.bodyBob = 0
 
-        #All head shapes
+        #Name Above Head and all head shapes
+        self.e1_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Jack Michaelson", font=("Fixedsys", 16))
         self.e1_head = canvas.create_oval(777, 305, 802, 330, fill="SlateGray1")
         self.e1_headBlank = canvas.create_rectangle(785, 322, 802, 330, fill="SkyBlue1", outline="")
         self.e1_headBlankLine = canvas.create_line(785, 322, 802, 322)
@@ -138,19 +156,128 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         
         #Arms
         self.e1_Larm = canvas.create_oval(767, 330, 782, 345, fill="SlateGray1", outline="black")
+        self.e1_Lfinger = canvas.create_line(768, 333, 775, 333)
+        self.e1_Lfinger2 = canvas.create_line(767, 336, 776, 336)
+        self.e1_Lfinger3 = canvas.create_line(767, 339, 776, 339)
+        self.e1_Lfinger4 = canvas.create_line(768, 342, 774, 342)
+        self.e1_LfingerDown = canvas.create_line(775, 333, 775, 339)
+        self.e1_LfingerDown1 = canvas.create_line(774, 339, 774, 342)
         self.e1_Rarm = canvas.create_oval(797, 330, 812, 345, fill="SlateGray1", outline="black")
 
-        #Legs
+        #Legs and hitbox
         self.e1_Rleg = canvas.create_oval(797, 355, 812, 363, fill="SlateGray1", outline="black")
-        #self.e1_RtoeLine = canvas.create_line(797, 360, 802, 360)
-        #self.e1_RtoeLine1 = canvas.create_line(797, 358, 802, 358)
-        #self.e1_RtoeLine2 = canvas.create_line(797, 356, 802, 356)
+        self.e1_RtoeLine = canvas.create_line(797, 360, 802, 360)
+        self.e1_RtoeLine1 = canvas.create_line(797, 358, 802, 358)
+        self.e1_RtoeLine2 = canvas.create_line(797, 356, 802, 356)
         self.e1_Lleg = canvas.create_oval(767, 355, 782, 363, fill="SlateGray1", outline="black")
-        #self.e1_LtoeLine = canvas.create_line(767, 360, 772, 360)
-        #self.e1_LtoeLine1 = canvas.create_line(767, 358, 772, 358)
-        #self.e1_LtoeLine2 = canvas.create_line(767, 356, 772, 356)        
-        #self.e1_hitbox = canvas.create_line(150+652, 125+180, 125+652, 183+180)
-        #canvas.itemconfigure(self.e1_hitbox, state='hidden')    
+        self.e1_LtoeLine = canvas.create_line(767, 360, 772, 360)
+        self.e1_LtoeLine1 = canvas.create_line(767, 358, 772, 358)
+        self.e1_LtoeLine2 = canvas.create_line(767, 356, 772, 356)
+        self.e1_hitbox = canvas.create_line(802, 305, 777, 363)
+        #canvas.itemconfigure(self.e1_hitbox, state='hidden') #hides shape.
+
+    def draw(self):
+        self.hitboxCoords = canvas.coords(self.e1_hitbox)
+
+        if self.hitboxCoords[2] <= 0:
+            self.Looking = "Right"
+
+        if 0 <= self.counterFrame <= 50 and self.Looking == "Left":
+            self.x -= 1
+            
+            if self.Frame == 0 and self.counterFrame <= 25:
+                self.bodyBob = 3
+            elif self.Frame == 1 and self.counterFrame > 25:
+                self.bodyBob = 0
+            
+            #Nameplate and Head
+            canvas.coords(self.e1_name, 790+self.x, 290+self.y+self.bodyBob)
+            canvas.coords(self.e1_head, 777+self.x, 305+self.y+self.bodyBob, 802+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e1_headBlank, 785+self.x, 322+self.y+self.bodyBob, 802+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e1_headBlankLine, 785+self.x, 322+self.y+self.bodyBob, 802+self.x, 322+self.y+self.bodyBob)
+            canvas.coords(self.e1_spine, 787+self.x, 322+self.y+self.bodyBob, 795+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e1_spineLine, 787+self.x, 324+self.y+self.bodyBob, 795+self.x, 328+self.y+self.bodyBob)
+            canvas.coords(self.e1_teeth, 777+self.x, 322+self.y+self.bodyBob, 785+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e1_teethDown1, 780+self.x, 322+self.y+self.bodyBob, 780+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e1_teethDown2, 783+self.x, 322+self.y+self.bodyBob, 783+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e1_teethCross, 777+self.x, 326+self.y+self.bodyBob, 785+self.x, 326+self.y+self.bodyBob)
+            canvas.coords(self.e1_nose, 778+self.x, 318+self.y+self.bodyBob, 779+self.x, 319+self.y+self.bodyBob)
+            canvas.coords(self.e1_eye, 780+self.x, 312+self.y+self.bodyBob, 785+self.x, 319+self.y+self.bodyBob)
+            canvas.coords(self.e1_eye2, 788+self.x, 314+self.y+self.bodyBob, 789+self.x, 319+self.y+self.bodyBob)
+            #Torso
+            canvas.coords(self.e1_torso, 782+self.x, 330+self.y+self.bodyBob, 797+self.x, 330+self.y+self.bodyBob, 797+self.x, 355+self.y+self.bodyBob, 782+self.x, 355+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribMidDown, 784+self.x, 330+self.y+self.bodyBob, 784+self.x, 345+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribHighestCross, 782+self.x, 333+self.y+self.bodyBob, 784+self.x, 333+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribHighest, 786+self.x, 333+self.y+self.bodyBob, 795+self.x, 332+self.y+self.bodyBob, 786+self.x, 334+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribMiddleCross, 782+self.x, 336+self.y+self.bodyBob, 784+self.x, 336+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribMiddle, 786+self.x, 336+self.y+self.bodyBob, 795+self.x, 335+self.y+self.bodyBob, 786+self.x, 337+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribThirdCross, 782+self.x, 339+self.y+self.bodyBob, 784+self.x, 339+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribThird, 786+self.x, 339+self.y+self.bodyBob, 795+self.x, 338+self.y+self.bodyBob, 786+self.x, 340+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribFourthCross, 782+self.x, 342+self.y+self.bodyBob, 784+self.x, 342+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribFourth, 786+self.x, 342+self.y+self.bodyBob, 795+self.x, 341+self.y+self.bodyBob, 786+self.x, 343+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribLowest, 782+self.x, 345+self.y+self.bodyBob, 789+self.x, 345+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribLowest1, 789+self.x, 344+self.y+self.bodyBob, 794+self.x, 344+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribLowest2, 794+self.x, 343+self.y+self.bodyBob, 796+self.x, 343+self.y+self.bodyBob)
+            canvas.coords(self.e1_ribLowest3, 796+self.x, 342+self.y+self.bodyBob, 797+self.x, 342+self.y+self.bodyBob)
+            canvas.coords(self.e1_torsoBlank, 782+self.x, 346+self.y+self.bodyBob, 787+self.x, 346, 787+self.x, 351+self.y+self.bodyBob, 782+self.x, 351+self.y+self.bodyBob)
+            canvas.coords(self.e1_spine2VerticalLine, 787+self.x, 346+self.y+self.bodyBob, 787+self.x, 350+self.y+self.bodyBob)
+            canvas.coords(self.e1_torsoBlank2, 796+self.x, 343+self.y+self.bodyBob, 798+self.x, 343+self.y+self.bodyBob, 798+self.x, 348+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
+            canvas.coords(self.e1_spine2VerticalLine1, 796+self.x, 342+self.y+self.bodyBob, 796+self.x, 350+self.y+self.bodyBob)
+            canvas.coords(self.e1_sprin2DiagonalLine, 788+self.x, 346+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
+            canvas.coords(self.e1_hipLine, 782+self.x, 350+self.y+self.bodyBob, 792+self.x, 350+self.y+self.bodyBob)
+            canvas.coords(self.e1_hipLine2, 792+self.x, 349+self.y+self.bodyBob, 797+self.x, 349+self.y+self.bodyBob)
+            canvas.coords(self.e1_hipHole, 792+self.x, 352+self.y+self.bodyBob, 795+self.x, 355+self.y+self.bodyBob)
+            if self.Frame == 0: #Arms and legs in AND moving
+                #Arms
+                canvas.coords(self.e1_Larm, 767+self.x+15, 330+self.y+10, 782+self.x+15, 345+self.y+10)
+                canvas.coords(self.e1_Lfinger, 768+self.x+15, 333+self.y+10, 775+self.x+15, 333+self.y+10)
+                canvas.coords(self.e1_Lfinger2, 767+self.x+15, 336+self.y+10, 776+self.x+15, 336+self.y+10)
+                canvas.coords(self.e1_Lfinger3, 767+self.x+15, 339+self.y+10, 776+self.x+15, 339+self.y+10)
+                canvas.coords(self.e1_Lfinger4, 768+self.x+15, 342+self.y+10, 774+self.x+15, 342+self.y+10)
+                canvas.coords(self.e1_LfingerDown, 775+self.x+15, 333+self.y+10, 775+self.x+15, 339+self.y+10)
+                canvas.coords(self.e1_LfingerDown1, 774+self.x+15, 339+self.y+10, 774+self.x+15, 342+self.y+10)
+                canvas.coords(self.e1_Rarm, 797+self.x-15, 330+self.y+10, 812+self.x-15, 345+self.y+10)
+                #Legs and hitbox
+                canvas.coords(self.e1_Rleg, 797+self.x-10, 355+self.y, 812+self.x-10, 363+self.y)
+                canvas.coords(self.e1_RtoeLine, 797+self.x-10, 360+self.y, 802+self.x-10, 360+self.y)
+                canvas.coords(self.e1_RtoeLine1, 797+self.x-10, 358+self.y, 802+self.x-10, 358+self.y)
+                canvas.coords(self.e1_RtoeLine2, 797+self.x-10, 356+self.y, 802+self.x-10, 356+self.y)
+                canvas.coords(self.e1_Lleg, 767+self.x+10, 355+self.y, 782+self.x+10, 363+self.y)
+                canvas.coords(self.e1_LtoeLine, 767+self.x+10, 360+self.y, 772+self.x+10, 360+self.y)
+                canvas.coords(self.e1_LtoeLine1, 767+self.x+10, 358+self.y, 772+self.x+10, 358+self.y)
+                canvas.coords(self.e1_LtoeLine2, 767+self.x+10, 356+self.y, 772+self.x+10, 356+self.y)
+                canvas.coords(self.e1_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
+            elif self.Frame == 1: #Arms and legs out AND NOT moving
+                #Arms
+                canvas.coords(self.e1_Larm, 767+self.x, 330+self.y, 782+self.x, 345+self.y)
+                canvas.coords(self.e1_Lfinger, 768+self.x, 333+self.y, 775+self.x, 333+self.y)
+                canvas.coords(self.e1_Lfinger2, 767+self.x, 336+self.y, 776+self.x, 336+self.y)
+                canvas.coords(self.e1_Lfinger3, 767+self.x, 339+self.y, 776+self.x, 339+self.y)
+                canvas.coords(self.e1_Lfinger4, 768+self.x, 342+self.y, 774+self.x, 342+self.y)
+                canvas.coords(self.e1_LfingerDown, 775+self.x, 333+self.y, 775+self.x, 339+self.y)
+                canvas.coords(self.e1_LfingerDown1, 774+self.x, 339+self.y, 774+self.x, 342+self.y)
+                canvas.coords(self.e1_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
+                #Legs and hitbox
+                canvas.coords(self.e1_Rleg, 797+self.x, 355+self.y, 812+self.x, 363+self.y)
+                canvas.coords(self.e1_RtoeLine, 797+self.x, 360+self.y, 802+self.x, 360+self.y)
+                canvas.coords(self.e1_RtoeLine1, 797+self.x, 358+self.y, 802+self.x, 358+self.y)
+                canvas.coords(self.e1_RtoeLine2, 797+self.x, 356+self.y, 802+self.x, 356+self.y)
+                canvas.coords(self.e1_Lleg, 767+self.x, 355+self.y, 782+self.x, 363+self.y)
+                canvas.coords(self.e1_LtoeLine, 767+self.x, 360+self.y, 772+self.x, 360+self.y)
+                canvas.coords(self.e1_LtoeLine1, 767+self.x, 358+self.y, 772+self.x, 358+self.y)
+                canvas.coords(self.e1_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
+                canvas.coords(self.e1_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
+
+        self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
+        
+        if self.counterFrame <= 25: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+            self.Frame = 0
+        elif 25 < self.counterFrame <= 100: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+            self.Frame = 1
+            
+        if self.counterFrame == 100: #Reset the counter after 50 so that the cycle repeats over and over again.
+            self.counterFrame = 0
+            
 
 class Sword: 
     def __init__(self,canvas):
@@ -321,7 +448,7 @@ class Bars:
         self.h_weaponName = canvas.create_text(1215, 610, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
         self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
         self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
-        self.h_playerClassName = canvas.create_text(1215, 515, text="[Kingslayer]", fill="green", anchor="center", font=("Fixedsys", 16))
+        self.h_playerClassName = canvas.create_text(1215, 515, text="[Dis-Connor-ed]", fill="green", anchor="center", font=("Fixedsys", 16))
         self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
     def draw(self):         #When mana is unused, regenerate? #When not hurt, heal? #These are undone.
@@ -443,12 +570,13 @@ class Nathaniel2010: #Refernce to Heavy Rain's AVI
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 2.2.3: Bars and Movement and Hitboxes Update\n"""
-                                                """Can toggle from sprint to crouching vise versa now. After you press the toggle for both keys, stance now changes."""
-                                                  """Player has an hp and mp bar. The HUI also shows current ability and weapon. Can make other bars."""
-                                                """\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
-                                                """ Hitbox is the line. This line should follow the player around the whole time. We can use the x and y coordinates and figure out"""
-                                                  """ a rectangle which is the hitbox.""",
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 3.0: Enemies of the East Update\n"""
+                                                """Added Enemy3's left-looing animation. It moves left and pauses to portray that it moves slowly."""
+                                                  """\nThe line is the hitbox and it is facing the wrong way but I'm too lazy to mirror it and it should be fine."""
+                                                """Enemy3 should move across the screen and stop when it reaches the window border. This is done with the hitbox line."""
+                                                #"""\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
+                                                """Enemy3's hands are questionable... I might need feedback on that."""
+                                                  """ Planning to make him move right next update.""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
                                                                  """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable. Did I mention you can left click?""",
@@ -644,7 +772,7 @@ class Player:
         #Creating the model of player 1 w/ label above it's head
         #Character is walking to the right of the screen
         #Name of the character
-        self.a_name = canvas.create_text(138, 110, text="Hand of The King", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
+        self.a_name = canvas.create_text(138, 110, text="Blademaster of the Thousand Years War, Guy", width=1000, fill="green", anchor="center", font=("Fixedsys", 16))
 
         #Creates the head of character
         self.a_head = canvas.create_oval(125, 125, 150, 150, fill="white")
@@ -677,7 +805,7 @@ class Player:
 
         #Hitbox
         self.a_hitbox = canvas.create_line(150, 125, 125, 183)
-        #canvas.itemconfigure(self.a_hitbox, state='hidden')
+        canvas.itemconfigure(self.a_hitbox, state='hidden')
 
         #IDK HOW TO CREATE A BUTTON IN THE MAIN WINDOW WILL DO LATER
         #button1=Button(main_frame,text="Click Me")
@@ -2171,7 +2299,7 @@ class Player:
                 
 background = Background(canvas)
 enemy1 = Enemy1(canvas)
-#enemy2 = Enemy2(canvas)
+enemy2 = Enemy2(canvas)
 enemy3 = Enemy3(canvas)
 sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
@@ -2191,7 +2319,7 @@ while 1:
     voice.draw()
     enemy1.draw()
     #enemy2.draw()
-    #enemy3.draw()
+    enemy3.draw()
     bars.draw()
     #sword.draw() #Incomplete
     sword.drawEye()
