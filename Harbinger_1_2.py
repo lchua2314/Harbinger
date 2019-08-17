@@ -12,6 +12,7 @@ sprinting = False #After pressing shiftL, this will turn true, when it does the 
 moving = False #This is to make sure the player is moving to deduct SP. Player could be stationary AND be in sprint stance so the character should NOT use SP during this time.
 outOfSprint = False #When the sprint bar becomes empty, make this true. This kicks the player out of sprint stance.
 oneIterate = True #This takes effect in the Player class's draw() method. The very first if statement will kick the player out of sprint stance. This will not be flipped back on until SP is full again.
+hitBySpecialOnce = True
 
 tk = Tk()
 tk.title("Harbinger - Alpha 3.0.1: Enemies of the East")
@@ -36,7 +37,7 @@ class Enemy2: #the dark guard (lEon cratieosn)
         self.e2_shoulderspike2 = canvas.create_polygon(896+5, 220+5+5+5, 900+5, 220+5+5-10+5, 904+5, 220+5+5+5, fill="gray")
         self.e2_lefthand2 = canvas.create_oval(900-10+2+5, 220+5+5+5+5, 900+10-2+5, 220+5+5+5+5+5+5+5, fill="gray")
         self.e2_spearshaft2 = canvas.create_polygon(900-10+2+5-10-10-5+7, 210+5, 900-10+2+5-10-10-5+7+3, 210+5, 900-10+2+5-10-10-5+7+3, 270+5, 900-10+2+5-10-10-5+7, 270+5, fill="black")
-        self.e1_spearhead2 = canvas.create_polygon(900-10+2+5-10-10-5+7-4, 210+5, 900-10+2+5-10-10-5+8, 210-10, 900-10+2+5-10-10-5+7+3+4, 210+5, fill="gray")
+        self.e2_spearhead2 = canvas.create_polygon(900-10+2+5-10-10-5+7-4, 210+5, 900-10+2+5-10-10-5+8, 210-10, 900-10+2+5-10-10-5+7+3+4, 210+5, fill="gray")
         self.e2_righthand2 = canvas.create_oval(900-10+2+5-10-10-5, 220+5+5+5-10+5, 900+10-2+5-10-10-5, 220+5+5+5+5+5+5-10+5, fill="gray")
         self.e2_Rleg2 = canvas.create_oval(900-10+2-2-4, 220+30+5+5+1, 900-10+2-2+15-4, 220+30+5+5+1+10,  fill="black") #+15, +8
         self.e2_Rleg2 = canvas.create_oval(900-10+2-2-4+15, 220+30+5+5+1, 900-10+2-2+15-4+15, 220+30+5+5+1+10,  fill="black") #+15, +8
@@ -105,80 +106,83 @@ class Enemy1: #Designs by Edward. Eye animation by Leon.
         self.counter += 1 #self.counter goes from -100 to 110 then to 0-10 10 times then repeat the cycle.
 
 class Enemy3: #Third enemy design. I'm planning on making this one (design, animation, health, hitboxes), however anyone can ask for edits or anything. Incomplete.
-    def __init__(self,canvas):
+    def __init__(self,canvas, voice):
         self.canvas = canvas
+        self.voice = voice
 
         #Variables
-        self.Frame = 0 #0, 1 ,2
+        self.Frame = 0 #0, 1
         self.x, self.y = 0,0
         self.counterFrame = 0
         self.Looking = "Left"
         self.bodyBob = 0
         self.canvas_width = self.canvas.winfo_width()
+        self.hpLoss = 0
 
-        #Name Above Head and all head shapes
-        self.e1_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Jack Michaelson", font=("Fixedsys", 16))
-        self.e1_head = canvas.create_oval(777, 305, 802, 330, fill="SlateGray1")
-        self.e1_headBlank = canvas.create_rectangle(785, 322, 802, 330, fill="SkyBlue1", outline="")
-        self.e1_headBlankLine = canvas.create_line(785, 322, 802, 322)
-        self.e1_spine = canvas.create_rectangle(787, 322, 795, 330, fill="SlateGray1", outline="black")
-        self.e1_spineLine = canvas.create_line(787, 324, 795, 328)
-        self.e1_teeth = canvas.create_rectangle(777, 322, 785, 330, fill="SlateGray1", outline="black")
-        self.e1_teethDown1 = canvas.create_line(780, 322, 780, 330)
-        self.e1_teethDown2 = canvas.create_line(783, 322, 783, 330)
-        self.e1_teethCross = canvas.create_line(777, 326, 785, 326)
-        self.e1_nose = canvas.create_oval(778, 318, 779, 319, fill="black")
-        self.e1_eye = canvas.create_oval(780, 312, 785, 319, fill="black")
-        self.e1_eye2 = canvas.create_oval(788, 314, 789, 319, fill="black")
+        #Name Above Head, health bar, and all head shapes
+        self.e3_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Jack Michaelson", font=("Fixedsys", 16))
+        self.e3_hp = canvas.create_rectangle(740, 297, 840, 302, fill="red2")
+        self.e3_head = canvas.create_oval(777, 305, 802, 330, fill="SlateGray1")
+        self.e3_headBlank = canvas.create_rectangle(785, 322, 802, 330, fill="SkyBlue1", outline="")
+        self.e3_headBlankLine = canvas.create_line(785, 322, 802, 322)
+        self.e3_spine = canvas.create_rectangle(787, 322, 795, 330, fill="SlateGray1", outline="black")
+        self.e3_spineLine = canvas.create_line(787, 324, 795, 328)
+        self.e3_teeth = canvas.create_rectangle(777, 322, 785, 330, fill="SlateGray1", outline="black")
+        self.e3_teethDown1 = canvas.create_line(780, 322, 780, 330)
+        self.e3_teethDown2 = canvas.create_line(783, 322, 783, 330)
+        self.e3_teethCross = canvas.create_line(777, 326, 785, 326)
+        self.e3_nose = canvas.create_oval(778, 318, 779, 319, fill="black")
+        self.e3_eye = canvas.create_oval(780, 312, 785, 319, fill="black")
+        self.e3_eye2 = canvas.create_oval(788, 314, 789, 319, fill="black")
 
         #All torso shapes.
-        self.e1_torso = canvas.create_polygon(782, 330, 797, 330, 797, 355, 782, 355, fill="SlateGray1", outline="black")
-        self.e1_ribMidDown = canvas.create_line(784, 330, 784, 345)
-        self.e1_ribHighestCross = canvas.create_line(782, 333, 784, 333)
-        self.e1_ribHighest = canvas.create_polygon(786, 333, 795, 332, 786, 334, fill="black", outline="black")
-        self.e1_ribMiddleCross = canvas.create_line(782, 336, 784, 336)
-        self.e1_ribMiddle = canvas.create_polygon(786, 336, 795, 335, 786, 337, fill="black", outline="black")
-        self.e1_ribThirdCross = canvas.create_line(782, 339, 784, 339)
-        self.e1_ribThird = canvas.create_polygon(786, 339, 795, 338, 786, 340, fill="black", outline="black")
-        self.e1_ribFourthCross = canvas.create_line(782, 342, 784, 342)
-        self.e1_ribFourth = canvas.create_polygon(786, 342, 795, 341, 786, 343, fill="black", outline="black")
-        self.e1_ribLowest = canvas.create_line(782, 345, 789, 345)
-        self.e1_ribLowest1 = canvas.create_line(789, 344, 794, 344)
-        self.e1_ribLowest2 = canvas.create_line(794, 343, 796, 343)
-        self.e1_ribLowest3 = canvas.create_line(796, 342, 797, 342)
-        self.e1_torsoBlank = canvas.create_polygon(782, 346, 787, 346, 787, 351, 782, 351, fill="SkyBlue1", outline="")
-        self.e1_spine2VerticalLine = canvas.create_line(787, 346, 787, 350)
-        self.e1_torsoBlank2 = canvas.create_polygon(796, 343, 798, 343, 798, 348, 796, 348, fill="SkyBlue1", outline="")
-        self.e1_spine2VerticalLine1 = canvas.create_line(796, 342, 796, 350)
-        self.e1_sprin2DiagonalLine = canvas.create_line(788, 346, 796, 348)
-        self.e1_hipLine = canvas.create_line(782, 350, 792, 350)
-        self.e1_hipLine2 = canvas.create_line(792, 349, 797, 349)
-        self.e1_hipHole = canvas.create_oval(792, 352, 795, 355, fill="black")
+        self.e3_torso = canvas.create_polygon(782, 330, 797, 330, 797, 355, 782, 355, fill="SlateGray1", outline="black")
+        self.e3_ribMidDown = canvas.create_line(784, 330, 784, 345)
+        self.e3_ribHighestCross = canvas.create_line(782, 333, 784, 333)
+        self.e3_ribHighest = canvas.create_polygon(786, 333, 795, 332, 786, 334, fill="black", outline="black")
+        self.e3_ribMiddleCross = canvas.create_line(782, 336, 784, 336)
+        self.e3_ribMiddle = canvas.create_polygon(786, 336, 795, 335, 786, 337, fill="black", outline="black")
+        self.e3_ribThirdCross = canvas.create_line(782, 339, 784, 339)
+        self.e3_ribThird = canvas.create_polygon(786, 339, 795, 338, 786, 340, fill="black", outline="black")
+        self.e3_ribFourthCross = canvas.create_line(782, 342, 784, 342)
+        self.e3_ribFourth = canvas.create_polygon(786, 342, 795, 341, 786, 343, fill="black", outline="black")
+        self.e3_ribLowest = canvas.create_line(782, 345, 789, 345)
+        self.e3_ribLowest1 = canvas.create_line(789, 344, 794, 344)
+        self.e3_ribLowest2 = canvas.create_line(794, 343, 796, 343)
+        self.e3_ribLowest3 = canvas.create_line(796, 342, 797, 342)
+        self.e3_torsoBlank = canvas.create_polygon(782, 346, 787, 346, 787, 351, 782, 351, fill="SkyBlue1", outline="")
+        self.e3_spine2VerticalLine = canvas.create_line(787, 346, 787, 350)
+        self.e3_torsoBlank2 = canvas.create_polygon(796, 343, 798, 343, 798, 348, 796, 348, fill="SkyBlue1", outline="")
+        self.e3_spine2VerticalLine1 = canvas.create_line(796, 342, 796, 350)
+        self.e3_sprin2DiagonalLine = canvas.create_line(788, 346, 796, 348)
+        self.e3_hipLine = canvas.create_line(782, 350, 792, 350)
+        self.e3_hipLine2 = canvas.create_line(792, 349, 797, 349)
+        self.e3_hipHole = canvas.create_oval(792, 352, 795, 355, fill="black")
         
         #Arms
-        self.e1_Larm = canvas.create_oval(767, 330, 782, 345, fill="SlateGray1", outline="black")
-        self.e1_Lfinger = canvas.create_line(768, 333, 775, 333)
-        self.e1_Lfinger2 = canvas.create_line(767, 336, 776, 336)
-        self.e1_Lfinger3 = canvas.create_line(767, 339, 776, 339)
-        self.e1_Lfinger4 = canvas.create_line(768, 342, 774, 342)
-        self.e1_LfingerDown = canvas.create_line(775, 333, 775, 339)
-        self.e1_LfingerDown1 = canvas.create_line(774, 339, 774, 342)
-        self.e1_Rarm = canvas.create_oval(797, 330, 812, 345, fill="SlateGray1", outline="black")
+        self.e3_Larm = canvas.create_oval(767, 330, 782, 345, fill="SlateGray1", outline="black")
+        self.e3_Lfinger = canvas.create_line(768, 333, 775, 333)
+        self.e3_Lfinger2 = canvas.create_line(767, 336, 776, 336)
+        self.e3_Lfinger3 = canvas.create_line(767, 339, 776, 339)
+        self.e3_Lfinger4 = canvas.create_line(768, 342, 774, 342)
+        self.e3_LfingerDown = canvas.create_line(775, 333, 775, 339)
+        self.e3_LfingerDown1 = canvas.create_line(774, 339, 774, 342)
+        self.e3_Rarm = canvas.create_oval(797, 330, 812, 345, fill="SlateGray1", outline="black")
 
         #Legs and hitbox
-        self.e1_Rleg = canvas.create_oval(797, 355, 812, 363, fill="SlateGray1", outline="black")
-        self.e1_RtoeLine = canvas.create_line(797, 360, 802, 360)
-        self.e1_RtoeLine1 = canvas.create_line(797, 358, 802, 358)
-        self.e1_RtoeLine2 = canvas.create_line(797, 356, 802, 356)
-        self.e1_Lleg = canvas.create_oval(767, 355, 782, 363, fill="SlateGray1", outline="black")
-        self.e1_LtoeLine = canvas.create_line(767, 360, 772, 360)
-        self.e1_LtoeLine1 = canvas.create_line(767, 358, 772, 358)
-        self.e1_LtoeLine2 = canvas.create_line(767, 356, 772, 356)
-        self.e1_hitbox = canvas.create_line(802, 305, 777, 363)
-        #canvas.itemconfigure(self.e1_hitbox, state='hidden') #hides shape.
+        self.e3_Rleg = canvas.create_oval(797, 355, 812, 363, fill="SlateGray1", outline="black")
+        self.e3_RtoeLine = canvas.create_line(797, 360, 802, 360)
+        self.e3_RtoeLine1 = canvas.create_line(797, 358, 802, 358)
+        self.e3_RtoeLine2 = canvas.create_line(797, 356, 802, 356)
+        self.e3_Lleg = canvas.create_oval(767, 355, 782, 363, fill="SlateGray1", outline="black")
+        self.e3_LtoeLine = canvas.create_line(767, 360, 772, 360)
+        self.e3_LtoeLine1 = canvas.create_line(767, 358, 772, 358)
+        self.e3_LtoeLine2 = canvas.create_line(767, 356, 772, 356)
+        self.e3_hitbox = canvas.create_line(802, 305, 777, 363)
+        #canvas.itemconfigure(self.e3_hitbox, state='hidden') #hides shape.
 
     def draw(self):
-        self.hitboxCoords = canvas.coords(self.e1_hitbox)
+        self.hitboxCoords = canvas.coords(self.e3_hitbox)
 
         if self.hitboxCoords[2] <= 0:
             self.Looking = "Right"
@@ -194,82 +198,83 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.bodyBob = 0
             
             #Nameplate and Head
-            canvas.coords(self.e1_name, 790+self.x, 290+self.y+self.bodyBob)
-            canvas.coords(self.e1_head, 777+self.x, 305+self.y+self.bodyBob, 802+self.x, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_headBlank, 785+self.x, 322+self.y+self.bodyBob, 802+self.x, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_headBlankLine, 785+self.x, 322+self.y+self.bodyBob, 802+self.x, 322+self.y+self.bodyBob)
-            canvas.coords(self.e1_spine, 787+self.x, 322+self.y+self.bodyBob, 795+self.x, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_spineLine, 787+self.x, 324+self.y+self.bodyBob, 795+self.x, 328+self.y+self.bodyBob)
-            canvas.coords(self.e1_teeth, 777+self.x, 322+self.y+self.bodyBob, 785+self.x, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_teethDown1, 780+self.x, 322+self.y+self.bodyBob, 780+self.x, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_teethDown2, 783+self.x, 322+self.y+self.bodyBob, 783+self.x, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_teethCross, 777+self.x, 326+self.y+self.bodyBob, 785+self.x, 326+self.y+self.bodyBob)
-            canvas.coords(self.e1_nose, 778+self.x, 318+self.y+self.bodyBob, 779+self.x, 319+self.y+self.bodyBob)
-            canvas.coords(self.e1_eye, 780+self.x, 312+self.y+self.bodyBob, 785+self.x, 319+self.y+self.bodyBob)
-            canvas.coords(self.e1_eye2, 788+self.x, 314+self.y+self.bodyBob, 789+self.x, 319+self.y+self.bodyBob)
+            canvas.coords(self.e3_name, 790+self.x, 290+self.y+self.bodyBob)
+            canvas.coords(self.e3_hp, 740+self.x+self.hpLoss, 297+self.y+self.bodyBob, 840+self.x-self.hpLoss, 302+self.y+self.bodyBob)
+            canvas.coords(self.e3_head, 777+self.x, 305+self.y+self.bodyBob, 802+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_headBlank, 785+self.x, 322+self.y+self.bodyBob, 802+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_headBlankLine, 785+self.x, 322+self.y+self.bodyBob, 802+self.x, 322+self.y+self.bodyBob)
+            canvas.coords(self.e3_spine, 787+self.x, 322+self.y+self.bodyBob, 795+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_spineLine, 787+self.x, 324+self.y+self.bodyBob, 795+self.x, 328+self.y+self.bodyBob)
+            canvas.coords(self.e3_teeth, 777+self.x, 322+self.y+self.bodyBob, 785+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_teethDown1, 780+self.x, 322+self.y+self.bodyBob, 780+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_teethDown2, 783+self.x, 322+self.y+self.bodyBob, 783+self.x, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_teethCross, 777+self.x, 326+self.y+self.bodyBob, 785+self.x, 326+self.y+self.bodyBob)
+            canvas.coords(self.e3_nose, 778+self.x, 318+self.y+self.bodyBob, 779+self.x, 319+self.y+self.bodyBob)
+            canvas.coords(self.e3_eye, 780+self.x, 312+self.y+self.bodyBob, 785+self.x, 319+self.y+self.bodyBob)
+            canvas.coords(self.e3_eye2, 788+self.x, 314+self.y+self.bodyBob, 789+self.x, 319+self.y+self.bodyBob)
             #Torso
-            canvas.coords(self.e1_torso, 782+self.x, 330+self.y+self.bodyBob, 797+self.x, 330+self.y+self.bodyBob, 797+self.x, 355+self.y+self.bodyBob, 782+self.x, 355+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribMidDown, 784+self.x, 330+self.y+self.bodyBob, 784+self.x, 345+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribHighestCross, 782+self.x, 333+self.y+self.bodyBob, 784+self.x, 333+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribHighest, 786+self.x, 333+self.y+self.bodyBob, 795+self.x, 332+self.y+self.bodyBob, 786+self.x, 334+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribMiddleCross, 782+self.x, 336+self.y+self.bodyBob, 784+self.x, 336+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribMiddle, 786+self.x, 336+self.y+self.bodyBob, 795+self.x, 335+self.y+self.bodyBob, 786+self.x, 337+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribThirdCross, 782+self.x, 339+self.y+self.bodyBob, 784+self.x, 339+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribThird, 786+self.x, 339+self.y+self.bodyBob, 795+self.x, 338+self.y+self.bodyBob, 786+self.x, 340+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribFourthCross, 782+self.x, 342+self.y+self.bodyBob, 784+self.x, 342+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribFourth, 786+self.x, 342+self.y+self.bodyBob, 795+self.x, 341+self.y+self.bodyBob, 786+self.x, 343+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest, 782+self.x, 345+self.y+self.bodyBob, 789+self.x, 345+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest1, 789+self.x, 344+self.y+self.bodyBob, 794+self.x, 344+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest2, 794+self.x, 343+self.y+self.bodyBob, 796+self.x, 343+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest3, 796+self.x, 342+self.y+self.bodyBob, 797+self.x, 342+self.y+self.bodyBob)
-            canvas.coords(self.e1_torsoBlank, 782+self.x, 346+self.y+self.bodyBob, 787+self.x, 346, 787+self.x, 351+self.y+self.bodyBob, 782+self.x, 351+self.y+self.bodyBob)
-            canvas.coords(self.e1_spine2VerticalLine, 787+self.x, 346+self.y+self.bodyBob, 787+self.x, 350+self.y+self.bodyBob)
-            canvas.coords(self.e1_torsoBlank2, 796+self.x, 343+self.y+self.bodyBob, 798+self.x, 343+self.y+self.bodyBob, 798+self.x, 348+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
-            canvas.coords(self.e1_spine2VerticalLine1, 796+self.x, 342+self.y+self.bodyBob, 796+self.x, 350+self.y+self.bodyBob)
-            canvas.coords(self.e1_sprin2DiagonalLine, 788+self.x, 346+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
-            canvas.coords(self.e1_hipLine, 782+self.x, 350+self.y+self.bodyBob, 792+self.x, 350+self.y+self.bodyBob)
-            canvas.coords(self.e1_hipLine2, 792+self.x, 349+self.y+self.bodyBob, 797+self.x, 349+self.y+self.bodyBob)
-            canvas.coords(self.e1_hipHole, 792+self.x, 352+self.y+self.bodyBob, 795+self.x, 355+self.y+self.bodyBob)
+            canvas.coords(self.e3_torso, 782+self.x, 330+self.y+self.bodyBob, 797+self.x, 330+self.y+self.bodyBob, 797+self.x, 355+self.y+self.bodyBob, 782+self.x, 355+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribMidDown, 784+self.x, 330+self.y+self.bodyBob, 784+self.x, 345+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribHighestCross, 782+self.x, 333+self.y+self.bodyBob, 784+self.x, 333+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribHighest, 786+self.x, 333+self.y+self.bodyBob, 795+self.x, 332+self.y+self.bodyBob, 786+self.x, 334+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribMiddleCross, 782+self.x, 336+self.y+self.bodyBob, 784+self.x, 336+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribMiddle, 786+self.x, 336+self.y+self.bodyBob, 795+self.x, 335+self.y+self.bodyBob, 786+self.x, 337+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribThirdCross, 782+self.x, 339+self.y+self.bodyBob, 784+self.x, 339+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribThird, 786+self.x, 339+self.y+self.bodyBob, 795+self.x, 338+self.y+self.bodyBob, 786+self.x, 340+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribFourthCross, 782+self.x, 342+self.y+self.bodyBob, 784+self.x, 342+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribFourth, 786+self.x, 342+self.y+self.bodyBob, 795+self.x, 341+self.y+self.bodyBob, 786+self.x, 343+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest, 782+self.x, 345+self.y+self.bodyBob, 789+self.x, 345+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest1, 789+self.x, 344+self.y+self.bodyBob, 794+self.x, 344+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest2, 794+self.x, 343+self.y+self.bodyBob, 796+self.x, 343+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest3, 796+self.x, 342+self.y+self.bodyBob, 797+self.x, 342+self.y+self.bodyBob)
+            canvas.coords(self.e3_torsoBlank, 782+self.x, 346+self.y+self.bodyBob, 787+self.x, 346, 787+self.x, 351+self.y+self.bodyBob, 782+self.x, 351+self.y+self.bodyBob)
+            canvas.coords(self.e3_spine2VerticalLine, 787+self.x, 346+self.y+self.bodyBob, 787+self.x, 350+self.y+self.bodyBob)
+            canvas.coords(self.e3_torsoBlank2, 796+self.x, 343+self.y+self.bodyBob, 798+self.x, 343+self.y+self.bodyBob, 798+self.x, 348+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
+            canvas.coords(self.e3_spine2VerticalLine1, 796+self.x, 342+self.y+self.bodyBob, 796+self.x, 350+self.y+self.bodyBob)
+            canvas.coords(self.e3_sprin2DiagonalLine, 788+self.x, 346+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
+            canvas.coords(self.e3_hipLine, 782+self.x, 350+self.y+self.bodyBob, 792+self.x, 350+self.y+self.bodyBob)
+            canvas.coords(self.e3_hipLine2, 792+self.x, 349+self.y+self.bodyBob, 797+self.x, 349+self.y+self.bodyBob)
+            canvas.coords(self.e3_hipHole, 792+self.x, 352+self.y+self.bodyBob, 795+self.x, 355+self.y+self.bodyBob)
             if self.Frame == 0: #Arms and legs in AND moving
                 #Arms
-                canvas.coords(self.e1_Larm, 767+self.x+15, 330+self.y+10, 782+self.x+15, 345+self.y+10)
-                canvas.coords(self.e1_Lfinger, 768+self.x+15, 333+self.y+10, 775+self.x+15, 333+self.y+10)
-                canvas.coords(self.e1_Lfinger2, 767+self.x+15, 336+self.y+10, 776+self.x+15, 336+self.y+10)
-                canvas.coords(self.e1_Lfinger3, 767+self.x+15, 339+self.y+10, 776+self.x+15, 339+self.y+10)
-                canvas.coords(self.e1_Lfinger4, 768+self.x+15, 342+self.y+10, 774+self.x+15, 342+self.y+10)
-                canvas.coords(self.e1_LfingerDown, 775+self.x+15, 333+self.y+10, 775+self.x+15, 339+self.y+10)
-                canvas.coords(self.e1_LfingerDown1, 774+self.x+15, 339+self.y+10, 774+self.x+15, 342+self.y+10)
-                canvas.coords(self.e1_Rarm, 797+self.x-15, 330+self.y+10, 812+self.x-15, 345+self.y+10)
+                canvas.coords(self.e3_Larm, 767+self.x+15, 330+self.y+10, 782+self.x+15, 345+self.y+10)
+                canvas.coords(self.e3_Lfinger, 768+self.x+15, 333+self.y+10, 775+self.x+15, 333+self.y+10)
+                canvas.coords(self.e3_Lfinger2, 767+self.x+15, 336+self.y+10, 776+self.x+15, 336+self.y+10)
+                canvas.coords(self.e3_Lfinger3, 767+self.x+15, 339+self.y+10, 776+self.x+15, 339+self.y+10)
+                canvas.coords(self.e3_Lfinger4, 768+self.x+15, 342+self.y+10, 774+self.x+15, 342+self.y+10)
+                canvas.coords(self.e3_LfingerDown, 775+self.x+15, 333+self.y+10, 775+self.x+15, 339+self.y+10)
+                canvas.coords(self.e3_LfingerDown1, 774+self.x+15, 339+self.y+10, 774+self.x+15, 342+self.y+10)
+                canvas.coords(self.e3_Rarm, 797+self.x-15, 330+self.y+10, 812+self.x-15, 345+self.y+10)
                 #Legs and hitbox
-                canvas.coords(self.e1_Rleg, 797+self.x-10, 355+self.y, 812+self.x-10, 363+self.y)
-                canvas.coords(self.e1_RtoeLine, 797+self.x-10, 360+self.y, 802+self.x-10, 360+self.y)
-                canvas.coords(self.e1_RtoeLine1, 797+self.x-10, 358+self.y, 802+self.x-10, 358+self.y)
-                canvas.coords(self.e1_RtoeLine2, 797+self.x-10, 356+self.y, 802+self.x-10, 356+self.y)
-                canvas.coords(self.e1_Lleg, 767+self.x+10, 355+self.y, 782+self.x+10, 363+self.y)
-                canvas.coords(self.e1_LtoeLine, 767+self.x+10, 360+self.y, 772+self.x+10, 360+self.y)
-                canvas.coords(self.e1_LtoeLine1, 767+self.x+10, 358+self.y, 772+self.x+10, 358+self.y)
-                canvas.coords(self.e1_LtoeLine2, 767+self.x+10, 356+self.y, 772+self.x+10, 356+self.y)
-                canvas.coords(self.e1_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
+                canvas.coords(self.e3_Rleg, 797+self.x-10, 355+self.y, 812+self.x-10, 363+self.y)
+                canvas.coords(self.e3_RtoeLine, 797+self.x-10, 360+self.y, 802+self.x-10, 360+self.y)
+                canvas.coords(self.e3_RtoeLine1, 797+self.x-10, 358+self.y, 802+self.x-10, 358+self.y)
+                canvas.coords(self.e3_RtoeLine2, 797+self.x-10, 356+self.y, 802+self.x-10, 356+self.y)
+                canvas.coords(self.e3_Lleg, 767+self.x+10, 355+self.y, 782+self.x+10, 363+self.y)
+                canvas.coords(self.e3_LtoeLine, 767+self.x+10, 360+self.y, 772+self.x+10, 360+self.y)
+                canvas.coords(self.e3_LtoeLine1, 767+self.x+10, 358+self.y, 772+self.x+10, 358+self.y)
+                canvas.coords(self.e3_LtoeLine2, 767+self.x+10, 356+self.y, 772+self.x+10, 356+self.y)
+                canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
             elif self.Frame == 1: #Arms and legs out AND NOT moving
                 #Arms
-                canvas.coords(self.e1_Larm, 767+self.x, 330+self.y, 782+self.x, 345+self.y)
-                canvas.coords(self.e1_Lfinger, 768+self.x, 333+self.y, 775+self.x, 333+self.y)
-                canvas.coords(self.e1_Lfinger2, 767+self.x, 336+self.y, 776+self.x, 336+self.y)
-                canvas.coords(self.e1_Lfinger3, 767+self.x, 339+self.y, 776+self.x, 339+self.y)
-                canvas.coords(self.e1_Lfinger4, 768+self.x, 342+self.y, 774+self.x, 342+self.y)
-                canvas.coords(self.e1_LfingerDown, 775+self.x, 333+self.y, 775+self.x, 339+self.y)
-                canvas.coords(self.e1_LfingerDown1, 774+self.x, 339+self.y, 774+self.x, 342+self.y)
-                canvas.coords(self.e1_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
+                canvas.coords(self.e3_Larm, 767+self.x, 330+self.y, 782+self.x, 345+self.y)
+                canvas.coords(self.e3_Lfinger, 768+self.x, 333+self.y, 775+self.x, 333+self.y)
+                canvas.coords(self.e3_Lfinger2, 767+self.x, 336+self.y, 776+self.x, 336+self.y)
+                canvas.coords(self.e3_Lfinger3, 767+self.x, 339+self.y, 776+self.x, 339+self.y)
+                canvas.coords(self.e3_Lfinger4, 768+self.x, 342+self.y, 774+self.x, 342+self.y)
+                canvas.coords(self.e3_LfingerDown, 775+self.x, 333+self.y, 775+self.x, 339+self.y)
+                canvas.coords(self.e3_LfingerDown1, 774+self.x, 339+self.y, 774+self.x, 342+self.y)
+                canvas.coords(self.e3_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
                 #Legs and hitbox
-                canvas.coords(self.e1_Rleg, 797+self.x, 355+self.y, 812+self.x, 363+self.y)
-                canvas.coords(self.e1_RtoeLine, 797+self.x, 360+self.y, 802+self.x, 360+self.y)
-                canvas.coords(self.e1_RtoeLine1, 797+self.x, 358+self.y, 802+self.x, 358+self.y)
-                canvas.coords(self.e1_RtoeLine2, 797+self.x, 356+self.y, 802+self.x, 356+self.y)
-                canvas.coords(self.e1_Lleg, 767+self.x, 355+self.y, 782+self.x, 363+self.y)
-                canvas.coords(self.e1_LtoeLine, 767+self.x, 360+self.y, 772+self.x, 360+self.y)
-                canvas.coords(self.e1_LtoeLine1, 767+self.x, 358+self.y, 772+self.x, 358+self.y)
-                canvas.coords(self.e1_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
-                canvas.coords(self.e1_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
+                canvas.coords(self.e3_Rleg, 797+self.x, 355+self.y, 812+self.x, 363+self.y)
+                canvas.coords(self.e3_RtoeLine, 797+self.x, 360+self.y, 802+self.x, 360+self.y)
+                canvas.coords(self.e3_RtoeLine1, 797+self.x, 358+self.y, 802+self.x, 358+self.y)
+                canvas.coords(self.e3_RtoeLine2, 797+self.x, 356+self.y, 802+self.x, 356+self.y)
+                canvas.coords(self.e3_Lleg, 767+self.x, 355+self.y, 782+self.x, 363+self.y)
+                canvas.coords(self.e3_LtoeLine, 767+self.x, 360+self.y, 772+self.x, 360+self.y)
+                canvas.coords(self.e3_LtoeLine1, 767+self.x, 358+self.y, 772+self.x, 358+self.y)
+                canvas.coords(self.e3_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
+                canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
                 
         elif 0 <= self.counterFrame <= 50 and self.Looking == "Right": #Enemy3 has to be mirrored and turned facing and moving right
             self.x += 1
@@ -280,82 +285,100 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.bodyBob = 0
             
             #Nameplate and Head
-            canvas.coords(self.e1_name, 790+self.x, 290+self.y+self.bodyBob)
-            canvas.coords(self.e1_head, 777+self.x+26, 305+self.y+self.bodyBob, 802+self.x-24, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_headBlank, 785+self.x+10, 322+self.y+self.bodyBob, 802+self.x-24, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_headBlankLine, 785+self.x+10, 322+self.y+self.bodyBob, 802+self.x-24, 322+self.y+self.bodyBob)
-            canvas.coords(self.e1_spine, 787+self.x+6, 322+self.y+self.bodyBob, 795+self.x-10, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_spineLine, 787+self.x+6, 324+self.y+self.bodyBob, 795+self.x-10, 328+self.y+self.bodyBob)
-            canvas.coords(self.e1_teeth, 777+self.x+26, 322+self.y+self.bodyBob, 785+self.x+10, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_teethDown1, 780+self.x+20, 322+self.y+self.bodyBob, 780+self.x+20, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_teethDown2, 783+self.x+14, 322+self.y+self.bodyBob, 783+self.x+14, 330+self.y+self.bodyBob)
-            canvas.coords(self.e1_teethCross, 777+self.x+26, 326+self.y+self.bodyBob, 785+self.x+10, 326+self.y+self.bodyBob)
-            canvas.coords(self.e1_nose, 778+self.x+24, 318+self.y+self.bodyBob, 779+self.x+22, 319+self.y+self.bodyBob)
-            canvas.coords(self.e1_eye, 780+self.x+20, 312+self.y+self.bodyBob, 785+self.x+10, 319+self.y+self.bodyBob)
-            canvas.coords(self.e1_eye2, 788+self.x+4, 314+self.y+self.bodyBob, 789+self.x+2, 319+self.y+self.bodyBob)
+            canvas.coords(self.e3_name, 790+self.x, 290+self.y+self.bodyBob)
+            canvas.coords(self.e3_hp, 740+self.x+self.hpLoss, 297+self.y+self.bodyBob, 840+self.x-self.hpLoss, 302+self.y+self.bodyBob)
+            canvas.coords(self.e3_head, 777+self.x+26, 305+self.y+self.bodyBob, 802+self.x-24, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_headBlank, 785+self.x+10, 322+self.y+self.bodyBob, 802+self.x-24, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_headBlankLine, 785+self.x+10, 322+self.y+self.bodyBob, 802+self.x-24, 322+self.y+self.bodyBob)
+            canvas.coords(self.e3_spine, 787+self.x+6, 322+self.y+self.bodyBob, 795+self.x-10, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_spineLine, 787+self.x+6, 324+self.y+self.bodyBob, 795+self.x-10, 328+self.y+self.bodyBob)
+            canvas.coords(self.e3_teeth, 777+self.x+26, 322+self.y+self.bodyBob, 785+self.x+10, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_teethDown1, 780+self.x+20, 322+self.y+self.bodyBob, 780+self.x+20, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_teethDown2, 783+self.x+14, 322+self.y+self.bodyBob, 783+self.x+14, 330+self.y+self.bodyBob)
+            canvas.coords(self.e3_teethCross, 777+self.x+26, 326+self.y+self.bodyBob, 785+self.x+10, 326+self.y+self.bodyBob)
+            canvas.coords(self.e3_nose, 778+self.x+24, 318+self.y+self.bodyBob, 779+self.x+22, 319+self.y+self.bodyBob)
+            canvas.coords(self.e3_eye, 780+self.x+20, 312+self.y+self.bodyBob, 785+self.x+10, 319+self.y+self.bodyBob)
+            canvas.coords(self.e3_eye2, 788+self.x+4, 314+self.y+self.bodyBob, 789+self.x+2, 319+self.y+self.bodyBob)
             #Torso
-            canvas.coords(self.e1_torso, 782+self.x+16, 330+self.y+self.bodyBob, 797+self.x-14, 330+self.y+self.bodyBob, 797+self.x-14, 355+self.y+self.bodyBob, 782+self.x+16, 355+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribMidDown, 784+self.x+12, 330+self.y+self.bodyBob, 784+self.x+12, 345+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribHighestCross, 782+self.x+16, 333+self.y+self.bodyBob, 784+self.x+12, 333+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribHighest, 786+self.x+8, 333+self.y+self.bodyBob, 795+self.x-10, 332+self.y+self.bodyBob, 786+self.x+8, 334+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribMiddleCross, 782+self.x+16, 336+self.y+self.bodyBob, 784+self.x+12, 336+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribMiddle, 786+self.x+8, 336+self.y+self.bodyBob, 795+self.x-10, 335+self.y+self.bodyBob, 786+self.x+8, 337+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribThirdCross, 782+self.x+16, 339+self.y+self.bodyBob, 784+self.x+12, 339+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribThird, 786+self.x+8, 339+self.y+self.bodyBob, 795+self.x-10, 338+self.y+self.bodyBob, 786+self.x+8, 340+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribFourthCross, 782+self.x+16, 342+self.y+self.bodyBob, 784+self.x+12, 342+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribFourth, 786+self.x+8, 342+self.y+self.bodyBob, 795+self.x-10, 341+self.y+self.bodyBob, 786+self.x+8, 343+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest, 782+self.x+16, 345+self.y+self.bodyBob, 789+self.x+2, 345+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest1, 789+self.x+2, 344+self.y+self.bodyBob, 794+self.x-8, 344+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest2, 794+self.x-8, 343+self.y+self.bodyBob, 796+self.x-12, 343+self.y+self.bodyBob)
-            canvas.coords(self.e1_ribLowest3, 796+self.x-12, 342+self.y+self.bodyBob, 797+self.x-14, 342+self.y+self.bodyBob)
-            canvas.coords(self.e1_torsoBlank, 782+self.x+16+1, 346+self.y+self.bodyBob, 787+self.x+6, 346, 787+self.x+6, 351+self.y+self.bodyBob, 782+self.x+16+1, 351+self.y+self.bodyBob)
-            canvas.coords(self.e1_spine2VerticalLine, 787+self.x+6, 346+self.y+self.bodyBob, 787+self.x+6, 350+self.y+self.bodyBob)
-            canvas.coords(self.e1_torsoBlank2, 796+self.x-12, 343+self.y+self.bodyBob, 798+self.x-16, 343+self.y+self.bodyBob, 798+self.x-16, 348+self.y+self.bodyBob, 796+self.x-12, 348+self.y+self.bodyBob)
-            canvas.coords(self.e1_spine2VerticalLine1, 796+self.x-12, 342+self.y+self.bodyBob, 796+self.x-12, 350+self.y+self.bodyBob)
-            canvas.coords(self.e1_sprin2DiagonalLine, 788+self.x+4, 346+self.y+self.bodyBob, 796+self.x-12, 348+self.y+self.bodyBob)
-            canvas.coords(self.e1_hipLine, 782+self.x+16, 350+self.y+self.bodyBob, 792+self.x-4, 350+self.y+self.bodyBob)
-            canvas.coords(self.e1_hipLine2, 792+self.x-4, 349+self.y+self.bodyBob, 797+self.x-14, 349+self.y+self.bodyBob)
-            canvas.coords(self.e1_hipHole, 792+self.x-4, 352+self.y+self.bodyBob, 795+self.x-10, 355+self.y+self.bodyBob)
+            canvas.coords(self.e3_torso, 782+self.x+16, 330+self.y+self.bodyBob, 797+self.x-14, 330+self.y+self.bodyBob, 797+self.x-14, 355+self.y+self.bodyBob, 782+self.x+16, 355+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribMidDown, 784+self.x+12, 330+self.y+self.bodyBob, 784+self.x+12, 345+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribHighestCross, 782+self.x+16, 333+self.y+self.bodyBob, 784+self.x+12, 333+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribHighest, 786+self.x+8, 333+self.y+self.bodyBob, 795+self.x-10, 332+self.y+self.bodyBob, 786+self.x+8, 334+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribMiddleCross, 782+self.x+16, 336+self.y+self.bodyBob, 784+self.x+12, 336+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribMiddle, 786+self.x+8, 336+self.y+self.bodyBob, 795+self.x-10, 335+self.y+self.bodyBob, 786+self.x+8, 337+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribThirdCross, 782+self.x+16, 339+self.y+self.bodyBob, 784+self.x+12, 339+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribThird, 786+self.x+8, 339+self.y+self.bodyBob, 795+self.x-10, 338+self.y+self.bodyBob, 786+self.x+8, 340+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribFourthCross, 782+self.x+16, 342+self.y+self.bodyBob, 784+self.x+12, 342+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribFourth, 786+self.x+8, 342+self.y+self.bodyBob, 795+self.x-10, 341+self.y+self.bodyBob, 786+self.x+8, 343+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest, 782+self.x+16, 345+self.y+self.bodyBob, 789+self.x+2, 345+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest1, 789+self.x+2, 344+self.y+self.bodyBob, 794+self.x-8, 344+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest2, 794+self.x-8, 343+self.y+self.bodyBob, 796+self.x-12, 343+self.y+self.bodyBob)
+            canvas.coords(self.e3_ribLowest3, 796+self.x-12, 342+self.y+self.bodyBob, 797+self.x-14, 342+self.y+self.bodyBob)
+            canvas.coords(self.e3_torsoBlank, 782+self.x+16+1, 346+self.y+self.bodyBob, 787+self.x+6, 346, 787+self.x+6, 351+self.y+self.bodyBob, 782+self.x+16+1, 351+self.y+self.bodyBob)
+            canvas.coords(self.e3_spine2VerticalLine, 787+self.x+6, 346+self.y+self.bodyBob, 787+self.x+6, 350+self.y+self.bodyBob)
+            canvas.coords(self.e3_torsoBlank2, 796+self.x-12, 343+self.y+self.bodyBob, 798+self.x-16, 343+self.y+self.bodyBob, 798+self.x-16, 348+self.y+self.bodyBob, 796+self.x-12, 348+self.y+self.bodyBob)
+            canvas.coords(self.e3_spine2VerticalLine1, 796+self.x-12, 342+self.y+self.bodyBob, 796+self.x-12, 350+self.y+self.bodyBob)
+            canvas.coords(self.e3_sprin2DiagonalLine, 788+self.x+4, 346+self.y+self.bodyBob, 796+self.x-12, 348+self.y+self.bodyBob)
+            canvas.coords(self.e3_hipLine, 782+self.x+16, 350+self.y+self.bodyBob, 792+self.x-4, 350+self.y+self.bodyBob)
+            canvas.coords(self.e3_hipLine2, 792+self.x-4, 349+self.y+self.bodyBob, 797+self.x-14, 349+self.y+self.bodyBob)
+            canvas.coords(self.e3_hipHole, 792+self.x-4, 352+self.y+self.bodyBob, 795+self.x-10, 355+self.y+self.bodyBob)
             if self.Frame == 0: #Arms and legs in AND moving
                 #Arms
-                canvas.coords(self.e1_Larm, 767+self.x+15, 330+self.y+10, 782+self.x+15, 345+self.y+10)
-                canvas.coords(self.e1_Lfinger, 768+self.x+15, 333+self.y+10, 775+self.x+15, 333+self.y+10)
-                canvas.coords(self.e1_Lfinger2, 767+self.x+15, 336+self.y+10, 776+self.x+15, 336+self.y+10)
-                canvas.coords(self.e1_Lfinger3, 767+self.x+15, 339+self.y+10, 776+self.x+15, 339+self.y+10)
-                canvas.coords(self.e1_Lfinger4, 768+self.x+15, 342+self.y+10, 774+self.x+15, 342+self.y+10)
-                canvas.coords(self.e1_LfingerDown, 775+self.x+15, 333+self.y+10, 775+self.x+15, 339+self.y+10)
-                canvas.coords(self.e1_LfingerDown1, 774+self.x+15, 339+self.y+10, 774+self.x+15, 342+self.y+10)
-                canvas.coords(self.e1_Rarm, 797+self.x-15, 330+self.y+10, 812+self.x-15, 345+self.y+10)
+                canvas.coords(self.e3_Larm, 767+self.x+15, 330+self.y+10, 782+self.x+15, 345+self.y+10)
+                canvas.coords(self.e3_Lfinger, 768+self.x+15, 333+self.y+10, 775+self.x+15, 333+self.y+10)
+                canvas.coords(self.e3_Lfinger2, 767+self.x+15, 336+self.y+10, 776+self.x+15, 336+self.y+10)
+                canvas.coords(self.e3_Lfinger3, 767+self.x+15, 339+self.y+10, 776+self.x+15, 339+self.y+10)
+                canvas.coords(self.e3_Lfinger4, 768+self.x+15, 342+self.y+10, 774+self.x+15, 342+self.y+10)
+                canvas.coords(self.e3_LfingerDown, 775+self.x+15, 333+self.y+10, 775+self.x+15, 339+self.y+10)
+                canvas.coords(self.e3_LfingerDown1, 774+self.x+15, 339+self.y+10, 774+self.x+15, 342+self.y+10)
+                canvas.coords(self.e3_Rarm, 797+self.x-15, 330+self.y+10, 812+self.x-15, 345+self.y+10)
                 #Legs and hitbox
-                canvas.coords(self.e1_Rleg, 797+self.x+10-14, 355+self.y, 812+self.x+10-44, 363+self.y)
-                canvas.coords(self.e1_RtoeLine, 797+self.x+10-14, 360+self.y, 802+self.x+10-24, 360+self.y)
-                canvas.coords(self.e1_RtoeLine1, 797+self.x+10-14, 358+self.y, 802+self.x+10-24, 358+self.y)
-                canvas.coords(self.e1_RtoeLine2, 797+self.x+10-14, 356+self.y, 802+self.x+10-24, 356+self.y)
-                canvas.coords(self.e1_Lleg, 767+self.x-10+46, 355+self.y, 782+self.x-10+16, 363+self.y)
-                canvas.coords(self.e1_LtoeLine, 767+self.x-10+46, 360+self.y, 772+self.x+-10+36, 360+self.y)
-                canvas.coords(self.e1_LtoeLine1, 767+self.x-10+46, 358+self.y, 772+self.x-10+36, 358+self.y)
-                canvas.coords(self.e1_LtoeLine2, 767+self.x-10+46, 356+self.y, 772+self.x-10+36, 356+self.y)
-                canvas.coords(self.e1_hitbox, 802+self.x-24, 305+self.y, 777+self.x+26, 363+self.y)
+                canvas.coords(self.e3_Rleg, 797+self.x+10-14, 355+self.y, 812+self.x+10-44, 363+self.y)
+                canvas.coords(self.e3_RtoeLine, 797+self.x+10-14, 360+self.y, 802+self.x+10-24, 360+self.y)
+                canvas.coords(self.e3_RtoeLine1, 797+self.x+10-14, 358+self.y, 802+self.x+10-24, 358+self.y)
+                canvas.coords(self.e3_RtoeLine2, 797+self.x+10-14, 356+self.y, 802+self.x+10-24, 356+self.y)
+                canvas.coords(self.e3_Lleg, 767+self.x-10+46, 355+self.y, 782+self.x-10+16, 363+self.y)
+                canvas.coords(self.e3_LtoeLine, 767+self.x-10+46, 360+self.y, 772+self.x+-10+36, 360+self.y)
+                canvas.coords(self.e3_LtoeLine1, 767+self.x-10+46, 358+self.y, 772+self.x-10+36, 358+self.y)
+                canvas.coords(self.e3_LtoeLine2, 767+self.x-10+46, 356+self.y, 772+self.x-10+36, 356+self.y)
+                canvas.coords(self.e3_hitbox, 802+self.x-24, 305+self.y, 777+self.x+26, 363+self.y)
             elif self.Frame == 1: #Arms and legs out AND NOT moving
                 #Arms
-                canvas.coords(self.e1_Larm, 767+self.x+46, 330+self.y, 782+self.x+16, 345+self.y)
-                canvas.coords(self.e1_Lfinger, 768+self.x+44, 333+self.y, 775+self.x+30, 333+self.y)
-                canvas.coords(self.e1_Lfinger2, 767+self.x+46, 336+self.y, 776+self.x+28, 336+self.y)
-                canvas.coords(self.e1_Lfinger3, 767+self.x+46, 339+self.y, 776+self.x+28, 339+self.y)
-                canvas.coords(self.e1_Lfinger4, 768+self.x+44, 342+self.y, 774+self.x+32, 342+self.y)
-                canvas.coords(self.e1_LfingerDown, 775+self.x+30, 333+self.y, 775+self.x+30, 339+self.y)
-                canvas.coords(self.e1_LfingerDown1, 774+self.x+32, 339+self.y, 774+self.x+32, 342+self.y)
-                canvas.coords(self.e1_Rarm, 797+self.x-14, 330+self.y, 812+self.x-44, 345+self.y)
+                canvas.coords(self.e3_Larm, 767+self.x+46, 330+self.y, 782+self.x+16, 345+self.y)
+                canvas.coords(self.e3_Lfinger, 768+self.x+44, 333+self.y, 775+self.x+30, 333+self.y)
+                canvas.coords(self.e3_Lfinger2, 767+self.x+46, 336+self.y, 776+self.x+28, 336+self.y)
+                canvas.coords(self.e3_Lfinger3, 767+self.x+46, 339+self.y, 776+self.x+28, 339+self.y)
+                canvas.coords(self.e3_Lfinger4, 768+self.x+44, 342+self.y, 774+self.x+32, 342+self.y)
+                canvas.coords(self.e3_LfingerDown, 775+self.x+30, 333+self.y, 775+self.x+30, 339+self.y)
+                canvas.coords(self.e3_LfingerDown1, 774+self.x+32, 339+self.y, 774+self.x+32, 342+self.y)
+                canvas.coords(self.e3_Rarm, 797+self.x-14, 330+self.y, 812+self.x-44, 345+self.y)
                 #Legs and hitbox
-                canvas.coords(self.e1_Rleg, 797+self.x-14, 355+self.y, 812+self.x-44, 363+self.y)
-                canvas.coords(self.e1_RtoeLine, 797+self.x-14, 360+self.y, 802+self.x-24, 360+self.y)
-                canvas.coords(self.e1_RtoeLine1, 797+self.x-14, 358+self.y, 802+self.x-24, 358+self.y)
-                canvas.coords(self.e1_RtoeLine2, 797+self.x-14, 356+self.y, 802+self.x-24, 356+self.y)
-                canvas.coords(self.e1_Lleg, 767+self.x+46, 355+self.y, 782+self.x+16, 363+self.y)
-                canvas.coords(self.e1_LtoeLine, 767+self.x+46, 360+self.y, 772+self.x+36, 360+self.y)
-                canvas.coords(self.e1_LtoeLine1, 767+self.x+46, 358+self.y, 772+self.x+36, 358+self.y)
-                canvas.coords(self.e1_LtoeLine2, 767+self.x+46, 356+self.y, 772+self.x+36, 356+self.y)
-                canvas.coords(self.e1_hitbox, 802+self.x-24, 305+self.y, 777+self.x+26, 363+self.y)
+                canvas.coords(self.e3_Rleg, 797+self.x-14, 355+self.y, 812+self.x-44, 363+self.y)
+                canvas.coords(self.e3_RtoeLine, 797+self.x-14, 360+self.y, 802+self.x-24, 360+self.y)
+                canvas.coords(self.e3_RtoeLine1, 797+self.x-14, 358+self.y, 802+self.x-24, 358+self.y)
+                canvas.coords(self.e3_RtoeLine2, 797+self.x-14, 356+self.y, 802+self.x-24, 356+self.y)
+                canvas.coords(self.e3_Lleg, 767+self.x+46, 355+self.y, 782+self.x+16, 363+self.y)
+                canvas.coords(self.e3_LtoeLine, 767+self.x+46, 360+self.y, 772+self.x+36, 360+self.y)
+                canvas.coords(self.e3_LtoeLine1, 767+self.x+46, 358+self.y, 772+self.x+36, 358+self.y)
+                canvas.coords(self.e3_LtoeLine2, 767+self.x+46, 356+self.y, 772+self.x+36, 356+self.y)
+                canvas.coords(self.e3_hitbox, 802+self.x-24, 305+self.y, 777+self.x+26, 363+self.y)
+
+        global hitBySpecialOnce
+        if self.hpLoss < 50 and self.hitboxCoords[2] <= self.voice.hitbox[4] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
+            self.hpLoss += 10
+            hitBySpecialOnce = False
+            #print(hitBySpecialOnce)
+            print("Hit1")
+        elif self.hpLoss < 50 and self.hitboxCoords[2] <= self.voice.hitbox[10] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
+            self.hpLoss += 10
+            hitBySpecialOnce = False
+            #print(hitBySpecialOnce)
+            print("Hit2")
+        elif self.hitboxCoords[2] <= self.voice.hitbox[4] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
+            print("It's dead, m8.")
+            hitBySpecialOnce = False
+
+        #print(self.voice.hitbox[10])
                 
         self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
         
@@ -697,6 +720,9 @@ class Voice():
         self.voice2 = canvas.create_polygon(130, 135, 139, 140, 140, 142, 139, 146, 130, 150, 137, 144, 137, 142, 137, 141, fill="grey", outline="black") #(-7, -5 or +5) (+3, 0) (-3,0
         self.voice3 = canvas.create_polygon(129, 140, 131, 142, 129, 146, 128, 144, 130, 142, 128, 141, fill="grey", outline="black") #(-9, 0)
 
+        self.hitbox = canvas.coords(self.voice1)
+        self.hitboxEnd = canvas.coords(self.voice3)
+
         #Mirroring the above over y-axis. Needed for player looking left.
         #125-150 = 25/2 = 12.5- > 13 + 125 = 138
         #self.voice1 = canvas.create_polygon(137+2, 130, 146-16, 136, 147-18, 142, 146-16, 149, 137+2, 155, 143-10, 149, 144-12, 142, 143-10, 136, fill="grey", outline="black")
@@ -799,13 +825,16 @@ class Voice():
 
             self.counter += 1
             
-            if self.vLooking == "Left" and self.counter == 10:
-                self.counter = 0
+            if self.vLooking == "Left":
+                #self.counter = 0
                 self.x -= 20
-                canvas.move(self.voice1, -50, 0)
-                canvas.move(self.voice2, -50, 0)
-                canvas.move(self.voice3, -50, 0)
-                if self.x == -520:
+                canvas.move(self.voice1, -10, 0)
+                canvas.move(self.voice2, -10, 0)
+                canvas.move(self.voice3, -10, 0)
+                canvas.update() #1
+                self.hitbox = canvas.coords(self.voice1)
+                self.hitboxEnd = canvas.coords(self.voice3)
+                if self.x == -2000: #-520
                     self.x = 0
                     voiceOn = False
                     self.vLooking = ""
@@ -814,20 +843,26 @@ class Voice():
                     canvas.move(self.voice3, -1000000, -1000000)
                     print("Special Ready.")
                     
-            elif self.vLooking == "Right" and self.counter == 10:
-                self.counter = 0
+            elif self.vLooking == "Right":
+                #self.counter = 0
                 self.x += 20
-                canvas.move(self.voice1, 50, 0)
-                canvas.move(self.voice2, 50, 0)
-                canvas.move(self.voice3, 50, 0)
-                if self.x == 520:
+                canvas.move(self.voice1, 10, 0)
+                canvas.move(self.voice2, 10, 0)
+                canvas.move(self.voice3, 10, 0)
+                canvas.update() #1
+                self.hitbox = canvas.coords(self.voice1)
+                self.hitboxEnd = canvas.coords(self.voice3)
+                if self.x == 2000: #520
                     self.x = 0
                     voiceOn = False
                     self.vLooking = ""
                     canvas.move(self.voice1, -1000000, -1000000)
                     canvas.move(self.voice2, -1000000, -1000000)
                     canvas.move(self.voice3, -1000000, -1000000)
-                    print("Special Ready.")        
+                    print("Special Ready.")
+                    
+            #self.hitbox = canvas.coords(self.voice1)
+            #print(self.hitbox)
 
 class Player:
     def __init__(self,canvas, background, bars):
@@ -1942,6 +1977,7 @@ class Player:
         #canvas.unbind("<space>", self.b_space)
         global voiceOn
         global manaUsed
+        global hitBySpecialOnce
         if voiceOn == True:
             print("Special on cooldown!")
         elif self.bars.manaLoss < -349:
@@ -1950,6 +1986,7 @@ class Player:
             print("Special activated. Used 50 mana. Maximum mana storage is 360.")
             manaUsed = True
             voiceOn = True
+            hitBySpecialOnce = True
         #canvas.after(100, self.rebindSpace) #MOVED TO BOTTOM OF VOICE.DRAW()
         
     def rebindSpace(self):
@@ -2389,13 +2426,13 @@ class Player:
 background = Background(canvas)
 enemy1 = Enemy1(canvas)
 enemy2 = Enemy2(canvas)
-enemy3 = Enemy3(canvas)
 sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
 #photoTest = PhotoTest(canvas)
 bars = Bars(canvas)
 player = Player(canvas,background, bars)
 voice = Voice(canvas,player)
+enemy3 = Enemy3(canvas, voice)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
 
 while 1:
