@@ -13,6 +13,7 @@ moving = False #This is to make sure the player is moving to deduct SP. Player c
 outOfSprint = False #When the sprint bar becomes empty, make this true. This kicks the player out of sprint stance.
 oneIterate = True #This takes effect in the Player class's draw() method. The very first if statement will kick the player out of sprint stance. This will not be flipped back on until SP is full again.
 hitBySpecialOnce = True
+hitByBasicAttackOnce = True
 
 tk = Tk()
 tk.title("Harbinger - Alpha 3.0.1: Enemies of the East")
@@ -106,9 +107,10 @@ class Enemy1: #Designs by Edward. Eye animation by Leon.
         self.counter += 1 #self.counter goes from -100 to 110 then to 0-10 10 times then repeat the cycle.
 
 class Enemy3: #Third enemy design. I'm planning on making this one (design, animation, health, hitboxes), however anyone can ask for edits or anything. Incomplete.
-    def __init__(self,canvas, voice):
+    def __init__(self,canvas, voice, player):
         self.canvas = canvas
         self.voice = voice
+        self.player = player
 
         #Variables
         self.Frame = 0 #0, 1
@@ -362,23 +364,44 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LtoeLine1, 767+self.x+46, 358+self.y, 772+self.x+36, 358+self.y)
                 canvas.coords(self.e3_LtoeLine2, 767+self.x+46, 356+self.y, 772+self.x+36, 356+self.y)
                 canvas.coords(self.e3_hitbox, 802+self.x-24, 305+self.y, 777+self.x+26, 363+self.y)
+        else:
+            canvas.coords(self.e3_hp, 740+self.x+self.hpLoss, 297+self.y+self.bodyBob, 840+self.x-self.hpLoss, 302+self.y+self.bodyBob)
 
         global hitBySpecialOnce
         if self.hpLoss < 50 and self.hitboxCoords[2] <= self.voice.hitbox[4] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
             self.hpLoss += 10
             hitBySpecialOnce = False
             #print(hitBySpecialOnce)
-            print("Hit1")
+            print("Voice: Hit1")
         elif self.hpLoss < 50 and self.hitboxCoords[2] <= self.voice.hitbox[10] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
             self.hpLoss += 10
             hitBySpecialOnce = False
             #print(hitBySpecialOnce)
-            print("Hit2")
+            print("Voice: Hit2")
         elif self.hitboxCoords[2] <= self.voice.hitbox[4] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
-            print("It's dead, m8.")
+            print("Voice: It's dead, m8.")
             hitBySpecialOnce = False
 
         #print(self.voice.hitbox[10])
+
+        global hitByBasicAttackOnce
+        global basic_attack
+        if basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+            self.hpLoss += 10
+            hitByBasicAttackOnce = False
+            #print(hitByBasicAttackOnce)
+            print("Basic Atack: Hit1")
+        elif basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxL[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxL[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxL[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxL[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+            self.hpLoss += 10
+            hitByBasicAttackOnce = False
+            #print(hitByBasicAttackOnce)
+            print("Basic Atack: Hit2")
+        elif basic_attack == True and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+            print("Basic Atack: It's dead, m8.")
+            hitByBasicAttackOnce = False
+
+        #print(self.player.basicAttackHitboxR[10])
+        #print(self.player.basicAttackHitboxL[10])
                 
         self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
         
@@ -688,7 +711,7 @@ class Background:
                                                 """ Enemy3 should move across the screen, stop, and turn around when it reaches the window border. This is done with the hitbox line."""
                                                 #"""\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
                                                 """ Enemy3's hands are questionable... I might need feedback on that."""
-                                                  """ Planning to make it a health bar that take damage from left-click and spacebar.""",
+                                                  """ Voice rework. Voice and basic attacks can now damage hp bar of Enemy3. Planning on making death animation.""",
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
                                                                  """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable. Did I mention you can left click?""",
@@ -825,7 +848,7 @@ class Voice():
 
             self.counter += 1
             
-            if self.vLooking == "Left":
+            if self.vLooking == "Left": #self.counter == 10:
                 #self.counter = 0
                 self.x -= 20
                 canvas.move(self.voice1, -10, 0)
@@ -843,7 +866,7 @@ class Voice():
                     canvas.move(self.voice3, -1000000, -1000000)
                     print("Special Ready.")
                     
-            elif self.vLooking == "Right":
+            elif self.vLooking == "Right": #self.counter == 10:
                 #self.counter = 0
                 self.x += 20
                 canvas.move(self.voice1, 10, 0)
@@ -861,8 +884,6 @@ class Voice():
                     canvas.move(self.voice3, -1000000, -1000000)
                     print("Special Ready.")
                     
-            #self.hitbox = canvas.coords(self.voice1)
-            #print(self.hitbox)
 
 class Player:
     def __init__(self,canvas, background, bars):
@@ -930,6 +951,10 @@ class Player:
         #Hitbox
         self.a_hitbox = canvas.create_line(150, 125, 125, 183)
         canvas.itemconfigure(self.a_hitbox, state='hidden')
+
+        #Basic attack hitbox
+        self.basicAttackHitboxR = canvas.coords(self.a_Rarm)
+        self.basicAttackHitboxL = canvas.coords(self.a_Larm)
 
         #IDK HOW TO CREATE A BUTTON IN THE MAIN WINDOW WILL DO LATER
         #button1=Button(main_frame,text="Click Me")
@@ -2341,13 +2366,18 @@ class Player:
             self.b_leftClick = canvas.bind("<Button-1>", self.leftClick)
             #print("Basic attack animation done")
             basic_attack = False
+
+        self.basicAttackHitboxR = canvas.coords(self.a_Rarm)
+        self.basicAttackHitboxL = canvas.coords(self.a_Larm)
             
     def leftClick(self, evt): #Basic attack - Punching
         #1 frame - Legs in. Still need facing still need to check if sprinting or crouching. Need to check looking.
         global basic_attack
+        global hitByBasicAttackOnce
         #print("Left Click")
         if basic_attack == False:
             basic_attack = True
+            hitByBasicAttackOnce = True
             canvas.unbind("<Button-1>", self.b_leftClick)
             canvas.unbind("<Button-2>", self.b_scroll)
             canvas.unbind("<Button-3>", self.b_rightClick)
@@ -2432,7 +2462,7 @@ sword = Sword(canvas)
 bars = Bars(canvas)
 player = Player(canvas,background, bars)
 voice = Voice(canvas,player)
-enemy3 = Enemy3(canvas, voice)
+enemy3 = Enemy3(canvas, voice, player)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
 
 while 1:
