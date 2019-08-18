@@ -1,0 +1,9 @@
+3.0.2 - Enemy3's Death animation
+-Added Leon's cleaned up Enemy2 coordinates.
+-Fixed a bug in which the player cannot hit Enemy3 due to hitbox mirror. Hitbox unmirrored after looking right.
+-Press Q to pause/unpause big eye animation. This is to reduce lag.
+-Made voice more efficient. This is to reduce lag.
+-Enemy3 has a death animation for both looking left and right.
+-Enemy3's hitbox has been made invisible so the death animation is easier to see.
+-A short time after death, Enemy3 will be deleted, then Enemy3's draw() method will no longer be run through.
+-Edited the hit text.
