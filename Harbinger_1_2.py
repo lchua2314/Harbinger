@@ -14,7 +14,7 @@ outOfSprint = False #When the sprint bar becomes empty, make this true. This kic
 oneIterate = True #This takes effect in the Player class's draw() method. The very first if statement will kick the player out of sprint stance. This will not be flipped back on until SP is full again.
 hitBySpecialOnce = True
 hitByBasicAttackOnce = True
-pressQ = True
+pressQ = False
 turnOffEnemy3 = False
 
 tk = Tk()
@@ -28,22 +28,143 @@ tk.update()
 class Enemy2: #the dark guard (lEon cratieosn)
     def __init__(self,canvas):
         self.canvas = canvas
+        self.x, self.y = 0,0
+        self.x2 = 0 #for continous movement purposes
+        self.Frame = 0
+        self.counterFrame = 0 #start it at something higher, so doesnt slide for too long at beginning
+        self.Looking = "Left"
         
-        self.e2_name2 = canvas.create_text(900, 200, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
-        self.e2_body2 = canvas.create_polygon(892, 232, 908, 232, 908, 262, 892, 262, fill="gray13", outline="black")
-        self.e2_head2 = canvas.create_oval(887, 206, 913, 232, fill="gray", outline="black")
-        self.e2_eye2 = canvas.create_polygon(888, 219, 900, 219, 900, 214, fill="red")
-        self.e2_helmet2 = canvas.create_polygon(884, 221, 889, 231, 914, 231, 916, 221, 914, 211, 899, 205, 884, 213, 902, 213, 906, 217, 902, 221,  fill="black", outline="black")
-        self.e2_shoulder2 = canvas.create_polygon(899, 237, 911, 237, 911, 249, 899, 249, fill="black")
+        self.e2_body2 = canvas.create_polygon(892, 232+2, 908, 232+2, 908, 262+2, 892, 262+2, fill="gray13", outline="black")
+        self.e2_head2 = canvas.create_oval(887, 206+2, 913, 232+2, fill="gray", outline="black")
+        self.e2_eye2 = canvas.create_polygon(888, 219+2, 900, 219+2, 900, 214+2, fill="red")
+        self.e2_helmet2 = canvas.create_polygon(884, 221+2, 889, 231+2, 914, 231+2, 916, 221+2, 914, 211+2, 899, 205+2, 884, 213+2, 902, 213+2, 906, 217+2, 902, 221+2,  fill="black", outline="black")
+        
 
         #might need to create another shoulder if the enemy moves.
-        self.e2_shoulderspike2 = canvas.create_polygon(901, 237, 905, 227, 909, 237, fill="gray")
-        self.e2_lefthand2 = canvas.create_oval(897, 242, 913, 257, fill="gray")
-        self.e2_spearshaft2 = canvas.create_polygon(879, 217, 882, 217, 882, 277, 879, 277, fill="black")
-        self.e2_spearhead2 = canvas.create_polygon(875, 217, 880, 202, 886, 217, fill="gray")
-        self.e2_righthand2 = canvas.create_oval(872, 232, 888, 247, fill="gray")
-        self.e2_Rleg2 = canvas.create_oval(886, 263, 901, 273,  fill="black") #+15, +8
-        self.e2_Rleg2 = canvas.create_oval(901, 263, 916, 273,  fill="black") #+15, +8
+        
+        
+        self.e2_spearshaft2 = canvas.create_polygon(879, 217+2, 882, 217+2, 882, 277+2, 879, 277+2, fill="black")
+        self.e2_spearhead2 = canvas.create_polygon(875, 217+2, 880, 202+2, 886, 217+2, fill="black")
+        self.e2_righthand2 = canvas.create_oval(872, 232+2, 888, 247+2, fill="gray")
+        self.e2_shoulder2 = canvas.create_polygon(899, 237+2, 911, 237+2, 911, 249+2, 899, 249+2, fill="black")
+        self.e2_shoulderspike2 = canvas.create_polygon(901, 237+2, 905, 227+2, 909, 237+2, fill="gray")
+        self.e2_lefthand2 = canvas.create_oval(897, 242+2, 913, 257+2, fill="gray")
+        
+        self.e2_Lleg2 = canvas.create_oval(886, 263, 901, 273,  fill="black") #+15, +8
+        self.e2_Rleg2 = canvas.create_oval(901-2, 263, 916-2, 273,  fill="black") #+15, +8
+        self.e2_name2 = canvas.create_text(900, 200, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
+        self.e2_hitbox = canvas.create_line(892, 231+2, 908, 262+2, fill="red")
+        self.e2_righthandhitbox = canvas.coords(self.e2_righthand2)
+        
+    def draw(self):
+        if self.e2_righthandhitbox[0] <= 0:
+            self.Looking = "Right"
+
+        if 0 <= self.counterFrame < 100 and self.Looking == "Left": #stops enemy animation if its right 
+            self.x -= 1
+            
+            # for going forward it will be +self.x2, back is -self.x2
+            canvas.coords(self.e2_name2, 900+self.x, 200+self.y)
+            canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
+            canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
+            canvas.coords(self.e2_eye2, 888+self.x, 219+2+self.y, 900+self.x, 219+2+self.y, 900+self.x, 214+2+self.y)
+            canvas.coords(self.e2_helmet2, 884+self.x, 221+2+self.y, 889+self.x, 231+2+self.y, 914+self.x, 231+2+self.y, 916+self.x, 221+2+self.y, 914+self.x, 211+2+self.y, 899+self.x, 205+2+self.y, 884+self.x, 213+2+self.y, 902+self.x, 213+2+self.y, 906+self.x, 217+2+self.y, 902+self.x, 221+2+self.y)
+            canvas.coords(self.e2_hitbox, 892+self.x, 231+2, 908+self.x, 262+2)
+            if self.Frame == 0: # left go forward, right go back
+                self.x2 -= 1
+                canvas.coords(self.e2_shoulder2, 899+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 249+2+self.y, 899+self.x+self.x2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x+self.x2, 237+2+self.y, 905+self.x+self.x2, 227+2+self.y, 909+self.x+self.x2, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x+self.x2, 242+2+self.y, 913+self.x+self.x2, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 277+2+self.y, 879+self.x-self.x2, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x-self.x2, 217+2+self.y, 880+self.x-self.x2, 202+2+self.y, 886+self.x-self.x2, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x-self.x2, 232+2+self.y, 888+self.x-self.x2, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x, 263+self.y, 901+self.x, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x, 263+self.y, 916-2+self.x, 273+self.y)
+                #print(self.x2, self.Frame, self.counterFrame)
+                                
+            elif self.Frame == 1:# returning 
+                self.x2 += 1
+               
+                canvas.coords(self.e2_shoulder2, 899+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 249+2+self.y, 899+self.x+self.x2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x+self.x2, 237+2+self.y, 905+self.x+self.x2, 227+2+self.y, 909+self.x+self.x2, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x+self.x2, 242+2+self.y, 913+self.x+self.x2, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 277+2+self.y, 879+self.x-self.x2, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x-self.x2, 217+2+self.y, 880+self.x-self.x2, 202+2+self.y, 886+self.x-self.x2, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x-self.x2, 232+2+self.y, 888+self.x-self.x2, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x, 263+self.y, 901+self.x, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x, 263+self.y, 916-2+self.x, 273+self.y)
+                #print(self.x2, self.Frame, self.counterFrame)
+                
+                
+                
+            elif self.Frame == 2: # right go forward, left go back
+                self.x2 -= 1
+                canvas.coords(self.e2_shoulder2, 899+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 249+2+self.y, 899+self.x-self.x2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x-self.x2, 237+2+self.y, 905+self.x-self.x2, 227+2+self.y, 909+self.x-self.x2, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x-self.x2, 242+2+self.y, 913+self.x-self.x2, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 277+2+self.y, 879+self.x+self.x2, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x+self.x2, 217+2+self.y, 880+self.x+self.x2, 202+2+self.y, 886+self.x+self.x2, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x+self.x2, 232+2+self.y, 888+self.x+self.x2, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+3, 263+self.y, 901+self.x+3, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3, 263+self.y, 916-2+self.x-3, 273+self.y)
+                #print(self.x2, self.Frame, self.counterFrame)
+                
+
+            elif self.Frame == 3: #returning 
+                self.x2 += 1
+                
+                canvas.coords(self.e2_shoulder2, 899+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 249+2+self.y, 899+self.x-self.x2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x-self.x2, 237+2+self.y, 905+self.x-self.x2, 227+2+self.y, 909+self.x-self.x2, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x-self.x2, 242+2+self.y, 913+self.x-self.x2, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 277+2+self.y, 879+self.x+self.x2, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x+self.x2, 217+2+self.y, 880+self.x+self.x2, 202+2+self.y, 886+self.x+self.x2, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x+self.x2, 232+2+self.y, 888+self.x+self.x2, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+3, 263+self.y, 901+self.x+3, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3, 263+self.y, 916-2+self.x-3, 273+self.y)
+                #print(self.x2, self.Frame, self.counterFrame)
+                
+
+            #self.x2 = 0
+
+
+                        
+
+
+        self.e2_righthandhitbox = canvas.coords(self.e2_righthand2) #to stop enemy2 when it hits window border
+        
+        self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
+        #print(self.Frame)
+        #print(self.counterFrame)
+        #print(self.counterFrame)
+        
+        if 0 <= self.counterFrame < 25: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+            self.Frame = 0
+        elif 25 <= self.counterFrame < 50: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+            self.Frame = 1
+        elif 50 <= self.counterFrame < 75:
+            self.Frame = 2
+        elif 75 <= self.counterFrame < 100:
+            self.Frame = 3
+        if self.counterFrame == 100: #Reset the counter after 50 so that the cycle repeats over and over again.
+            self.counterFrame = 0
+            self.Frame = 0
+        
+
+
+
+
 
 class Enemy1: #Designs by Edward. Eye animation by Leon.
     def __init__(self,canvas):
@@ -124,18 +245,16 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.hpLoss = 0
         self.isDead = False
         self.deleteOnce = True
-        self.xDeathHead = 0
-        self.yDeathHead = 0
+        self.xDeathHead, self.yDeathHead = 0, 0
         self.yDeathHeadInAir = True
-        self.xDeathRibCage = 0
-        self.yDeathRibCage = 0
-        self.xDeathLHand = 0
-        self.yDeathLHand = 0
-        self.xDeathRHand = 0
-        self.yDeathRHand = 0
+        self.xDeathRibCage, self.yDeathRibCage = 0, 0
+        self.xDeathLHand, self.yDeathLHand = 0, 0
+        self.xDeathRHand, self.yDeathRHand = 0, 0
         self.deathAnimation = True
         self.deleteEnemy3Complete = True
         self.deleteEnemy3Counter = 0
+        self.inAttackRange = False
+        self.xArmAttack, self.yArmAttack = 0, 0
 
         #Name Above Head, health bar, and all head shapes
         self.e3_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Jack Michaelson", font=("Fixedsys", 16))
@@ -197,17 +316,32 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.e3_LtoeLine1 = canvas.create_line(767, 358, 772, 358)
         self.e3_LtoeLine2 = canvas.create_line(767, 356, 772, 356)
         self.e3_hitbox = canvas.create_line(802, 305, 777, 363)
-        canvas.itemconfigure(self.e3_hitbox, state='hidden') #hides shape.
+        #canvas.itemconfigure(self.e3_hitbox, state='hidden') #hides shape.
 
     def draw(self):
         self.hitboxCoords = canvas.coords(self.e3_hitbox)
 
-        if self.hitboxCoords[2] <= 0:
+        if self.hitboxCoords[2] <= 0 and self.inAttackRange == False: #If Enemy3 hits the left or right border, turn it around.
             self.Looking = "Right"
-        elif self.hitboxCoords[2] >= self.canvas_width:
+        elif self.hitboxCoords[2] >= self.canvas_width and self.inAttackRange == False:
+            self.Looking = "Left"
+            
+        #If not in attack range yet and in the range to hit, change to self.inAttackRange = True. This changes all animations to attacking.
+        if self.inAttackRange == False and self.player.hitbox[3] == 363 and ((self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 10) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] > self.hitboxCoords[2] and 1 <= self.player.hitbox[0] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] < self.hitboxCoords[0] and 1 <=  self.hitboxCoords[0] - self.player.hitbox[0] <= 10)):
+            self.inAttackRange = True
+            print("self.inAttackRange == True")
+        #else: #At end of attack animation, make it False
+            #self.inAttackRange = False
+        #elif self.inAttackRange == False and self.player.hitbox[3] == 363 and self.Looking == "Right" and (self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 10) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 10):
+            #self.inAttackRange = True
+            #print("self.inAttackRange == True 2")
+
+        if self.Looking == "Left" and self.player.hitbox[3] == 363 and self.player.hitbox[2] > self.hitboxCoords[2] and self.inAttackRange == False: #If player lands behind Emeny3, turn around.
+            self.Looking = "Right"
+        elif self.Looking == "Right" and self.player.hitbox[3] == 363 and self.player.hitbox[2] < self.hitboxCoords[0] and self.inAttackRange == False:
             self.Looking = "Left"
 
-        if 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False:
+        if 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == False:
             self.x -= 1
             
             if self.Frame == 0 and self.counterFrame <= 25:
@@ -294,7 +428,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
                 canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
                 
-        elif 0 <= self.counterFrame <= 50 and self.Looking == "Right" and self.hpLoss < 50 and self.isDead == False: #Enemy3 has to be mirrored and turned facing and moving right
+        elif 0 <= self.counterFrame <= 50 and self.Looking == "Right" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == False: #Enemy3 has to be mirrored and turned facing and moving right
             self.x += 1
             
             if self.Frame == 0 and self.counterFrame <= 25:
@@ -380,14 +514,14 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LtoeLine1, 767+self.x+46, 358+self.y, 772+self.x+36, 358+self.y)
                 canvas.coords(self.e3_LtoeLine2, 767+self.x+46, 356+self.y, 772+self.x+36, 356+self.y)
                 canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
-        elif self.hpLoss <= 50 and self.isDead == False:
+        elif self.hpLoss <= 50 and self.isDead == False and self.inAttackRange == False:
             canvas.coords(self.e3_hp, 740+self.x+self.hpLoss, 297+self.y+self.bodyBob, 840+self.x-self.hpLoss, 302+self.y+self.bodyBob)
-        elif self.deleteOnce == True and self.isDead == True:
+        elif self.deleteOnce == True and self.isDead == False and self.inAttackRange == False:
             #print("Death aniamtion")
             canvas.delete(self.e3_hp)
             canvas.delete(self.e3_name)
             self.deleteOnce = False
-        elif self.deleteOnce == False and self.Looking == "Left" and self.isDead == True and self.deathAnimation == True:
+        elif self.deleteOnce == False and self.Looking == "Left" and self.isDead == False and self.inAttackRange == False and self.deathAnimation == True:
             #print("self.deleteOnce == False and self.Looking == Left")
             #Move head x: 100 y: +10 then -363 is the floor coordinates. So y:-373
             if self.yDeathHead <= 31:
@@ -467,7 +601,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.yDeathRHand += 1
                 canvas.coords(self.e3_Rarm, 797+self.x+self.xDeathRHand, 330+self.y+self.yDeathRHand, 812+self.x+self.xDeathRHand, 345+self.y+self.yDeathRHand)
             
-        elif self.deleteOnce == False and self.Looking == "Right" and self.isDead == True and self.deathAnimation == True:
+        elif self.deleteOnce == False and self.Looking == "Right" and self.isDead == False and self.inAttackRange == False and self.deathAnimation == True:
             #print("self.deleteOnce == False and self.Looking == Right")
             #Move head x: 100 y: +10 then -363 is the floor coordinates. So y:-373
             if self.yDeathHead <= 31:
@@ -548,6 +682,39 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.xDeathRHand += 0.5
                 self.yDeathRHand += 1
                 canvas.coords(self.e3_Rarm, 797+self.x+self.xDeathRHand, 330+self.y+self.yDeathRHand, 812+self.x+self.xDeathRHand, 345+self.y+self.yDeathRHand)
+
+        #elif 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
+        elif self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
+            if self.yArmAttack <= 50:
+                #if self.xDeathHead >= -100: #Always reaches -31 because of above if statement
+                self.yArmAttack += 1
+                #Arms
+                canvas.coords(self.e3_Larm, 767+self.x-5, 330+self.y-50+self.yArmAttack, 782+self.x-5, 345+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_Lfinger, 768+self.x-5, 333+self.y-50+self.yArmAttack, 775+self.x-5, 333+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_Lfinger2, 767+self.x-5, 336+self.y-50+self.yArmAttack, 776+self.x-5, 336+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_Lfinger3, 767+self.x-5, 339+self.y-50+self.yArmAttack, 776+self.x-5, 339+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_Lfinger4, 768+self.x-5, 342+self.y-50+self.yArmAttack, 774+self.x-5, 342+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_LfingerDown, 775+self.x-5, 333+self.y-50+self.yArmAttack, 775+self.x-5, 339+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_LfingerDown1, 774+self.x-5, 339+self.y-50+self.yArmAttack, 774+self.x-5, 342+self.y-50+self.yArmAttack)
+                canvas.coords(self.e3_Rarm, 767+self.x-5, 330+self.y-45+self.yArmAttack, 782+self.x-5, 345+self.y-45+self.yArmAttack)
+            else:
+                self.yArmAttack = 0
+                self.inAttackRange = False
+                print("Left arm attack, Done")
+                
+            
+            #canvas.coords(self.e3_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
+            
+            #Legs and hitbox
+            #canvas.coords(self.e3_Rleg, 797+self.x, 355+self.y, 812+self.x, 363+self.y)
+            #canvas.coords(self.e3_RtoeLine, 797+self.x, 360+self.y, 802+self.x, 360+self.y)
+            #canvas.coords(self.e3_RtoeLine1, 797+self.x, 358+self.y, 802+self.x, 358+self.y)
+            #canvas.coords(self.e3_RtoeLine2, 797+self.x, 356+self.y, 802+self.x, 356+self.y)
+            #canvas.coords(self.e3_Lleg, 767+self.x, 355+self.y, 782+self.x, 363+self.y)
+            #canvas.coords(self.e3_LtoeLine, 767+self.x, 360+self.y, 772+self.x, 360+self.y)
+            #canvas.coords(self.e3_LtoeLine1, 767+self.x, 358+self.y, 772+self.x, 358+self.y)
+            #canvas.coords(self.e3_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
+            #canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
 
         elif self.deathAnimation == False and self.deleteEnemy3Complete == True:
             self.deleteEnemy3Counter += 1
@@ -1205,7 +1372,8 @@ class Player:
 
         #Hitbox
         self.a_hitbox = canvas.create_line(150, 125, 125, 183)
-        canvas.itemconfigure(self.a_hitbox, state='hidden')
+        #canvas.itemconfigure(self.a_hitbox, state='hidden')
+        self.hitbox = canvas.coords(self.a_hitbox)
 
         #Basic attack hitbox
         self.basicAttackHitboxR = canvas.coords(self.a_Rarm)
@@ -2736,7 +2904,7 @@ while 1:
     if voiceOn == True:
         voice.draw()
     enemy1.draw()
-    #enemy2.draw()
+    enemy2.draw()
     if turnOffEnemy3 == False:
         enemy3.draw()
     bars.draw()
