@@ -254,7 +254,10 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.deleteEnemy3Complete = True
         self.deleteEnemy3Counter = 0
         self.inAttackRange = False
-        self.xArmAttack, self.yArmAttack = 0, 0
+        self.xAttackArm, self.yAttackArm = 0, 0
+        self.yAttackHeadInAir = True
+        self.xAttackHead, self.yAttackHead = 0, 0
+        self.xAttackTorso, self.yAttackTorso = 0, 0
 
         #Name Above Head, health bar, and all head shapes
         self.e3_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Jack Michaelson", font=("Fixedsys", 16))
@@ -316,7 +319,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.e3_LtoeLine1 = canvas.create_line(767, 358, 772, 358)
         self.e3_LtoeLine2 = canvas.create_line(767, 356, 772, 356)
         self.e3_hitbox = canvas.create_line(802, 305, 777, 363)
-        #canvas.itemconfigure(self.e3_hitbox, state='hidden') #hides shape.
+        canvas.itemconfigure(self.e3_hitbox, state='hidden') #hides shape.
 
     def draw(self):
         self.hitboxCoords = canvas.coords(self.e3_hitbox)
@@ -327,7 +330,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
             self.Looking = "Left"
             
         #If not in attack range yet and in the range to hit, change to self.inAttackRange = True. This changes all animations to attacking.
-        if self.inAttackRange == False and self.player.hitbox[3] == 363 and ((self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 10) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] > self.hitboxCoords[2] and 1 <= self.player.hitbox[0] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] < self.hitboxCoords[0] and 1 <=  self.hitboxCoords[0] - self.player.hitbox[0] <= 10)):
+        if self.hpLoss < 50 and self.inAttackRange == False and self.player.hitbox[3] == 363 and ((self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 10) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] > self.hitboxCoords[2] and 1 <= self.player.hitbox[0] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] < self.hitboxCoords[0] and 1 <=  self.hitboxCoords[0] - self.player.hitbox[0] <= 10)):
             self.inAttackRange = True
             print("self.inAttackRange == True")
         #else: #At end of attack animation, make it False
@@ -514,14 +517,151 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LtoeLine1, 767+self.x+46, 358+self.y, 772+self.x+36, 358+self.y)
                 canvas.coords(self.e3_LtoeLine2, 767+self.x+46, 356+self.y, 772+self.x+36, 356+self.y)
                 canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
-        elif self.hpLoss <= 50 and self.isDead == False and self.inAttackRange == False:
+        elif self.hpLoss <= 50 and self.isDead == False and self.inAttackRange == False: #and self.inAttackRange == False:
             canvas.coords(self.e3_hp, 740+self.x+self.hpLoss, 297+self.y+self.bodyBob, 840+self.x-self.hpLoss, 302+self.y+self.bodyBob)
-        elif self.deleteOnce == True and self.isDead == False and self.inAttackRange == False:
+
+                #elif 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
+        elif self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
+            
+            canvas.coords(self.e3_hp, 740+self.x+self.xDeathHead +self.hpLoss, 297+self.y+self.yDeathHead, 840+self.x+self.xDeathHead -self.hpLoss, 302+self.y+self.yDeathHead)
+
+            #Head
+            if self.yAttackHead <= 10:
+                #if self.xAttackHead <= 100: #Always reaches 31 because of above if statement
+                #self.xAttackHead -= 4
+                if self.yAttackHeadInAir == True:
+                    self.xAttackHead += 0.5
+                    if self.xAttackHead == 5:
+                        self.yAttackHeadInAir = False
+                        self.xAttackHead = -6
+                    #canvas.coords(self.e3_name, 790+self.x+self.xAttackHead , 290+self.y+self.yAttackHead)
+                    #canvas.coords(self.e3_hp, 740+self.x+self.xAttackHead +self.hpLoss, 297+self.y+self.yAttackHead, 840+self.x+self.xAttackHead -self.hpLoss, 302+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_head, 777+self.x+self.xAttackHead , 305+self.y+self.yAttackHead, 802+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_headBlank, 785+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 802+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_headBlankLine, 785+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 802+self.x+self.xAttackHead , 322+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_spine, 787+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 795+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_spineLine, 787+self.x+self.xAttackHead , 324+self.y+self.yAttackHead , 795+self.x+self.xAttackHead , 328+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teeth, 777+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teethDown1, 780+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 780+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teethDown2, 783+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 783+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teethCross, 777+self.x+self.xAttackHead , 326+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 326+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_nose, 778+self.x+self.xAttackHead , 318+self.y+self.yAttackHead , 779+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_eye, 780+self.x+self.xAttackHead , 312+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_eye2, 788+self.x+self.xAttackHead , 314+self.y+self.yAttackHead , 789+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
+                    #Torso
+                    canvas.coords(self.e3_torso, 782+self.x+self.xAttackHead, 330+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 330+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 355+self.y+self.yAttackHead, 782+self.x+self.xAttackHead, 355+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribMidDown, 784+self.x+self.xAttackHead, 330+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 345+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribHighestCross, 782+self.x+self.xAttackHead, 333+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 333+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribHighest, 786+self.x+self.xAttackHead, 333+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 332+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 334+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribMiddleCross, 782+self.x+self.xAttackHead, 336+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 336+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribMiddle, 786+self.x+self.xAttackHead, 336+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 335+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 337+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribThirdCross, 782+self.x+self.xAttackHead, 339+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 339+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribThird, 786+self.x+self.xAttackHead, 339+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 338+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 340+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribFourthCross, 782+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 342+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribFourth, 786+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 341+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 343+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest, 782+self.x+self.xAttackHead, 345+self.y+self.yAttackHead, 789+self.x+self.xAttackHead, 345+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest1, 789+self.x+self.xAttackHead, 344+self.y+self.yAttackHead, 794+self.x+self.xAttackHead, 344+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest2, 794+self.x+self.xAttackHead, 343+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 343+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest3, 796+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 342+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_torsoBlank, 782+self.x+self.xAttackHead, 346+self.y+self.yAttackHead, 787+self.x+self.xAttackHead, 346, 787+self.x+self.xAttackHead, 351+self.y+self.yAttackHead, 782+self.x+self.xAttackHead, 351+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_spine2VerticalLine, 787+self.x+self.xAttackHead, 346+self.y+self.yAttackHead, 787+self.x+self.xAttackHead, 350+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_torsoBlank2, 796+self.x+self.xAttackHead, 343+self.y+self.yAttackHead, 798+self.x+self.xAttackHead, 343+self.y+self.yAttackHead, 798+self.x+self.xAttackHead, 348+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 348+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_spine2VerticalLine1, 796+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 350+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_sprin2DiagonalLine, 788+self.x+self.xAttackHead, 346+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 348+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_hipLine, 782+self.x+self.xAttackHead, 350+self.y+self.yAttackHead, 792+self.x+self.xAttackHead, 350+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_hipLine2, 792+self.x+self.xAttackHead, 349+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 349+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_hipHole, 792+self.x+self.xAttackHead, 352+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 355+self.y+self.yAttackHead)
+                elif self.yAttackHeadInAir == False and self.xAttackHead <= -6:
+                    self.xAttackHead -= 1
+                    if self.xAttackHead == -20:
+                        self.xAttackHead = 5
+                elif self.yAttackHeadInAir == False and self.xAttackHead >= 0:
+                    self.xAttackHead -= 1
+                    if self.xAttackHead == 0:
+                        self.yAttackHeadInAir = True
+                                    #canvas.coords(self.e3_name, 790+self.x+self.xAttackHead+self.x+self.xAttackHeadAttackHead , 290+self.y+self.yAttackHead+self.y+self.yAttackHeadAttackHead)
+                    #canvas.coords(self.e3_hp, 740+self.x+self.xAttackHead+self.x+self.xAttackHeadAttackHead +self.hpLoss, 297+self.y+self.yAttackHead+self.y+self.yAttackHeadAttackHead, 840+self.x+self.xAttackHead+self.x+self.xAttackHeadAttackHead -self.hpLoss, 302+self.y+self.yAttackHead+self.y+self.yAttackHeadAttackHead)
+                    canvas.coords(self.e3_head, 777+self.x+self.xAttackHead , 305+self.y+self.yAttackHead, 802+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_headBlank, 785+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 802+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_headBlankLine, 785+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 802+self.x+self.xAttackHead , 322+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_spine, 787+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 795+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_spineLine, 787+self.x+self.xAttackHead , 324+self.y+self.yAttackHead , 795+self.x+self.xAttackHead , 328+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teeth, 777+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teethDown1, 780+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 780+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teethDown2, 783+self.x+self.xAttackHead , 322+self.y+self.yAttackHead , 783+self.x+self.xAttackHead , 330+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_teethCross, 777+self.x+self.xAttackHead , 326+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 326+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_nose, 778+self.x+self.xAttackHead , 318+self.y+self.yAttackHead , 779+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_eye, 780+self.x+self.xAttackHead , 312+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
+                    canvas.coords(self.e3_eye2, 788+self.x+self.xAttackHead , 314+self.y+self.yAttackHead , 789+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
+                    #Torso
+                    canvas.coords(self.e3_torso, 782+self.x+self.xAttackHead, 330+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 330+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 355+self.y+self.yAttackHead, 782+self.x+self.xAttackHead, 355+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribMidDown, 784+self.x+self.xAttackHead, 330+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 345+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribHighestCross, 782+self.x+self.xAttackHead, 333+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 333+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribHighest, 786+self.x+self.xAttackHead, 333+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 332+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 334+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribMiddleCross, 782+self.x+self.xAttackHead, 336+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 336+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribMiddle, 786+self.x+self.xAttackHead, 336+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 335+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 337+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribThirdCross, 782+self.x+self.xAttackHead, 339+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 339+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribThird, 786+self.x+self.xAttackHead, 339+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 338+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 340+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribFourthCross, 782+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 784+self.x+self.xAttackHead, 342+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribFourth, 786+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 341+self.y+self.yAttackHead, 786+self.x+self.xAttackHead, 343+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest, 782+self.x+self.xAttackHead, 345+self.y+self.yAttackHead, 789+self.x+self.xAttackHead, 345+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest1, 789+self.x+self.xAttackHead, 344+self.y+self.yAttackHead, 794+self.x+self.xAttackHead, 344+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest2, 794+self.x+self.xAttackHead, 343+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 343+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_ribLowest3, 796+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 342+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_torsoBlank, 782+self.x+self.xAttackHead, 346+self.y+self.yAttackHead, 787+self.x+self.xAttackHead, 346, 787+self.x+self.xAttackHead, 351+self.y+self.yAttackHead, 782+self.x+self.xAttackHead, 351+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_spine2VerticalLine, 787+self.x+self.xAttackHead, 346+self.y+self.yAttackHead, 787+self.x+self.xAttackHead, 350+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_torsoBlank2, 796+self.x+self.xAttackHead, 343+self.y+self.yAttackHead, 798+self.x+self.xAttackHead, 343+self.y+self.yAttackHead, 798+self.x+self.xAttackHead, 348+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 348+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_spine2VerticalLine1, 796+self.x+self.xAttackHead, 342+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 350+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_sprin2DiagonalLine, 788+self.x+self.xAttackHead, 346+self.y+self.yAttackHead, 796+self.x+self.xAttackHead, 348+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_hipLine, 782+self.x+self.xAttackHead, 350+self.y+self.yAttackHead, 792+self.x+self.xAttackHead, 350+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_hipLine2, 792+self.x+self.xAttackHead, 349+self.y+self.yAttackHead, 797+self.x+self.xAttackHead, 349+self.y+self.yAttackHead)
+                    canvas.coords(self.e3_hipHole, 792+self.x+self.xAttackHead, 352+self.y+self.yAttackHead, 795+self.x+self.xAttackHead, 355+self.y+self.yAttackHead)
+
+            else:
+                self.xAttackHead, self.yAttackHead = 0, 0
+                self.yAttackHead = True
+                print("Head attack, Done")
+            
+            if self.yAttackArm <= 50:
+                #if self.xDeathHead >= -100: #Always reaches -31 because of above if statement
+                self.yAttackArm += 1
+                #Arms
+                canvas.coords(self.e3_Larm, 767+self.x-5, 330+self.y-50+self.yAttackArm, 782+self.x-5, 345+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_Lfinger, 768+self.x-5, 333+self.y-50+self.yAttackArm, 775+self.x-5, 333+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_Lfinger2, 767+self.x-5, 336+self.y-50+self.yAttackArm, 776+self.x-5, 336+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_Lfinger3, 767+self.x-5, 339+self.y-50+self.yAttackArm, 776+self.x-5, 339+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_Lfinger4, 768+self.x-5, 342+self.y-50+self.yAttackArm, 774+self.x-5, 342+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_LfingerDown, 775+self.x-5, 333+self.y-50+self.yAttackArm, 775+self.x-5, 339+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_LfingerDown1, 774+self.x-5, 339+self.y-50+self.yAttackArm, 774+self.x-5, 342+self.y-50+self.yAttackArm)
+                canvas.coords(self.e3_Rarm, 767+self.x-5, 330+self.y-45+self.yAttackArm, 782+self.x-5, 345+self.y-45+self.yAttackArm)
+                
+            else:
+                self.yAttackArm = 0
+                self.inAttackRange = False
+                print("Arm attack, Done")
+                
+            
+            #canvas.coords(self.e3_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
+            
+            #Legs and hitbox
+            canvas.coords(self.e3_Rleg, 797+self.x, 355+self.y, 812+self.x, 363+self.y)
+            canvas.coords(self.e3_RtoeLine, 797+self.x, 360+self.y, 802+self.x, 360+self.y)
+            canvas.coords(self.e3_RtoeLine1, 797+self.x, 358+self.y, 802+self.x, 358+self.y)
+            canvas.coords(self.e3_RtoeLine2, 797+self.x, 356+self.y, 802+self.x, 356+self.y)
+            canvas.coords(self.e3_Lleg, 767+self.x, 355+self.y, 782+self.x, 363+self.y)
+            canvas.coords(self.e3_LtoeLine, 767+self.x, 360+self.y, 772+self.x, 360+self.y)
+            canvas.coords(self.e3_LtoeLine1, 767+self.x, 358+self.y, 772+self.x, 358+self.y)
+            canvas.coords(self.e3_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
+            #canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
+
+
+        
+        elif self.deleteOnce == True: #and self.inAttackRange == False:
             #print("Death aniamtion")
             canvas.delete(self.e3_hp)
             canvas.delete(self.e3_name)
             self.deleteOnce = False
-        elif self.deleteOnce == False and self.Looking == "Left" and self.isDead == False and self.inAttackRange == False and self.deathAnimation == True:
+        elif self.deleteOnce == False and self.Looking == "Left" and self.deathAnimation == True: 
             #print("self.deleteOnce == False and self.Looking == Left")
             #Move head x: 100 y: +10 then -363 is the floor coordinates. So y:-373
             if self.yDeathHead <= 31:
@@ -601,7 +741,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.yDeathRHand += 1
                 canvas.coords(self.e3_Rarm, 797+self.x+self.xDeathRHand, 330+self.y+self.yDeathRHand, 812+self.x+self.xDeathRHand, 345+self.y+self.yDeathRHand)
             
-        elif self.deleteOnce == False and self.Looking == "Right" and self.isDead == False and self.inAttackRange == False and self.deathAnimation == True:
+        elif self.deleteOnce == False and self.Looking == "Right" and self.deathAnimation == True:
             #print("self.deleteOnce == False and self.Looking == Right")
             #Move head x: 100 y: +10 then -363 is the floor coordinates. So y:-373
             if self.yDeathHead <= 31:
@@ -682,39 +822,6 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.xDeathRHand += 0.5
                 self.yDeathRHand += 1
                 canvas.coords(self.e3_Rarm, 797+self.x+self.xDeathRHand, 330+self.y+self.yDeathRHand, 812+self.x+self.xDeathRHand, 345+self.y+self.yDeathRHand)
-
-        #elif 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
-        elif self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
-            if self.yArmAttack <= 50:
-                #if self.xDeathHead >= -100: #Always reaches -31 because of above if statement
-                self.yArmAttack += 1
-                #Arms
-                canvas.coords(self.e3_Larm, 767+self.x-5, 330+self.y-50+self.yArmAttack, 782+self.x-5, 345+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_Lfinger, 768+self.x-5, 333+self.y-50+self.yArmAttack, 775+self.x-5, 333+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_Lfinger2, 767+self.x-5, 336+self.y-50+self.yArmAttack, 776+self.x-5, 336+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_Lfinger3, 767+self.x-5, 339+self.y-50+self.yArmAttack, 776+self.x-5, 339+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_Lfinger4, 768+self.x-5, 342+self.y-50+self.yArmAttack, 774+self.x-5, 342+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_LfingerDown, 775+self.x-5, 333+self.y-50+self.yArmAttack, 775+self.x-5, 339+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_LfingerDown1, 774+self.x-5, 339+self.y-50+self.yArmAttack, 774+self.x-5, 342+self.y-50+self.yArmAttack)
-                canvas.coords(self.e3_Rarm, 767+self.x-5, 330+self.y-45+self.yArmAttack, 782+self.x-5, 345+self.y-45+self.yArmAttack)
-            else:
-                self.yArmAttack = 0
-                self.inAttackRange = False
-                print("Left arm attack, Done")
-                
-            
-            #canvas.coords(self.e3_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
-            
-            #Legs and hitbox
-            #canvas.coords(self.e3_Rleg, 797+self.x, 355+self.y, 812+self.x, 363+self.y)
-            #canvas.coords(self.e3_RtoeLine, 797+self.x, 360+self.y, 802+self.x, 360+self.y)
-            #canvas.coords(self.e3_RtoeLine1, 797+self.x, 358+self.y, 802+self.x, 358+self.y)
-            #canvas.coords(self.e3_RtoeLine2, 797+self.x, 356+self.y, 802+self.x, 356+self.y)
-            #canvas.coords(self.e3_Lleg, 767+self.x, 355+self.y, 782+self.x, 363+self.y)
-            #canvas.coords(self.e3_LtoeLine, 767+self.x, 360+self.y, 772+self.x, 360+self.y)
-            #canvas.coords(self.e3_LtoeLine1, 767+self.x, 358+self.y, 772+self.x, 358+self.y)
-            #canvas.coords(self.e3_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
-            #canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
 
         elif self.deathAnimation == False and self.deleteEnemy3Complete == True:
             self.deleteEnemy3Counter += 1
@@ -1372,7 +1479,7 @@ class Player:
 
         #Hitbox
         self.a_hitbox = canvas.create_line(150, 125, 125, 183)
-        #canvas.itemconfigure(self.a_hitbox, state='hidden')
+        canvas.itemconfigure(self.a_hitbox, state='hidden')
         self.hitbox = canvas.coords(self.a_hitbox)
 
         #Basic attack hitbox
