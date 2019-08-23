@@ -25,7 +25,7 @@ tk.update()
 
 
 
-class Enemy2: #the dark guard (lEon cratieosn)
+class Enemy2: #the dark guard (lEon cratieosns)
     def __init__(self,canvas):
         self.canvas = canvas
         self.x, self.y = 0,0
