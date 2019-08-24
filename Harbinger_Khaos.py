@@ -17,10 +17,11 @@ hitByBasicAttackOnce = True
 pressQ = False
 turnOffEnemy3 = False
 enemy3Damage = False
+gameOver = False
 
 tk = Tk()
 tk.title("Harbinger - Alpha 3.0.1: Enemies of the East")
-canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
+canvas = Canvas(width=1300, height=700, bg="gray30")
 canvas.pack()
 tk.update()
 
@@ -261,10 +262,10 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.hitPlayerOnce = False
 
         #Name Above Head, health bar, and all head shapes
-        self.e3_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Jack Michaelson", font=("Fixedsys", 16))
+        self.e3_name = canvas.create_text(790, 290, anchor="center", fill="red", text="Undead Skeleton", font=("Fixedsys", 16))
         self.e3_hp = canvas.create_rectangle(740, 297, 840, 302, fill="red2")
         self.e3_head = canvas.create_oval(777, 305, 802, 330, fill="SlateGray1")
-        self.e3_headBlank = canvas.create_rectangle(785, 322, 802, 330, fill="SkyBlue1", outline="")
+        self.e3_headBlank = canvas.create_rectangle(785, 322, 802, 330, fill="gray30", outline="")
         self.e3_headBlankLine = canvas.create_line(785, 322, 802, 322)
         self.e3_spine = canvas.create_rectangle(787, 322, 795, 330, fill="SlateGray1", outline="black")
         self.e3_spineLine = canvas.create_line(787, 324, 795, 328)
@@ -273,7 +274,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.e3_teethDown2 = canvas.create_line(783, 322, 783, 330)
         self.e3_teethCross = canvas.create_line(777, 326, 785, 326)
         self.e3_nose = canvas.create_oval(778, 318, 779, 319, fill="black")
-        self.e3_eye = canvas.create_oval(780, 312, 785, 319, fill="black")
+        self.e3_eye = canvas.create_oval(780, 312, 785, 319, fill="cyan")
         self.e3_eye2 = canvas.create_oval(788, 314, 789, 319, fill="black")
 
         #All torso shapes.
@@ -291,9 +292,9 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.e3_ribLowest1 = canvas.create_line(789, 344, 794, 344)
         self.e3_ribLowest2 = canvas.create_line(794, 343, 796, 343)
         self.e3_ribLowest3 = canvas.create_line(796, 342, 797, 342)
-        self.e3_torsoBlank = canvas.create_polygon(782, 346, 787, 346, 787, 351, 782, 351, fill="SkyBlue1", outline="")
+        self.e3_torsoBlank = canvas.create_polygon(782, 346, 787, 346, 787, 351, 782, 351, fill="gray30", outline="")
         self.e3_spine2VerticalLine = canvas.create_line(787, 346, 787, 350)
-        self.e3_torsoBlank2 = canvas.create_polygon(796, 343, 798, 343, 798, 348, 796, 348, fill="SkyBlue1", outline="")
+        self.e3_torsoBlank2 = canvas.create_polygon(796, 343, 798, 343, 798, 348, 796, 348, fill="gray30", outline="")
         self.e3_spine2VerticalLine1 = canvas.create_line(796, 342, 796, 350)
         self.e3_sprin2DiagonalLine = canvas.create_line(788, 346, 796, 348)
         self.e3_hipLine = canvas.create_line(782, 350, 792, 350)
@@ -331,21 +332,27 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
             self.Looking = "Left"
             
         #If not in attack range yet and in the range to hit, change to self.inAttackRange = True. This changes all animations to attacking.
-        if self.hpLoss < 50 and self.inAttackRange == False and self.player.hitbox[3] == 363 and ((self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 10) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] > self.hitboxCoords[2] and 1 <= self.player.hitbox[0] - self.hitboxCoords[2] <= 10) or (self.player.hitbox[0] < self.hitboxCoords[0] and 1 <=  self.hitboxCoords[0] - self.player.hitbox[0] <= 10)):
+        if self.hpLoss < 50 and self.inAttackRange == False and 300 <= self.player.hitbox[3] <= 400 and ((self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 100) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 100) or (self.player.hitbox[0] > self.hitboxCoords[2] and 1 <= self.player.hitbox[0] - self.hitboxCoords[2] <= 100) or (self.player.hitbox[0] < self.hitboxCoords[0] and 1 <=  self.hitboxCoords[0] - self.player.hitbox[0] <= 100)):
             self.inAttackRange = True
             #print("self.inAttackRange == True")
+
+        #else: #At end of attack animation, make it False
+            #self.inAttackRange = False
+        #elif self.inAttackRange == False and self.player.hitbox[3] == 363 and self.Looking == "Right" and (self.player.hitbox[2] < self.hitboxCoords[0] and 1 <= self.hitboxCoords[0] - self.player.hitbox[2] <= 10) or (self.player.hitbox[2] > self.hitboxCoords[2] and 1 <= self.player.hitbox[2] - self.hitboxCoords[2] <= 10):
+            #self.inAttackRange = True
+            #print("self.inAttackRange == True 2")
 
         if self.Looking == "Left" and self.player.hitbox[3] == 363 and self.player.hitbox[2] > self.hitboxCoords[2] and self.inAttackRange == False: #If player lands behind Emeny3, turn around.
             self.Looking = "Right"
         elif self.Looking == "Right" and self.player.hitbox[3] == 363 and self.player.hitbox[2] < self.hitboxCoords[0] and self.inAttackRange == False:
             self.Looking = "Left"
 
-        if 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == False:
-            self.x -= 1
+        if 0 <= self.counterFrame <= 100 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == False:
+            self.x -= 10
             
-            if self.Frame == 0 and self.counterFrame <= 25:
+            if self.Frame == 0 and self.counterFrame <= 50:
                 self.bodyBob = 3
-            elif self.Frame == 1 and self.counterFrame > 25:
+            elif self.Frame == 1 and self.counterFrame > 50:
                 self.bodyBob = 0
             
             #Nameplate and Head
@@ -427,12 +434,12 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LtoeLine2, 767+self.x, 356+self.y, 772+self.x, 356+self.y)
                 canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
                 
-        elif 0 <= self.counterFrame <= 50 and self.Looking == "Right" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == False: #Enemy3 has to be mirrored and turned facing and moving right
-            self.x += 1
+        elif 0 <= self.counterFrame <= 100 and self.Looking == "Right" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == False: #Enemy3 has to be mirrored and turned facing and moving right
+            self.x += 10
             
-            if self.Frame == 0 and self.counterFrame <= 25:
+            if self.Frame == 0 and self.counterFrame <= 50:
                 self.bodyBob = 3
-            elif self.Frame == 1 and self.counterFrame > 25:
+            elif self.Frame == 1 and self.counterFrame > 50:
                 self.bodyBob = 0
             
             #Nameplate and Head
@@ -513,17 +520,20 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LtoeLine1, 767+self.x+46, 358+self.y, 772+self.x+36, 358+self.y)
                 canvas.coords(self.e3_LtoeLine2, 767+self.x+46, 356+self.y, 772+self.x+36, 356+self.y)
                 canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
-        elif self.hpLoss <= 50 and self.isDead == False and self.inAttackRange == False:
+        elif self.hpLoss <= 50 and self.isDead == False and self.inAttackRange == False: #and self.inAttackRange == False:
             canvas.coords(self.e3_hp, 740+self.x+self.hpLoss, 297+self.y+self.bodyBob, 840+self.x-self.hpLoss, 302+self.y+self.bodyBob)
 
+                #elif 0 <= self.counterFrame <= 50 and self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
         elif self.Looking == "Left" and self.hpLoss < 50 and self.isDead == False and self.inAttackRange == True:
             
             canvas.coords(self.e3_hp, 740+self.x+self.xDeathHead +self.hpLoss, 297+self.y+self.yDeathHead, 840+self.x+self.xDeathHead -self.hpLoss, 302+self.y+self.yDeathHead)
 
             #Head AND LEGS because it only has to iterate once, just leave it here.
-            if self.xAttackHeadCounter <= 55:
-                if 0 <= self.xAttackHeadCounter < 10: #Head moves back; Enemy3 preps for a swing attack
-                    self.xAttackHead += 0.5
+            if self.xAttackHeadCounter <= 27:
+                if 0 <= self.xAttackHeadCounter < 5: #Head moves back; Enemy3 preps for a swing attack
+                    self.xAttackHead += 0.5*5
+                    
+                    
                     #canvas.coords(self.e3_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
             
                     #Legs and hitbox
@@ -538,14 +548,16 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                     #canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
                     
                     #print("First if")
-                elif 10 <= self.xAttackHeadCounter < 40: #Head is stationary
+                #elif 5 <= self.xAttackHeadCounter < 20: #Head is stationary
+                    #pass
                     #print("Second if")
-                    pass
-                elif 40 <= self.xAttackHeadCounter < 50: #Head jerks forward during the swing attack
-                    self.xAttackHead -= 1
+                elif 10 <= self.xAttackHeadCounter < 20: #Head jerks forward during the swing attack
+                    self.xAttackHead -= 1*5
+                    
                     #print("Third if")
-                elif 50 <= self.xAttackHeadCounter < 55: #Move head back into original position
-                    self.xAttackHead += 0.5
+                elif 20 <= self.xAttackHeadCounter < 25: #Move head back into original position
+                    self.xAttackHead += 0.5*5
+                    
                     #print("Fourth if")
                         
                 #canvas.coords(self.e3_name, 790+self.x+self.xAttackHead+self.x+self.xAttackHeadAttackHead , 290+self.y+self.yAttackHead+self.y+self.yAttackHeadAttackHead)
@@ -563,27 +575,30 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_eye, 780+self.x+self.xAttackHead , 312+self.y+self.yAttackHead , 785+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
                 canvas.coords(self.e3_eye2, 788+self.x+self.xAttackHead , 314+self.y+self.yAttackHead , 789+self.x+self.xAttackHead , 319+self.y+self.yAttackHead )
             
-            if self.yAttackArmCounter <= 55: #NOTICE THAT IT COUNTS THE Y
-                if 0 <= self.yAttackArmCounter < 10: #Arms go behind ribcage.
+            if self.yAttackArmCounter <= 27: #NOTICE THAT IT COUNTS THE Y
+                if 0 <= self.yAttackArmCounter < 5: #Arms go behind ribcage.
                     #if 0 <= self.xAttackArmCounter < 5:
-                    self.xAttackArm += 2
+                    self.xAttackArm += 2*5
+                    
                     #print("First if")
-                elif 10 <= self.yAttackArmCounter < 40: #Arms are stationary, getting ready to shove the player.
+                #elif 5 <= self.yAttackArmCounter < 20: #Arms are stationary, getting ready to shove the player.
+                   # pass
                     #print("Second if")
-                    pass
-                elif 40 <= self.yAttackArmCounter < 50: #Arms jerk forward in a shoving motion.
+                elif 10 <= self.yAttackArmCounter < 20: #Arms jerk forward in a shoving motion.
                     #if 5 <= self.yAttackArmCounter < 10:
-                    self.xAttackArm -= 5
+                    self.xAttackArm -= 5*5
+                    
                     self.hitboxLarm = canvas.coords(self.e3_Larm)
                     global enemy3Damage
                     if self.hitPlayerOnce  == False and ( self.player.hitbox[1] <= self.hitboxLarm[1] <= self.player.hitbox[3] or self.player.hitbox[1] <= self.hitboxLarm[3] <= self.player.hitbox[3] ) and (self.player.hitbox[0] <= self.hitboxLarm[0] <= self.player.hitbox[2] or self.player.hitbox[2] <= self.hitboxLarm[2] <= self.player.hitbox[0]) and enemy3Damage == False: 
                         enemy3Damage = True
                         self.hitPlayerOnce = True
-                        print("Enemy3, facing left, hit the player dealing 10 damage.")
+                        print("Undead Skeleton: HAHAHAHAHA! SEE YOU IN HELL!")
                     #print("Third if")
-                elif 50 <= self.yAttackArmCounter < 55: #Arms move back into original position.
+                elif 20 <= self.yAttackArmCounter < 25: #Arms move back into original position.
                     #if 10 <= self.yAttackArmCounter < 15:
-                    self.xAttackArm += 2
+                    self.xAttackArm += 2*5
+                    
                     #print("Fourth if")
 
                 #Arms
@@ -596,21 +611,24 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LfingerDown1, 774+self.x+15+self.xAttackArm, 339+self.y+self.yAttackArm-7, 774+self.x+15+self.xAttackArm, 342+self.y+self.yAttackArm-7)
                 canvas.coords(self.e3_Rarm, 767+self.x+15+self.xAttackArm, 330+self.y+self.yAttackArm-5, 782+self.x+15+self.xAttackArm, 345+self.y+self.yAttackArm-5)
 
-            if self.xAttackTorsoCounter <= 55:
-                if 0 <= self.xAttackTorsoCounter < 10: #Torso moves back BUT less than it's head.
+            if self.xAttackTorsoCounter <= 27:
+                if 0 <= self.xAttackTorsoCounter < 5: #Torso moves back BUT less than it's head.
                     #if 0 <= self.xAttackTorsoCounter < 5:
-                    self.xAttackTorso += 0.25
+                    self.xAttackTorso += 0.25*5
+                    
                     #print("First if")
-                elif 10 <= self.xAttackTorsoCounter < 40: #Torso is stationary
+                #elif 10 <= self.xAttackTorsoCounter < 40: #Torso is stationary
+                    #pass
                     #print("Second if")
-                    pass
-                elif 40 <= self.xAttackTorsoCounter < 50: #Torso jerks forward during the swing attack
+                elif 10 <= self.xAttackTorsoCounter < 20: #Torso jerks forward during the swing attack
                     #if 5 <= self.xAttackTorsoCounter < 10:
-                    self.xAttackTorso -= 0.5
+                    self.xAttackTorso -= 0.5*5
+                    
                     #print("Third if")
-                elif 50 <= self.xAttackTorsoCounter < 55: #Move torso back into original position
+                elif 20 <= self.xAttackTorsoCounter < 25: #Move torso back into original position
                     #if 10 <= self.xAttackTorsoCounter < 15:
-                    self.xAttackTorso += 0.25
+                    self.xAttackTorso += 0.25*5
+                    
                     #print("Fourth if")
 
                 canvas.coords(self.e3_torso, 782+self.x+self.xAttackTorso, 330+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso, 330+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso, 355+self.y+self.yAttackTorso, 782+self.x+self.xAttackTorso, 355+self.y+self.yAttackTorso)
@@ -636,7 +654,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_hipLine2, 792+self.x+self.xAttackTorso, 349+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso, 349+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_hipHole, 792+self.x+self.xAttackTorso, 352+self.y+self.yAttackTorso, 795+self.x+self.xAttackTorso, 355+self.y+self.yAttackTorso)
 
-                if self.xAttackTorsoCounter == 55: #When self.xAttackTorsoCounter == 45, reset all variables.
+                if self.xAttackTorsoCounter == 27: #When self.xAttackTorsoCounter == 45, reset all variables.
                     self.xAttackTorso, self.yAttackTorso, self.xAttackTorsoCounter = 0, 0, 0
                     #print("Torso attack, done")
                     #if self.yAttackArmCounter == 55: #When self.yAttackArmCounter == 55, reset all variables.
@@ -648,7 +666,6 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                     #if self.xAttackHeadCounter == 55: #When self.xAttackHeadCounter == 45, reset all variables.
                     self.xAttackHead, self.yAttackHead, self.xAttackHeadCounter = 0, 0, 0
                     #print("Head attack, Done")
-
             self.xAttackHeadCounter += 1
             self.yAttackArmCounter += 1
             self.xAttackTorsoCounter += 1
@@ -658,9 +675,11 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
             canvas.coords(self.e3_hp, 740+self.x+self.xDeathHead +self.hpLoss, 297+self.y+self.yDeathHead, 840+self.x+self.xDeathHead -self.hpLoss, 302+self.y+self.yDeathHead)
 
             #Head AND LEGS because it only has to iterate once, just leave it here.
-            if self.xAttackHeadCounter <= 55:
-                if 0 <= self.xAttackHeadCounter < 10: #Head moves back; Enemy3 preps for a swing attack
-                    self.xAttackHead -= 0.5
+            if self.xAttackHeadCounter <= 27:
+                if 0 <= self.xAttackHeadCounter < 5: #Head moves back; Enemy3 preps for a swing attack
+                    self.xAttackHead -= 0.5*5
+                    
+                    
                     #canvas.coords(self.e3_Rarm, 797+self.x, 330+self.y, 812+self.x, 345+self.y)
             
                     #Legs and hitbox
@@ -675,14 +694,16 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                     canvas.coords(self.e3_hitbox, 802+self.x, 305+self.y, 777+self.x, 363+self.y)
                     
                     #print("First if")
-                elif 10 <= self.xAttackHeadCounter < 40: #Head is stationary
+                #elif 10 <= self.xAttackHeadCounter < 40: #Head is stationary
+                    #pass
                     #print("Second if")
-                    pass
-                elif 40 <= self.xAttackHeadCounter < 50: #Head jerks forward during the swing attack
-                    self.xAttackHead += 1
+                elif 10 <= self.xAttackHeadCounter < 20: #Head jerks forward during the swing attack
+                    self.xAttackHead += 1*5
+                    
                     #print("Third if")
-                elif 50 <= self.xAttackHeadCounter < 55: #Move head back into original position
-                    self.xAttackHead -= 0.5
+                elif 20 <= self.xAttackHeadCounter < 25: #Move head back into original position
+                    self.xAttackHead -= 0.5*5
+                    
                     #print("Fourth if")
                         
                 #canvas.coords(self.e3_name, 790+self.x+self.xAttackHead+self.x+self.xAttackHeadAttackHead , 290+self.y+self.yAttackHead+self.y+self.yAttackHeadAttackHead)
@@ -700,26 +721,29 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_eye, 780+self.x+self.xAttackHead+20, 312+self.y+self.yAttackHead, 785+self.x+self.xAttackHead+10, 319+self.y+self.yAttackHead)
                 canvas.coords(self.e3_eye2, 788+self.x+self.xAttackHead+4, 314+self.y+self.yAttackHead, 789+self.x+self.xAttackHead+2, 319+self.y+self.yAttackHead)
             
-            if self.yAttackArmCounter <= 55: #NOTICE THAT IT COUNTS THE Y
-                if 0 <= self.yAttackArmCounter < 10: #Arms move behind ribcage.
+            if self.yAttackArmCounter <= 27: #NOTICE THAT IT COUNTS THE Y
+                if 0 <= self.yAttackArmCounter < 5: #Arms move behind ribcage.
                     #if 0 <= self.xAttackArmCounter < 5:
-                    self.xAttackArm -= 2
+                    self.xAttackArm -= 2*5
+                    
                     #print("First if")
-                elif 10 <= self.yAttackArmCounter < 40: #Arms pause getting ready for attack.
+                #elif 10 <= self.yAttackArmCounter < 40: #Arms pause getting ready for attack.
+                    #pass
                     #print("Second if")
-                    pass
-                elif 40 <= self.yAttackArmCounter < 50: #Arms move forward in a shoving motion.
+                elif 10 <= self.yAttackArmCounter < 20: #Arms move forward in a shoving motion.
                     #if 5 <= self.yAttackArmCounter < 10:
-                    self.xAttackArm += 5
+                    self.xAttackArm += 5*5
                     self.hitboxLarm = canvas.coords(self.e3_Larm)
                     if self.hitPlayerOnce  == False and ( self.player.hitbox[1] <= self.hitboxLarm[1] <= self.player.hitbox[3] or self.player.hitbox[1] <= self.hitboxLarm[3] <= self.player.hitbox[3] ) and (self.player.hitbox[0] <= self.hitboxLarm[0] <= self.player.hitbox[2] or self.player.hitbox[2] <= self.hitboxLarm[2] <= self.player.hitbox[0]) and enemy3Damage == False: 
                         enemy3Damage = True
                         self.hitPlayerOnce = True
-                        print("Enemy3, facing right, hit the player dealing 10 damage.")
+                        print("Undead Skeleton: HAHAHAHAHA! SEE YOU IN HELL!")
+                    
                     #print("Third if")
-                elif 50 <= self.yAttackArmCounter < 55: #Move arms back into original position
+                elif 20 <= self.yAttackArmCounter < 25: #Move arms back into original position
                     #if 10 <= self.yAttackArmCounter < 15:
-                    self.xAttackArm -= 2
+                    self.xAttackArm -= 2*5
+                    
                     #print("Fourth if")
 
                 #Arms
@@ -732,21 +756,24 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_LfingerDown1, 774+self.x+15+self.xAttackArm, 339+self.y+self.yAttackArm-7, 774+self.x+15+self.xAttackArm, 342+self.y+self.yAttackArm-7)
                 canvas.coords(self.e3_Rarm, 767+self.x+15+self.xAttackArm, 330+self.y+self.yAttackArm-5, 782+self.x+15+self.xAttackArm, 345+self.y+self.yAttackArm-5)
 
-            if self.xAttackTorsoCounter <= 55:
-                if 0 <= self.xAttackTorsoCounter < 10: #Torso moves back BUT less than it's head.
+            if self.xAttackTorsoCounter <= 27:
+                if 0 <= self.xAttackTorsoCounter < 5: #Torso moves back BUT less than it's head.
                     #if 0 <= self.xAttackTorsoCounter < 5:
-                    self.xAttackTorso -= 0.25
+                    self.xAttackTorso -= 0.25*5
+                    
                     #print("First if")
-                elif 10 <= self.xAttackTorsoCounter < 40: #Torso is stationary
+                #elif 10 <= self.xAttackTorsoCounter < 40: #Torso is stationary
+                    #pass
                     #print("Second if")
-                    pass
-                elif 40 <= self.xAttackTorsoCounter < 50: #Torso jerks forward during the swing attack
+                elif 10 <= self.xAttackTorsoCounter < 20: #Torso jerks forward during the swing attack
                     #if 5 <= self.xAttackTorsoCounter < 10:
-                    self.xAttackTorso += 0.5
+                    self.xAttackTorso += 0.5*5
+                    
                     #print("Third if")
-                elif 50 <= self.xAttackTorsoCounter < 55: #Move torso back into original position
+                elif 20 <= self.xAttackTorsoCounter < 25: #Move torso back into original position
                     #if 10 <= self.xAttackTorsoCounter < 15:
-                    self.xAttackTorso -= 0.25
+                    self.xAttackTorso -= 0.25*5
+                    
                     #print("Fourth if")
 
                 canvas.coords(self.e3_torso, 782+self.x+self.xAttackTorso+16, 330+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso-14, 330+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso-14, 355+self.y+self.yAttackTorso, 782+self.x+self.xAttackTorso+16, 355+self.y+self.yAttackTorso)
@@ -772,7 +799,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_hipLine2, 792+self.x+self.xAttackTorso-4, 349+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso-14, 349+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_hipHole, 792+self.x+self.xAttackTorso-4, 352+self.y+self.yAttackTorso, 795+self.x+self.xAttackTorso-10, 355+self.y+self.yAttackTorso)
 
-                if self.xAttackTorsoCounter == 55: #When self.xAttackTorsoCounter == 45, reset all variables.
+                if self.xAttackTorsoCounter == 27: #When self.xAttackTorsoCounter == 45, reset all variables.
                     self.xAttackTorso, self.yAttackTorso, self.xAttackTorsoCounter = 0, 0, 0
                     #print("Torso attack, done")
                     #if self.yAttackArmCounter == 55: #When self.yAttackArmCounter == 55, reset all variables.
@@ -786,7 +813,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                     #print("Head attack, Done")
             self.xAttackHeadCounter += 1
             self.yAttackArmCounter += 1
-            self.xAttackTorsoCounter += 1
+            self.xAttackTorsoCounter += 1                    
         
         elif self.deleteOnce == True: #and self.inAttackRange == False:
             #print("Death aniamtion")
@@ -1021,6 +1048,10 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 self.deleteEnemy3Complete = False
         else:
             global turnOffEnemy3
+            global gameOver
+            print("Titus: Glass waiting to be shattered.")
+            print("You win.")
+            gameOver = True
             turnOffEnemy3 = True
             #print("Stopping Enemy3's draw method")
     
@@ -1030,15 +1061,15 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
 
         global hitBySpecialOnce
         if self.isDead == False and self.hpLoss < 50 and self.hitboxCoords[2] <= self.voice.hitbox[4] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
-            self.hpLoss += 10
+            self.hpLoss += 5
             hitBySpecialOnce = False
             #print(hitBySpecialOnce)
-            print("Voice: 1. Hit Enemy3. Did 10 damage.")
+            print("Voice: 1. Hit Enemy3. Did 5 damage.")
         elif self.isDead == False and self.hpLoss < 50 and self.hitboxCoords[2] <= self.voice.hitbox[10] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
-            self.hpLoss += 10
+            self.hpLoss += 5
             hitBySpecialOnce = False
             #print(hitBySpecialOnce)
-            print("Voice: 2. Hit Enemy3. Did 10 damage.")
+            print("Voice: 2. Hit Enemy3. Did 5 damage.")
         elif self.isDead == False and self.hitboxCoords[2] <= self.voice.hitbox[4] <= self.hitboxCoords[0] and (self.hitboxCoords[1] <= self.voice.hitbox[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.voice.hitbox[9] <= self.hitboxCoords[3]) and hitBySpecialOnce == True:
             print("Voice: 3. Hit Enemy3 when it's dead. (m8)")
             hitBySpecialOnce = False
@@ -1048,15 +1079,15 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         global hitByBasicAttackOnce
         global basic_attack
         if self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
-            self.hpLoss += 10
+            self.hpLoss += 5
             hitByBasicAttackOnce = False
             #print(hitByBasicAttackOnce)
-            print("Basic Atack: 1. Hit Enemy3. Did 10 damage.")
+            print("Basic Atack: 1. Hit Enemy3. Did 5 damage.")
         elif self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxL[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxL[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxL[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxL[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
-            self.hpLoss += 10
+            self.hpLoss += 5
             hitByBasicAttackOnce = False
             #print(hitByBasicAttackOnce)
-            print("Basic Atack: 2. Hit Enemy3. Did 10 damage.")
+            print("Basic Atack: 2. Hit Enemy3. Did 5 damage.")
         elif self.isDead == False and basic_attack == True and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
             print("Basic Atack: 3. Hit Enemy3 when it's dead. (m8)")
             hitByBasicAttackOnce = False
@@ -1066,9 +1097,9 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 
         self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
         
-        if self.counterFrame <= 25: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+        if self.Frame == 1: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
             self.Frame = 0
-        elif 25 < self.counterFrame <= 100: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+        elif self.Frame == 0: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
             self.Frame = 1
             
         if self.counterFrame == 100: #Reset the counter after 50 so that the cycle repeats over and over again.
@@ -1261,27 +1292,30 @@ class Bars:
                 #print("YOU ARE DEAD caused from Enemy3 attack")
                 canvas.delete(self.h_hpFill)
                 canvas.delete(self.h_hp)
-            enemy3Damage = False
+            #enemy3Damage = False
 
         #WHEN IN LAVA, GET DAMAGED
         global lavaDamage
         if lavaDamage == True:
             #print("HOT LAVA BOI")
-            if self.counterFrameLava == 25 and self.healthLoss >= -358: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
-                self.healthLoss -= 20
+            if self.healthLoss >= -354: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+                self.healthLoss -= 5
                 canvas.delete(self.h_hp)
                 self.h_hp = canvas.create_arc(1143, 538, 1282, 677, width=18, start=0, extent=359+self.healthLoss, style=ARC, outline="red2")
                 #print("Decrease hp now (25 counterFrameLava)")
                 self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
-            elif self.healthLoss <= -359: #if self.counterFrameLava > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+            elif self.healthLoss <= -355: #if self.counterFrameLava > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
                 #print("YOU ARE DEAD")
+                self.healthLoss -= 300
                 canvas.delete(self.h_hpFill)
                 canvas.delete(self.h_hp)
+                lavaDamage = False
+                print("Did you really just die by lava?")
 
-            self.counterFrameLava += 1 #Add one to counterFrame (Starts at 0)
+            #self.counterFrameLava += 1 #Add one to counterFrame (Starts at 0)
             
-            if self.counterFrameLava == 50: #Reset the counter after 50 so that the cycle repeats over and over again.
-                self.counterFrameLava = 0
+            #if self.counterFrameLava == 50: #Reset the counter after 50 so that the cycle repeats over and over again.
+                #self.counterFrameLava = 0
 
         #When mana is used, decrease mana bar
         global manaUsed
@@ -1361,7 +1395,14 @@ class Bars:
             
             if self.counterFrameSprint3 == 50: #Reset the counter after 50 so that the cycle repeats over and over again.
                 self.counterFrameSprint3 = 0
-        
+
+        global gameOver
+        if self.healthLoss <= -359:
+            gameOver = True
+            canvas.delete(self.h_hpFill)
+            canvas.delete(self.h_hp)
+            print("GAME OVER")
+            print("You suck.")
             
 class PhotoTest: #Testing to see if we can print images onto the program
     def __init__(self,canvas):
@@ -2620,9 +2661,9 @@ class Player:
             global lavaDamage
             #print("first if")
             lavaDamage = True
-        else:
+        #else:
             #print("second if")
-            lavaDamage = False
+            #lavaDamage = False
 
 
         #if self.hitbox[2] and self.hitbox[3]:
@@ -3147,7 +3188,7 @@ voice = Voice(canvas,player)
 enemy3 = Enemy3(canvas, voice, player)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
 
-while 1:
+while gameOver == False:
     if basic_attack == False:
         player.draw()
         #pass

@@ -7,3 +7,13 @@
 -Enemy3's hitbox has been made invisible so the death animation is easier to see.
 -A short time after death, Enemy3 will be deleted, then Enemy3's draw() method will no longer be run through.
 -Edited the hit text.
+
+3.0.3 - Enemy3 Attack
+-Enemy3 will now turn to player when on the same level as it.
+-Enemy3 has an attack animation.
+-Enemy3 deals 10 damage to player when near enough.
+-Big Eye animation is paused by default.
+-Added Harbinger_Khaos.py
+
+3.0.4 - Efficiency
+-Make variables equal to 'None'?
