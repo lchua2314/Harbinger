@@ -42,8 +42,6 @@ class Enemy2: #the dark guard (lEon cratieosn)
         
 
         #might need to create another shoulder if the enemy moves.
-        
-        
         self.e2_spearshaft2 = canvas.create_polygon(879, 217+2, 882, 217+2, 882, 277+2, 879, 277+2, fill="black")
         self.e2_spearhead2 = canvas.create_polygon(875, 217+2, 880, 202+2, 886, 217+2, fill="black")
         self.e2_righthand2 = canvas.create_oval(872, 232+2, 888, 247+2, fill="gray")
@@ -378,7 +376,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
             canvas.coords(self.e3_ribLowest1, 789+self.x, 344+self.y+self.bodyBob, 794+self.x, 344+self.y+self.bodyBob)
             canvas.coords(self.e3_ribLowest2, 794+self.x, 343+self.y+self.bodyBob, 796+self.x, 343+self.y+self.bodyBob)
             canvas.coords(self.e3_ribLowest3, 796+self.x, 342+self.y+self.bodyBob, 797+self.x, 342+self.y+self.bodyBob)
-            canvas.coords(self.e3_torsoBlank, 782+self.x, 346+self.y+self.bodyBob, 787+self.x, 346, 787+self.x, 351+self.y+self.bodyBob, 782+self.x, 351+self.y+self.bodyBob)
+            canvas.coords(self.e3_torsoBlank, 782+self.x, 346+self.y+self.bodyBob, 787+self.x, 346+self.y+self.bodyBob, 787+self.x, 351+self.y+self.bodyBob, 782+self.x, 351+self.y+self.bodyBob)
             canvas.coords(self.e3_spine2VerticalLine, 787+self.x, 346+self.y+self.bodyBob, 787+self.x, 350+self.y+self.bodyBob)
             canvas.coords(self.e3_torsoBlank2, 796+self.x, 343+self.y+self.bodyBob, 798+self.x, 343+self.y+self.bodyBob, 798+self.x, 348+self.y+self.bodyBob, 796+self.x, 348+self.y+self.bodyBob)
             canvas.coords(self.e3_spine2VerticalLine1, 796+self.x, 342+self.y+self.bodyBob, 796+self.x, 350+self.y+self.bodyBob)
@@ -465,7 +463,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
             canvas.coords(self.e3_ribLowest1, 789+self.x+2, 344+self.y+self.bodyBob, 794+self.x-8, 344+self.y+self.bodyBob)
             canvas.coords(self.e3_ribLowest2, 794+self.x-8, 343+self.y+self.bodyBob, 796+self.x-12, 343+self.y+self.bodyBob)
             canvas.coords(self.e3_ribLowest3, 796+self.x-12, 342+self.y+self.bodyBob, 797+self.x-14, 342+self.y+self.bodyBob)
-            canvas.coords(self.e3_torsoBlank, 782+self.x+16+1, 346+self.y+self.bodyBob, 787+self.x+6, 346, 787+self.x+6, 351+self.y+self.bodyBob, 782+self.x+16+1, 351+self.y+self.bodyBob)
+            canvas.coords(self.e3_torsoBlank, 782+self.x+16+1, 346+self.y+self.bodyBob, 787+self.x+6, 346+self.y+self.bodyBob, 787+self.x+6, 351+self.y+self.bodyBob, 782+self.x+16+1, 351+self.y+self.bodyBob)
             canvas.coords(self.e3_spine2VerticalLine, 787+self.x+6, 346+self.y+self.bodyBob, 787+self.x+6, 350+self.y+self.bodyBob)
             canvas.coords(self.e3_torsoBlank2, 796+self.x-12, 343+self.y+self.bodyBob, 798+self.x-16, 343+self.y+self.bodyBob, 798+self.x-16, 348+self.y+self.bodyBob, 796+self.x-12, 348+self.y+self.bodyBob)
             canvas.coords(self.e3_spine2VerticalLine1, 796+self.x-12, 342+self.y+self.bodyBob, 796+self.x-12, 350+self.y+self.bodyBob)
@@ -627,7 +625,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_ribLowest1, 789+self.x+self.xAttackTorso, 344+self.y+self.yAttackTorso, 794+self.x+self.xAttackTorso, 344+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_ribLowest2, 794+self.x+self.xAttackTorso, 343+self.y+self.yAttackTorso, 796+self.x+self.xAttackTorso, 343+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_ribLowest3, 796+self.x+self.xAttackTorso, 342+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso, 342+self.y+self.yAttackTorso)
-                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xAttackTorso, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso, 346, 787+self.x+self.xAttackTorso, 351+self.y+self.yAttackTorso, 782+self.x+self.xAttackTorso, 351+self.y+self.yAttackTorso)
+                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xAttackTorso, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso, 351+self.y+self.yAttackTorso, 782+self.x+self.xAttackTorso, 351+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_spine2VerticalLine, 787+self.x+self.xAttackTorso, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso, 350+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_torsoBlank2, 796+self.x+self.xAttackTorso, 343+self.y+self.yAttackTorso, 798+self.x+self.xAttackTorso, 343+self.y+self.yAttackTorso, 798+self.x+self.xAttackTorso, 348+self.y+self.yAttackTorso, 796+self.x+self.xAttackTorso, 348+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_spine2VerticalLine1, 796+self.x+self.xAttackTorso, 342+self.y+self.yAttackTorso, 796+self.x+self.xAttackTorso, 350+self.y+self.yAttackTorso)
@@ -763,7 +761,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_ribLowest1, 789+self.x+self.xAttackTorso+2, 344+self.y+self.yAttackTorso, 794+self.x+self.xAttackTorso-8, 344+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_ribLowest2, 794+self.x+self.xAttackTorso-8, 343+self.y+self.yAttackTorso, 796+self.x+self.xAttackTorso-12, 343+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_ribLowest3, 796+self.x+self.xAttackTorso-12, 342+self.y+self.yAttackTorso, 797+self.x+self.xAttackTorso-14, 342+self.y+self.yAttackTorso)
-                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xAttackTorso+16+1, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso+6, 346, 787+self.x+self.xAttackTorso+6, 351+self.y+self.yAttackTorso, 782+self.x+self.xAttackTorso+16+1, 351+self.y+self.yAttackTorso)
+                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xAttackTorso+16+1, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso+6, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso+6, 351+self.y+self.yAttackTorso, 782+self.x+self.xAttackTorso+16+1, 351+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_spine2VerticalLine, 787+self.x+self.xAttackTorso+6, 346+self.y+self.yAttackTorso, 787+self.x+self.xAttackTorso+6, 350+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_torsoBlank2, 796+self.x+self.xAttackTorso-12, 343+self.y+self.yAttackTorso, 798+self.x+self.xAttackTorso-16, 343+self.y+self.yAttackTorso, 798+self.x+self.xAttackTorso-16, 348+self.y+self.yAttackTorso, 796+self.x+self.xAttackTorso-12, 348+self.y+self.yAttackTorso)
                 canvas.coords(self.e3_spine2VerticalLine1, 796+self.x+self.xAttackTorso-12, 342+self.y+self.yAttackTorso, 796+self.x+self.xAttackTorso-12, 350+self.y+self.yAttackTorso)
@@ -844,7 +842,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_ribLowest1, 789+self.x+self.xDeathRibCage, 344+self.y+self.yDeathRibCage, 794+self.x+self.xDeathRibCage, 344+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_ribLowest2, 794+self.x+self.xDeathRibCage, 343+self.y+self.yDeathRibCage, 796+self.x+self.xDeathRibCage, 343+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_ribLowest3, 796+self.x+self.xDeathRibCage, 342+self.y+self.yDeathRibCage, 797+self.x+self.xDeathRibCage, 342+self.y+self.yDeathRibCage)
-                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xDeathRibCage, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage, 346, 787+self.x+self.xDeathRibCage, 351+self.y+self.yDeathRibCage, 782+self.x+self.xDeathRibCage, 351+self.y+self.yDeathRibCage)
+                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xDeathRibCage, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage, 351+self.y+self.yDeathRibCage, 782+self.x+self.xDeathRibCage, 351+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_spine2VerticalLine, 787+self.x+self.xDeathRibCage, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage, 350+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_torsoBlank2, 796+self.x+self.xDeathRibCage, 343+self.y+self.yDeathRibCage, 798+self.x+self.xDeathRibCage, 343+self.y+self.yDeathRibCage, 798+self.x+self.xDeathRibCage, 348+self.y+self.yDeathRibCage, 796+self.x+self.xDeathRibCage, 348+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_spine2VerticalLine1, 796+self.x+self.xDeathRibCage, 342+self.y+self.yDeathRibCage, 796+self.x+self.xDeathRibCage, 350+self.y+self.yDeathRibCage)
@@ -924,7 +922,7 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
                 canvas.coords(self.e3_ribLowest1, 789+self.x+self.xDeathRibCage+2, 344+self.y+self.yDeathRibCage, 794+self.x+self.xDeathRibCage-8, 344+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_ribLowest2, 794+self.x+self.xDeathRibCage-8, 343+self.y+self.yDeathRibCage, 796+self.x+self.xDeathRibCage-12, 343+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_ribLowest3, 796+self.x+self.xDeathRibCage-12, 342+self.y+self.yDeathRibCage, 797+self.x+self.xDeathRibCage-14, 342+self.y+self.yDeathRibCage)
-                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xDeathRibCage+16+1, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage+6, 346, 787+self.x+self.xDeathRibCage+6, 351+self.y+self.yDeathRibCage, 782+self.x+self.xDeathRibCage+16+1, 351+self.y+self.yDeathRibCage)
+                canvas.coords(self.e3_torsoBlank, 782+self.x+self.xDeathRibCage+16+1, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage+6, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage+6, 351+self.y+self.yDeathRibCage, 782+self.x+self.xDeathRibCage+16+1, 351+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_spine2VerticalLine, 787+self.x+self.xDeathRibCage+6, 346+self.y+self.yDeathRibCage, 787+self.x+self.xDeathRibCage+6, 350+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_torsoBlank2, 796+self.x+self.xDeathRibCage-12, 343+self.y+self.yDeathRibCage, 798+self.x+self.xDeathRibCage-16, 343+self.y+self.yDeathRibCage, 798+self.x+self.xDeathRibCage-16, 348+self.y+self.yDeathRibCage, 796+self.x+self.xDeathRibCage-12, 348+self.y+self.yDeathRibCage)
                 canvas.coords(self.e3_spine2VerticalLine1, 796+self.x+self.xDeathRibCage-12, 342+self.y+self.yDeathRibCage, 796+self.x+self.xDeathRibCage-12, 350+self.y+self.yDeathRibCage)
@@ -1418,6 +1416,10 @@ class Voice():
         self.voice2 = canvas.create_polygon(130, 135, 139, 140, 140, 142, 139, 146, 130, 150, 137, 144, 137, 142, 137, 141, fill="grey", outline="black") #(-7, -5 or +5) (+3, 0) (-3,0
         self.voice3 = canvas.create_polygon(129, 140, 131, 142, 129, 146, 128, 144, 130, 142, 128, 141, fill="grey", outline="black") #(-9, 0)
 
+        canvas.move(self.voice1, -10000, -10000)
+        canvas.move(self.voice2, -10000, -10000)
+        canvas.move(self.voice3, -10000, -10000)
+
         self.hitbox = canvas.coords(self.voice1)
         self.hitboxEnd = canvas.coords(self.voice3)
 
@@ -1426,10 +1428,6 @@ class Voice():
         #self.voice1 = canvas.create_polygon(137+2, 130, 146-16, 136, 147-18, 142, 146-16, 149, 137+2, 155, 143-10, 149, 144-12, 142, 143-10, 136, fill="grey", outline="black")
         #self.voice2 = canvas.create_polygon(130+16, 135, 139-2, 140, 140-4, 142, 139-2, 146, 130+16, 150, 137+2, 144, 137+2, 142, 137+2, 141, fill="grey", outline="black") #(-7, -5 or +5) (+3, 0) (-3,0
         #self.voice3 = canvas.create_polygon(129+18, 140, 131+14, 142, 129+18, 146, 128+20, 144, 130+16, 142, 128+20, 141, fill="grey", outline="black") #(-9, 0)
-
-        canvas.move(self.voice1, -10000, -10000)
-        canvas.move(self.voice2, -10000, -10000)
-        canvas.move(self.voice3, -10000, -10000)
 
     def draw(self):
         global voiceOn
