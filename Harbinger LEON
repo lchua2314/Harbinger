@@ -25,7 +25,7 @@ tk.update()
 
 
 
-class Enemy2: #the dark guard (lEon cratieosns)
+class Enemy2: #the dark guard (lEon cratieosn)
     def __init__(self,canvas):
         self.canvas = canvas
         self.x, self.y = 0,0
@@ -62,7 +62,7 @@ class Enemy2: #the dark guard (lEon cratieosns)
         if self.e2_righthandhitbox[0] <= 0:
             self.Looking = "Right"
 
-        if 0 <= self.counterFrame < 50 and self.Looking == "Left": #stops enemy animation if its right 
+        if 0 <= self.counterFrame < 36 and self.Looking == "Left": #stops enemy animation if its right 
             self.x -= 1
             
             # for going forward it will be +self.x2, back is -self.x2
@@ -152,15 +152,15 @@ class Enemy2: #the dark guard (lEon cratieosns)
         #print(self.counterFrame)
 
         # IF YOU WANT TO EDIT THIS REMEMBER THAT THE LENGTHS OF THESE 
-        if 0 <= self.counterFrame < 15: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+        if 0 <= self.counterFrame < 12: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
             self.Frame = 0
-        elif 15 <= self.counterFrame < 30: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+        elif 12 <= self.counterFrame < 24: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
             self.Frame = 1
-        elif 30 <= self.counterFrame < 40:
+        elif 24 <= self.counterFrame < 30:
             self.Frame = 2
-        elif 40 <= self.counterFrame < 50:
+        elif 30 <= self.counterFrame < 36:
             self.Frame = 3
-        if self.counterFrame == 50: #Reset the counter after 50 so that the cycle repeats over and over again.
+        if self.counterFrame == 36: #Reset the counter after 50 so that the cycle repeats over and over again.
             self.counterFrame = 0
             self.Frame = 0
         
