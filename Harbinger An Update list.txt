@@ -16,4 +16,6 @@
 -Added Harbinger_Khaos.py
 
 3.0.4 - Efficiency
--Make variables equal to 'None'?
+-Fixed voice being able to hit when it is not there first hit thing.
+-Fixed missing +y variables for coordinate 346 for torsoBlank
+-Made code more efficient.
