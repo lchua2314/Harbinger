@@ -36,6 +36,10 @@ class Enemy2: #the dark guard (lEon cratieosn)
         self.counterArm = 0 #make arm move slower
         self.Looking = "Left"
         self.canvas_width = self.canvas.winfo_width()
+        
+        self.e2_hp2 = canvas.create_rectangle(850, 199, 950, 204, fill="red2") #+100, +5
+        
+        self.e2_name2 = canvas.create_text(900, 193, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
 
         self.e2_spearshaft2 = canvas.create_polygon(879, 217+2, 882, 217+2, 882, 277+2, 879, 277+2, fill="black")
         self.e2_spearhead2 = canvas.create_polygon(875, 217+2, 880, 202+2, 886, 217+2, fill="black")
@@ -57,7 +61,8 @@ class Enemy2: #the dark guard (lEon cratieosn)
         
         self.e2_Lleg2 = canvas.create_oval(886, 263, 901, 273,  fill="black") #+15, +8
         self.e2_Rleg2 = canvas.create_oval(901-2, 263, 916-2, 273,  fill="black") #+15, +8
-        self.e2_name2 = canvas.create_text(900, 200, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
+        
+        
         self.e2_hitbox = canvas.create_line(892, 231+2, 908, 262+2, fill="red")
         self.e2_righthandhitbox = canvas.coords(self.e2_righthand2) #to stop enemy2 when it hits window border
         self.e2_lefthandhitbox = canvas.coords(self.e2_lefthand2) #cause either left or right may be in front of enemy6
@@ -72,7 +77,8 @@ class Enemy2: #the dark guard (lEon cratieosn)
             #Code to flip everything, but ONLY ONCE EVERY TIME IT HITS THE LEFT
 
             #no flip
-            canvas.coords(self.e2_name2, 900+self.x, 200+self.y)
+            canvas.coords(self.e2_hp2, 850+self.x, 199+self.y, 950+self.x, 204+self.y)
+            canvas.coords(self.e2_name2, 900+self.x, 193+self.y)
             canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
             canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
             #Minor flip
@@ -138,7 +144,8 @@ class Enemy2: #the dark guard (lEon cratieosn)
         if 0 <= self.counterFrame < 105 and self.Looking == "Left": #stops enemy animation if its right 
             self.x -= 1
             # for going forward it will be +self.x2, back is -self.x2
-            canvas.coords(self.e2_name2, 900+self.x, 200+self.y)
+            canvas.coords(self.e2_hp2, 850+self.x, 199+self.y, 950+self.x, 204+self.y)
+            canvas.coords(self.e2_name2, 900+self.x, 193+self.y)
             canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
             canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
             canvas.coords(self.e2_eye2, 888+self.x, 219+2+self.y, 900+self.x, 219+2+self.y, 900+self.x, 214+2+self.y)
@@ -219,7 +226,8 @@ class Enemy2: #the dark guard (lEon cratieosn)
         elif 0 <= self.counterFrame < 105 and self.Looking == "Right":  #Flipping him when he hits left edge of screen
             self.x += 1
             #No flip
-            canvas.coords(self.e2_name2, 900+self.x, 200+self.y)
+            canvas.coords(self.e2_hp2, 850+self.x, 199+self.y, 950+self.x, 204+self.y)
+            canvas.coords(self.e2_name2, 900+self.x, 193+self.y)
             canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
             canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
             #Minor flip
