@@ -17,9 +17,11 @@ hitByBasicAttackOnce = True
 pressQ = False
 turnOffEnemy3 = False
 enemy3Damage = False
+sword1InRange = False
+sword1OnFloor = True
 
 tk = Tk()
-tk.title("Harbinger - Alpha 3.0.5: The Details are in the Details")
+tk.title("Harbinger - Alpha 3.0.6: Rusty Edge Interactable")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
@@ -1196,19 +1198,25 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
 
         global hitByBasicAttackOnce
         global basic_attack
-        if self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+        if sword1OnFloor == True and self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
             self.hpLoss += 10
             hitByBasicAttackOnce = False
             #print(hitByBasicAttackOnce)
-            print("Basic Atack: 1. Hit Enemy3. Did 10 damage.")
-        elif self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxL[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxL[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxL[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxL[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+            print("Basic Atack: 1. Hit Enemy3 with fists. Did 10 damage.")
+        elif sword1OnFloor == True and self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxL[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxL[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxL[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxL[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
             self.hpLoss += 10
             hitByBasicAttackOnce = False
             #print(hitByBasicAttackOnce)
-            print("Basic Atack: 2. Hit Enemy3. Did 10 damage.")
-        elif self.isDead == False and basic_attack == True and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
-            print("Basic Atack: 3. Hit Enemy3 when it's dead. (m8)")
+            print("Basic Atack: 2. Hit Enemy3 with fists. Did 10 damage.")
+        elif sword1OnFloor == False and self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxR[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxR[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxR[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxR[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+            self.hpLoss += 15
             hitByBasicAttackOnce = False
+            print("Basic Atack: 3. Hit Enemy3 with sword1. Did 15 damage.")
+        elif sword1OnFloor == False and self.isDead == False and basic_attack == True and self.hpLoss < 50 and (self.hitboxCoords[2] <= self.player.basicAttackHitboxL[2] <= self.hitboxCoords[0] or self.hitboxCoords[2] <= self.player.basicAttackHitboxL[0] <= self.hitboxCoords[0]) and (self.hitboxCoords[1] <= self.player.basicAttackHitboxL[1] <= self.hitboxCoords[3] or self.hitboxCoords[1] <= self.player.basicAttackHitboxL[3] <= self.hitboxCoords[3]) and hitByBasicAttackOnce == True:
+            self.hpLoss += 15
+            hitByBasicAttackOnce = False
+            #print(hitByBasicAttackOnce)
+            print("Basic Atack: 4. Hit Enemy3 with sword1. Did 15 damage.")            
 
         #print(self.player.basicAttackHitboxR[10])
         #print(self.player.basicAttackHitboxL[10])
@@ -1242,11 +1250,14 @@ class Sword:
         self.x_eyelid1, self.y_eyelid1 = 0,0
         self.counter = -70
         self.counter2 = 0
+        self.checkSwordRangeOnce = True
+        self.whenSword1IsDropped = False
+        self.initialPickUp = True
         
         #Anymore sword ideas please make "self.s4_"
 
         #Rusty Sword (Tier 0) #Desgined by Leon
-        self.s1_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Rusty Sword (Tier 0)", font=("Fixedsys", 16)) #The "s_" means sword for short.
+        self.s1_name1 = canvas.create_text(500, 110, anchor="center", fill="green", text="Rusty Sword (Tier 0)", font=("Fixedsys", 16)) #The "s_" means sword for short.
         self.s1_blade1 = canvas.create_polygon(493, 165, 498, 165, 498, 140, 500, 138, 502, 140, 502, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="gray50", outline="black") #Follow the format of naming please.
         self.s1_handle1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="saddle brown", outline="black")
         self.s1_hilt1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 493, 168, fill="brown", outline="black")
@@ -1309,8 +1320,31 @@ class Sword:
 
     def draw1(self):
         #pass
-        if (self.player.hitbox[0] >= self.s1_hitboxData[0] >= self.player.hitbox[2] or self.player.hitbox[0] >= self.s1_hitboxData[2] >= self.player.hitbox[2] or self.player.hitbox[0] <= self.s1_hitboxData[0] <= self.player.hitbox[2] or self.player.hitbox[0] <= self.s1_hitboxData[2] <= self.player.hitbox[2] ) and ( self.player.hitbox[1] <= self.s1_hitboxData[1] <= self.player.hitbox[3] or self.player.hitbox[1] <= self.s1_hitboxData[3] <= self.player.hitbox[3] ):
-            print("Player has crossed over sword1.")
+        global sword1InRange
+        global sword1OnFloor
+        if sword1OnFloor == True and (self.player.hitbox[0] >= self.s1_hitboxData[0] >= self.player.hitbox[2] or self.player.hitbox[0] >= self.s1_hitboxData[2] >= self.player.hitbox[2] or self.player.hitbox[0] <= self.s1_hitboxData[0] <= self.player.hitbox[2] or self.player.hitbox[0] <= self.s1_hitboxData[2] <= self.player.hitbox[2] ) and ( self.player.hitbox[1] <= self.s1_hitboxData[1] <= self.player.hitbox[3] or self.player.hitbox[1] <= self.s1_hitboxData[3] <= self.player.hitbox[3] ):
+            #print("Player has crossed over sword1.")
+            sword1InRange = True
+            self.checkSwordRangeOnce = False
+            if self.initialPickUp == False:
+                canvas.coords(self.s1_name1, 500-363+self.player.x, 110+self.player.y)
+                canvas.itemconfigure(self.s1_name1, state='normal') #normal, hidden or disabled
+                self.initialPickUp = True
+        elif sword1OnFloor == True and self.checkSwordRangeOnce == False:
+            sword1InRange = False
+            self.checkSwordRangeOnce = True
+            print("Option to pick up sword1 is now off.")
+        elif sword1OnFloor == False and self.initialPickUp == True:
+            #self.s1_name1 = canvas.create_text(500, 100, anchor="center", fill="green", text="Rusty Sword (Tier 0)", font=("Fixedsys", 16)) #The "s_" means sword for short.
+            canvas.itemconfigure(self.s1_name1, state='hidden')
+            self.initialPickUp = False
+        elif sword1OnFloor == False:
+            canvas.coords(self.s1_blade1, 493-363+self.player.x, 165+self.player.y, 498-363+self.player.x, 165+self.player.y, 498-363+self.player.x, 140+self.player.y, 500-363+self.player.x, 138+self.player.y, 502-363+self.player.x, 140+self.player.y, 502-363+self.player.x, 165+self.player.y, 507-363+self.player.x, 165+self.player.y, 507-363+self.player.x, 168+self.player.y, 501-363+self.player.x, 168+self.player.y, 501-363+self.player.x, 180+self.player.y, 499-363+self.player.x, 180+self.player.y, 499-363+self.player.x, 168+self.player.y, 493-363+self.player.x, 168+self.player.y)
+            canvas.coords(self.s1_handle1, 493-363+self.player.x, 165+self.player.y, 507-363+self.player.x, 165+self.player.y, 507-363+self.player.x, 168+self.player.y, 501-363+self.player.x, 168+self.player.y, 501-363+self.player.x, 180+self.player.y, 499-363+self.player.x, 180+self.player.y, 499-363+self.player.x, 168+self.player.y, 493-363+self.player.x, 168+self.player.y)
+            canvas.coords(self.s1_hilt1, 493-363+self.player.x, 165+self.player.y, 507-363+self.player.x, 165+self.player.y, 507-363+self.player.x, 168+self.player.y, 493-363+self.player.x, 168+self.player.y)
+            canvas.coords(self.s1_rust1, 500-363+self.player.x, 139+self.player.y, 501-363+self.player.x, 140+self.player.y, 501-363+self.player.x, 165+self.player.y)
+            canvas.coords(self.s1_hitbox, 493-363+self.player.x, 138+self.player.y, 507-363+self.player.x, 180+self.player.y)
+            self.s1_hitboxData = canvas.coords(self.s1_hitbox)
 
     def drawEye(self): #Animates the big eye in the top right of the screen. self.counter (which is a counter) starts at -70 and ends at 246 when it resets.
         if -70 <= self.counter < 0: #Move closed eye into screen
@@ -1393,6 +1427,8 @@ class Bars:
         self.counterFrameSprint3 = 0 #third ^
         self.getOutOfStatement = True #Used for
         self.changeColorBack = False
+        self.sword1PickUp = False
+        self.sword1MovedOnce = False
 
         #Model for the bars in the bottom right hand corner of window.
         self.h_sprintBorder = canvas.create_rectangle(1037, 667, 1228, 689, fill="black", outline="black")
@@ -1409,12 +1445,51 @@ class Bars:
         self.h_hand1 = canvas.create_oval(1180, 575, 1220, 615,fill="white", outline="black")
         self.h_hand2 = canvas.create_oval(1205, 600, 1245, 640,fill="white", outline="black")
         self.h_weaponName = canvas.create_text(1215, 610, text="Fists", fill="black", anchor="center", font=("Fixedsys", 16))
+
+        self.h_blade1 = canvas.create_polygon(493, 165, 498, 165, 498, 140, 500, 138, 502, 140, 502, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="gray50", outline="black") #Follow the format of naming please.
+        self.h_handle1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="saddle brown", outline="black")
+        self.h_hilt1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 493, 168, fill="brown", outline="black")
+        self.h_rust1 = canvas.create_line(500, 139, 501, 140, 501, 165, fill="brown")
+        self.h_weaponNameSword1 = canvas.create_text(1215, 610, text="Rusty Sword\n  (Tier 0)", fill="white", anchor="center", font=("Fixedsys", 7))
+        canvas.move(self.h_blade1, 1713, 450)
+        canvas.move(self.h_handle1, 1713, 450)
+        canvas.move(self.h_hilt1, 1713, 450)
+        canvas.move(self.h_rust1, 1713, 450)
+        canvas.move(self.h_weaponNameSword1, 1000, 0)
+        
         self.h_hpName = canvas.create_text(1195, 540, text="HP", fill="black", anchor="center", font=("Fixedsys", 16))
         self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
         self.h_playerClassName = canvas.create_text(1215, 515, text="[Dis-Connor-ed]", fill="green", anchor="center", font=("Fixedsys", 16))
         self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
 
     def draw(self):         #When mana is unused, regenerate? #When not hurt, heal? #These are undone.
+
+        if sword1OnFloor == False and self.sword1MovedOnce == False:
+            canvas.move(self.h_weaponName, 1000, 0)
+            canvas.move(self.h_hand1, 1000, 0)
+            canvas.move(self.h_hand2, 1000, 0)
+
+            canvas.move(self.h_blade1, -1000, 0)
+            canvas.move(self.h_handle1, -1000, 0)
+            canvas.move(self.h_hilt1, -1000, 0)
+            canvas.move(self.h_rust1, -1000, 0)
+            canvas.move(self.h_weaponNameSword1, -1000, 0)
+            
+            self.sword1MovedOnce = True
+            #print("Move HUI fists out once")
+        elif sword1OnFloor == True and self.sword1MovedOnce == True:
+            canvas.move(self.h_weaponName, -1000, 0)
+            canvas.move(self.h_hand1, -1000, 0)
+            canvas.move(self.h_hand2, -1000, 0)
+
+            canvas.move(self.h_blade1, 1000, 0)
+            canvas.move(self.h_handle1, 1000, 0)
+            canvas.move(self.h_hilt1, 1000, 0)
+            canvas.move(self.h_rust1, 1000, 0)
+            canvas.move(self.h_weaponNameSword1, 1000, 0)
+            
+            self.sword1MovedOnce = False
+            #print("Move HUI fists back once")
 
         global enemy3Damage
         if enemy3Damage == True:
@@ -1555,9 +1630,11 @@ class Nathaniel2010: #Refernce to Heavy Rain's AVI
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 3.0.5: The Details are in the Details\n"""
-                                                            """The mana bar changes color when on cooldown. Rusty sword barely interactable."""
-                                                            """\nLeon's Dark Guard can move back and forth, finished moving animations, and has a health bar.""", 
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 3.0.6: Rusty Edge Interactable\n"""
+                                                            """The mana bar changes color when on cooldown."""
+                                                            """\nLeon's Dark Guard can move back and forth, finished moving animations, and has a health bar."""
+                                                            """\nRusty Sword can be picked up and dropped by pressing E when near it. HUD updates when sword is picked up and when dropped."""
+                                                            """ When Rusty Sword is picked up, player's basic attacks do more damage.""", 
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
                                                                  """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable. Did I mention you can left click?""",
@@ -2866,8 +2943,16 @@ class Player:
         self.b_space = canvas.bind("<space>", self.spaceKey)
 
     def eKey(self, evt): #Action Key
-        print("'e' key pressed")
-        
+        #print("'e' key pressed")
+        global sword1InRange
+        global sword1OnFloor
+        if sword1InRange == True and sword1OnFloor == True:
+            print("Picked up sword1")
+            self.sword1PickUp = True
+            sword1OnFloor = False
+        elif sword1OnFloor == False:
+            print("Dropped sword1")
+            sword1OnFloor = True
 
     def qKey(self, evt): #Switch weapons
         #print("'q' key pressed")

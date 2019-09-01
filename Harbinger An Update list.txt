@@ -27,3 +27,9 @@
 -Dark Guard walk animation finished.
 -When special ability is on cooldown, change color of the mana bar.
 -Player can interact with the sword... just a bit...
+
+3.0.6 - Rusty Edge Interactable
+-Player can now pick up/drop the Rusty Sword by pressing E when near it.
+-Shifted sword1's nameplate down 10 so it can fit at all levels.
+-HUD switches from fists to sword1 if sword is picked up. Switches back to fists when sword1 is dropped.
+-When sword1 is picked up, player does more damage with basic attacks (no animation).
