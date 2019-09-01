@@ -19,12 +19,10 @@ turnOffEnemy3 = False
 enemy3Damage = False
 
 tk = Tk()
-tk.title("Harbinger - Alpha 3.0.4: Enemies of the East")
+tk.title("Harbinger - Alpha 3.0.5: The Details are in the Details")
 canvas = Canvas(width=1300, height=700, bg="SkyBlue1")
 canvas.pack()
 tk.update()
-
-
 
 class Enemy2: #the dark guard (lEon cratieosn)
     def __init__(self,canvas):
@@ -33,7 +31,17 @@ class Enemy2: #the dark guard (lEon cratieosn)
         self.x2 = 0 #for continous movement purposes
         self.Frame = 0
         self.counterFrame = 0 #start it at something higher, so doesnt slide for too long at beginning
+        self.counterArm = 0 #make arm move slower
         self.Looking = "Left"
+        self.canvas_width = self.canvas.winfo_width()
+        
+        self.e2_hp2 = canvas.create_rectangle(850, 199, 950, 204, fill="red2") #+100, +5
+        
+        self.e2_name2 = canvas.create_text(900, 193, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
+
+        self.e2_spearshaft2 = canvas.create_polygon(879, 217+2, 882, 217+2, 882, 277+2, 879, 277+2, fill="black")
+        self.e2_spearhead2 = canvas.create_polygon(875, 217+2, 880, 202+2, 886, 217+2, fill="black")
+        self.e2_righthand2 = canvas.create_oval(872, 232+2, 888, 247+2, fill="gray")
         
         self.e2_body2 = canvas.create_polygon(892, 232+2, 908, 232+2, 908, 262+2, 892, 262+2, fill="gray13", outline="black")
         self.e2_head2 = canvas.create_oval(887, 206+2, 913, 232+2, fill="gray", outline="black")
@@ -42,128 +50,305 @@ class Enemy2: #the dark guard (lEon cratieosn)
         
 
         #might need to create another shoulder if the enemy moves.
-        self.e2_spearshaft2 = canvas.create_polygon(879, 217+2, 882, 217+2, 882, 277+2, 879, 277+2, fill="black")
-        self.e2_spearhead2 = canvas.create_polygon(875, 217+2, 880, 202+2, 886, 217+2, fill="black")
-        self.e2_righthand2 = canvas.create_oval(872, 232+2, 888, 247+2, fill="gray")
+        
+        
+        
         self.e2_shoulder2 = canvas.create_polygon(899, 237+2, 911, 237+2, 911, 249+2, 899, 249+2, fill="black")
         self.e2_shoulderspike2 = canvas.create_polygon(901, 237+2, 905, 227+2, 909, 237+2, fill="gray")
         self.e2_lefthand2 = canvas.create_oval(897, 242+2, 913, 257+2, fill="gray")
         
         self.e2_Lleg2 = canvas.create_oval(886, 263, 901, 273,  fill="black") #+15, +8
         self.e2_Rleg2 = canvas.create_oval(901-2, 263, 916-2, 273,  fill="black") #+15, +8
-        self.e2_name2 = canvas.create_text(900, 200, anchor="center", fill="red", text="Dark Guard", font=("Fixedsys", 16))
+        
+        
         self.e2_hitbox = canvas.create_line(892, 231+2, 908, 262+2, fill="red")
-        self.e2_righthandhitbox = canvas.coords(self.e2_righthand2)
+        self.e2_righthandhitbox = canvas.coords(self.e2_righthand2) #to stop enemy2 when it hits window border
+        self.e2_lefthandhitbox = canvas.coords(self.e2_lefthand2) #cause either left or right may be in front of enemy6
+        
+        
+        
+        
         
     def draw(self):
-        if self.e2_righthandhitbox[0] <= 0:
+        if (self.e2_righthandhitbox[0] <= 0) or (self.e2_lefthandhitbox[0] <= 0):
             self.Looking = "Right"
+            #Code to flip everything, but ONLY ONCE EVERY TIME IT HITS THE LEFT
 
-        if 0 <= self.counterFrame < 100 and self.Looking == "Left": #stops enemy animation if its right 
-            self.x -= 1
+            #no flip
+            canvas.coords(self.e2_hp2, 850+self.x, 199+self.y, 950+self.x, 204+self.y)
+            canvas.coords(self.e2_name2, 900+self.x, 193+self.y)
+            canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
+            canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
+            #Minor flip
+            canvas.coords(self.e2_eye2, 888+self.x+24, 219+2+self.y, 900+self.x, 219+2+self.y, 900+self.x, 214+2+self.y)
+            canvas.coords(self.e2_helmet2, 884+self.x+32, 221+2+self.y, 889+self.x+22, 231+2+self.y, 914+self.x-28, 231+2+self.y, 916+self.x-32, 221+2+self.y, 914+self.x-28, 211+2+self.y, 899+self.x+2, 205+2+self.y, 884+self.x+32, 213+2+self.y, 902+self.x-4, 213+2+self.y, 906+self.x-12, 217+2+self.y, 902+self.x-4, 221+2+self.y)
+            canvas.coords(self.e2_hitbox, 892+self.x+16, 231+2, 908+self.x-16, 262+2)
             
+            
+            if self.Frame == 0:
+                canvas.coords(self.e2_shoulder2, 899+self.x2+self.x+2, 237+2+self.y, 911+self.x2+self.x-22, 237+2+self.y, 911+self.x2+self.x-22, 249+2+self.y, 899+self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x2+self.x-2, 237+2+self.y, 905+self.x2+self.x-10, 227+2+self.y, 909+self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x2+self.x+6, 242+2+self.y, 913+self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879-self.x2+self.x+42, 217+2+self.y, 882-self.x2+self.x+36, 217+2+self.y, 882-self.x2+self.x+36, 277+2+self.y, 879-self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875-self.x2+self.x+50, 217+2+self.y, 880-self.x2+self.x+40, 202+2+self.y, 886-self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872-self.x2+self.x+56, 232+2+self.y, 888-self.x2+self.x+24, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+28, 263+self.y, 901+self.x-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x+2, 263+self.y, 916-2+self.x-28, 273+self.y)
+            elif self.Frame == 1:
+                canvas.coords(self.e2_shoulder2, 899+self.x2+self.x+2, 237+2+self.y, 911+self.x2+self.x-22, 237+2+self.y, 911+self.x2+self.x-22, 249+2+self.y, 899+self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x2+self.x-2, 237+2+self.y, 905+self.x2+self.x-10, 227+2+self.y, 909+self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x2+self.x+6, 242+2+self.y, 913+self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879-self.x2+self.x+42, 217+2+self.y, 882-self.x2+self.x+36, 217+2+self.y, 882-self.x2+self.x+36, 277+2+self.y, 879-self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875-self.x2+self.x+50, 217+2+self.y, 880-self.x2+self.x+40, 202+2+self.y, 886-self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872-self.x2+self.x+56, 232+2+self.y, 888-self.x2+self.x+24, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+28, 263+self.y, 901+self.x-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x+2, 263+self.y, 916-2+self.x-28, 273+self.y)
+            elif self.Frame == 2:
+                canvas.coords(self.e2_shoulder2, 899-self.x2+self.x+2, 237+2+self.y, 911-self.x2+self.x-22, 237+2+self.y, 911-self.x2+self.x-22, 249+2+self.y, 899-self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901-self.x2+self.x-2, 237+2+self.y, 905-self.x2+self.x-10, 227+2+self.y, 909-self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897-self.x2+self.x+6, 242+2+self.y, 913-self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x2+self.x+42, 217+2+self.y, 882+self.x2+self.x+36, 217+2+self.y, 882+self.x2+self.x+36, 277+2+self.y, 879+self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x2+self.x+50, 217+2+self.y, 880+self.x2+self.x+40, 202+2+self.y, 886+self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x2+self.x+56, 232+2+self.y, 888+self.x2+self.x+24, 247+2+self.y)
+
+                #LEGS ARE MOVING, MAY HAVE TO TWEAK THIS A BIT
+                canvas.coords(self.e2_Lleg2, 886+self.x+3+28, 263+self.y, 901+self.x+3-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3+2, 263+self.y, 916-2+self.x-3-28, 273+self.y)
+            elif self.Frame == 3:
+                canvas.coords(self.e2_shoulder2, 899-self.x2+self.x+2, 237+2+self.y, 911-self.x2+self.x-22, 237+2+self.y, 911-self.x2+self.x-22, 249+2+self.y, 899-self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901-self.x2+self.x-2, 237+2+self.y, 905-self.x2+self.x-10, 227+2+self.y, 909-self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897-self.x2+self.x+6, 242+2+self.y, 913-self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x2+self.x+42, 217+2+self.y, 882+self.x2+self.x+36, 217+2+self.y, 882+self.x2+self.x+36, 277+2+self.y, 879+self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x2+self.x+50, 217+2+self.y, 880+self.x2+self.x+40, 202+2+self.y, 886+self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x2+self.x+56, 232+2+self.y, 888+self.x2+self.x+24, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+3+28, 263+self.y, 901+self.x+3-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3+2, 263+self.y, 916-2+self.x-3-28, 273+self.y)
+        #stuff 2 flip it to the left when it hits right border
+        elif (self.e2_righthandhitbox[0] >= self.canvas_width) or (self.e2_lefthandhitbox[0] >= self.canvas_width):
+            self.Looking = "Left" 
+       
+        #CODE 4 MOVING LEFT
+        if 0 <= self.counterFrame < 105 and self.Looking == "Left": #stops enemy animation if its right 
+            self.x -= 1
             # for going forward it will be +self.x2, back is -self.x2
-            canvas.coords(self.e2_name2, 900+self.x, 200+self.y)
+            canvas.coords(self.e2_hp2, 850+self.x, 199+self.y, 950+self.x, 204+self.y)
+            canvas.coords(self.e2_name2, 900+self.x, 193+self.y)
             canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
             canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
             canvas.coords(self.e2_eye2, 888+self.x, 219+2+self.y, 900+self.x, 219+2+self.y, 900+self.x, 214+2+self.y)
             canvas.coords(self.e2_helmet2, 884+self.x, 221+2+self.y, 889+self.x, 231+2+self.y, 914+self.x, 231+2+self.y, 916+self.x, 221+2+self.y, 914+self.x, 211+2+self.y, 899+self.x, 205+2+self.y, 884+self.x, 213+2+self.y, 902+self.x, 213+2+self.y, 906+self.x, 217+2+self.y, 902+self.x, 221+2+self.y)
             canvas.coords(self.e2_hitbox, 892+self.x, 231+2, 908+self.x, 262+2)
+            
             if self.Frame == 0: # left go forward, right go back
-                self.x2 -= 1
-                canvas.coords(self.e2_shoulder2, 899+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 249+2+self.y, 899+self.x+self.x2, 249+2+self.y)
-                canvas.coords(self.e2_shoulderspike2, 901+self.x+self.x2, 237+2+self.y, 905+self.x+self.x2, 227+2+self.y, 909+self.x+self.x2, 237+2+self.y)
-                canvas.coords(self.e2_lefthand2, 897+self.x+self.x2, 242+2+self.y, 913+self.x+self.x2, 257+2+self.y)
+                if self.counterArm == 5:
+                    self.x2 -= 1
+                    self.counterArm = 0
+                canvas.coords(self.e2_shoulder2, 899+self.x2+self.x, 237+2+self.y, 911+self.x2+self.x, 237+2+self.y, 911+self.x2+self.x, 249+2+self.y, 899+self.x2+self.x, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x2+self.x, 237+2+self.y, 905+self.x2+self.x, 227+2+self.y, 909+self.x2+self.x, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x2+self.x, 242+2+self.y, 913+self.x2+self.x, 257+2+self.y)
                 
-                canvas.coords(self.e2_spearshaft2, 879+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 277+2+self.y, 879+self.x-self.x2, 277+2+self.y)
-                canvas.coords(self.e2_spearhead2, 875+self.x-self.x2, 217+2+self.y, 880+self.x-self.x2, 202+2+self.y, 886+self.x-self.x2, 217+2+self.y)
-                canvas.coords(self.e2_righthand2, 872+self.x-self.x2, 232+2+self.y, 888+self.x-self.x2, 247+2+self.y)
+                canvas.coords(self.e2_spearshaft2, 879-self.x2+self.x, 217+2+self.y, 882-self.x2+self.x, 217+2+self.y, 882-self.x2+self.x, 277+2+self.y, 879-self.x2+self.x, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875-self.x2+self.x, 217+2+self.y, 880-self.x2+self.x, 202+2+self.y, 886-self.x2+self.x, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872-self.x2+self.x, 232+2+self.y, 888-self.x2+self.x, 247+2+self.y)
                 
                 canvas.coords(self.e2_Lleg2, 886+self.x, 263+self.y, 901+self.x, 273+self.y)
                 
                 canvas.coords(self.e2_Rleg2, 901-2+self.x, 263+self.y, 916-2+self.x, 273+self.y)
-                #print(self.x2, self.Frame, self.counterFrame)
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame)
                                 
-            elif self.Frame == 1:# returning 
-                self.x2 += 1
+            elif self.Frame == 1:# returning
+                if self.counterArm == 5:
+                    self.x2 += 1
+                    self.counterArm = 0
                
-                canvas.coords(self.e2_shoulder2, 899+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 237+2+self.y, 911+self.x+self.x2, 249+2+self.y, 899+self.x+self.x2, 249+2+self.y)
-                canvas.coords(self.e2_shoulderspike2, 901+self.x+self.x2, 237+2+self.y, 905+self.x+self.x2, 227+2+self.y, 909+self.x+self.x2, 237+2+self.y)
-                canvas.coords(self.e2_lefthand2, 897+self.x+self.x2, 242+2+self.y, 913+self.x+self.x2, 257+2+self.y)
+                canvas.coords(self.e2_shoulder2, 899+self.x2+self.x, 237+2+self.y, 911+self.x2+self.x, 237+2+self.y, 911+self.x2+self.x, 249+2+self.y, 899+self.x2+self.x, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x2+self.x, 237+2+self.y, 905+self.x2+self.x, 227+2+self.y, 909+self.x2+self.x, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x2+self.x, 242+2+self.y, 913+self.x2+self.x, 257+2+self.y)
                 
-                canvas.coords(self.e2_spearshaft2, 879+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 217+2+self.y, 882+self.x-self.x2, 277+2+self.y, 879+self.x-self.x2, 277+2+self.y)
-                canvas.coords(self.e2_spearhead2, 875+self.x-self.x2, 217+2+self.y, 880+self.x-self.x2, 202+2+self.y, 886+self.x-self.x2, 217+2+self.y)
-                canvas.coords(self.e2_righthand2, 872+self.x-self.x2, 232+2+self.y, 888+self.x-self.x2, 247+2+self.y)
+                canvas.coords(self.e2_spearshaft2, 879-self.x2+self.x, 217+2+self.y, 882-self.x2+self.x, 217+2+self.y, 882-self.x2+self.x, 277+2+self.y, 879-self.x2+self.x, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875-self.x2+self.x, 217+2+self.y, 880-self.x2+self.x, 202+2+self.y, 886-self.x2+self.x, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872-self.x2+self.x, 232+2+self.y, 888-self.x2+self.x, 247+2+self.y)
                 
                 canvas.coords(self.e2_Lleg2, 886+self.x, 263+self.y, 901+self.x, 273+self.y)
                 
                 canvas.coords(self.e2_Rleg2, 901-2+self.x, 263+self.y, 916-2+self.x, 273+self.y)
-                #print(self.x2, self.Frame, self.counterFrame)
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame)
                 
                 
                 
             elif self.Frame == 2: # right go forward, left go back
-                self.x2 -= 1
-                canvas.coords(self.e2_shoulder2, 899+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 249+2+self.y, 899+self.x-self.x2, 249+2+self.y)
-                canvas.coords(self.e2_shoulderspike2, 901+self.x-self.x2, 237+2+self.y, 905+self.x-self.x2, 227+2+self.y, 909+self.x-self.x2, 237+2+self.y)
-                canvas.coords(self.e2_lefthand2, 897+self.x-self.x2, 242+2+self.y, 913+self.x-self.x2, 257+2+self.y)
+                if self.counterArm == 5:
+                    self.x2 -= 1
+                    self.counterArm = 0
+                canvas.coords(self.e2_shoulder2, 899-self.x2+self.x, 237+2+self.y, 911-self.x2+self.x, 237+2+self.y, 911-self.x2+self.x, 249+2+self.y, 899-self.x2+self.x, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901-self.x2+self.x, 237+2+self.y, 905-self.x2+self.x, 227+2+self.y, 909-self.x2+self.x, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897-self.x2+self.x, 242+2+self.y, 913-self.x2+self.x, 257+2+self.y)
                 
-                canvas.coords(self.e2_spearshaft2, 879+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 277+2+self.y, 879+self.x+self.x2, 277+2+self.y)
-                canvas.coords(self.e2_spearhead2, 875+self.x+self.x2, 217+2+self.y, 880+self.x+self.x2, 202+2+self.y, 886+self.x+self.x2, 217+2+self.y)
-                canvas.coords(self.e2_righthand2, 872+self.x+self.x2, 232+2+self.y, 888+self.x+self.x2, 247+2+self.y)
-                
-                canvas.coords(self.e2_Lleg2, 886+self.x+3, 263+self.y, 901+self.x+3, 273+self.y)
-                
-                canvas.coords(self.e2_Rleg2, 901-2+self.x-3, 263+self.y, 916-2+self.x-3, 273+self.y)
-                #print(self.x2, self.Frame, self.counterFrame)
-                
-
-            elif self.Frame == 3: #returning 
-                self.x2 += 1
-                
-                canvas.coords(self.e2_shoulder2, 899+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 237+2+self.y, 911+self.x-self.x2, 249+2+self.y, 899+self.x-self.x2, 249+2+self.y)
-                canvas.coords(self.e2_shoulderspike2, 901+self.x-self.x2, 237+2+self.y, 905+self.x-self.x2, 227+2+self.y, 909+self.x-self.x2, 237+2+self.y)
-                canvas.coords(self.e2_lefthand2, 897+self.x-self.x2, 242+2+self.y, 913+self.x-self.x2, 257+2+self.y)
-                
-                canvas.coords(self.e2_spearshaft2, 879+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 217+2+self.y, 882+self.x+self.x2, 277+2+self.y, 879+self.x+self.x2, 277+2+self.y)
-                canvas.coords(self.e2_spearhead2, 875+self.x+self.x2, 217+2+self.y, 880+self.x+self.x2, 202+2+self.y, 886+self.x+self.x2, 217+2+self.y)
-                canvas.coords(self.e2_righthand2, 872+self.x+self.x2, 232+2+self.y, 888+self.x+self.x2, 247+2+self.y)
+                canvas.coords(self.e2_spearshaft2, 879+self.x2+self.x, 217+2+self.y, 882+self.x2+self.x, 217+2+self.y, 882+self.x2+self.x, 277+2+self.y, 879+self.x2+self.x, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x2+self.x, 217+2+self.y, 880+self.x2+self.x, 202+2+self.y, 886+self.x2+self.x, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x2+self.x, 232+2+self.y, 888+self.x2+self.x, 247+2+self.y)
                 
                 canvas.coords(self.e2_Lleg2, 886+self.x+3, 263+self.y, 901+self.x+3, 273+self.y)
                 
                 canvas.coords(self.e2_Rleg2, 901-2+self.x-3, 263+self.y, 916-2+self.x-3, 273+self.y)
-                #print(self.x2, self.Frame, self.counterFrame)
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame)
                 
 
-            #self.x2 = 0
+            elif self.Frame == 3: #returning
+                if self.counterArm == 5:
+                    self.x2 += 1
+                    self.counterArm = 0
+                
+                canvas.coords(self.e2_shoulder2, 899-self.x2+self.x, 237+2+self.y, 911-self.x2+self.x, 237+2+self.y, 911-self.x2+self.x, 249+2+self.y, 899-self.x2+self.x, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901-self.x2+self.x, 237+2+self.y, 905-self.x2+self.x, 227+2+self.y, 909-self.x2+self.x, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897-self.x2+self.x, 242+2+self.y, 913-self.x2+self.x, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x2+self.x, 217+2+self.y, 882+self.x2+self.x, 217+2+self.y, 882+self.x2+self.x, 277+2+self.y, 879+self.x2+self.x, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x2+self.x, 217+2+self.y, 880+self.x2+self.x, 202+2+self.y, 886+self.x2+self.x, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x2+self.x, 232+2+self.y, 888+self.x2+self.x, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+3, 263+self.y, 901+self.x+3, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3, 263+self.y, 916-2+self.x-3, 273+self.y)
+        elif 0 <= self.counterFrame < 105 and self.Looking == "Right":  #Flipping him when he hits left edge of screen
+            self.x += 1
+            #No flip
+            canvas.coords(self.e2_hp2, 850+self.x, 199+self.y, 950+self.x, 204+self.y)
+            canvas.coords(self.e2_name2, 900+self.x, 193+self.y)
+            canvas.coords(self.e2_body2, 892+self.x, 232+2+self.y, 908+self.x, 232+2+self.y, 908+self.x, 262+2+self.y, 892+self.x, 262+2+self.y)
+            canvas.coords(self.e2_head2, 887+self.x, 206+2+self.y, 913+self.x, 232+2+self.y)
+            #Minor flip
+            canvas.coords(self.e2_eye2, 888+self.x+24, 219+2+self.y, 900+self.x, 219+2+self.y, 900+self.x, 214+2+self.y)
+            canvas.coords(self.e2_helmet2, 884+self.x+32, 221+2+self.y, 889+self.x+22, 231+2+self.y, 914+self.x-28, 231+2+self.y, 916+self.x-32, 221+2+self.y, 914+self.x-28, 211+2+self.y, 899+self.x+2, 205+2+self.y, 884+self.x+32, 213+2+self.y, 902+self.x-4, 213+2+self.y, 906+self.x-12, 217+2+self.y, 902+self.x-4, 221+2+self.y)
+            canvas.coords(self.e2_hitbox, 892+self.x+16, 231+2, 908+self.x-16, 262+2)
+            
+            # Moving it to right CHANGE THIS STUFF
+            if self.Frame == 0: # left go forward, right go back
+                if self.counterArm == 5:
+                    self.x2 -= 1
+                    self.counterArm = 0
+                canvas.coords(self.e2_shoulder2, 899+self.x2+self.x+2, 237+2+self.y, 911+self.x2+self.x-22, 237+2+self.y, 911+self.x2+self.x-22, 249+2+self.y, 899+self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x2+self.x-2, 237+2+self.y, 905+self.x2+self.x-10, 227+2+self.y, 909+self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x2+self.x+6, 242+2+self.y, 913+self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879-self.x2+self.x+42, 217+2+self.y, 882-self.x2+self.x+36, 217+2+self.y, 882-self.x2+self.x+36, 277+2+self.y, 879-self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875-self.x2+self.x+50, 217+2+self.y, 880-self.x2+self.x+40, 202+2+self.y, 886-self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872-self.x2+self.x+56, 232+2+self.y, 888-self.x2+self.x+24, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+28, 263+self.y, 901+self.x-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x+2, 263+self.y, 916-2+self.x-28, 273+self.y)
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame)
+                                
+            elif self.Frame == 1:# returning
+                if self.counterArm == 5:
+                    self.x2 += 1
+                    self.counterArm = 0
+               
+                canvas.coords(self.e2_shoulder2, 899+self.x2+self.x+2, 237+2+self.y, 911+self.x2+self.x-22, 237+2+self.y, 911+self.x2+self.x-22, 249+2+self.y, 899+self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901+self.x2+self.x-2, 237+2+self.y, 905+self.x2+self.x-10, 227+2+self.y, 909+self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897+self.x2+self.x+6, 242+2+self.y, 913+self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879-self.x2+self.x+42, 217+2+self.y, 882-self.x2+self.x+36, 217+2+self.y, 882-self.x2+self.x+36, 277+2+self.y, 879-self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875-self.x2+self.x+50, 217+2+self.y, 880-self.x2+self.x+40, 202+2+self.y, 886-self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872-self.x2+self.x+56, 232+2+self.y, 888-self.x2+self.x+24, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+28, 263+self.y, 901+self.x-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x+2, 263+self.y, 916-2+self.x-28, 273+self.y)
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame)
+                
+                
+                
+            elif self.Frame == 2: # right go forward, left go back
+                if self.counterArm == 5:
+                    self.x2 -= 1
+                    self.counterArm = 0
+                canvas.coords(self.e2_shoulder2, 899-self.x2+self.x+2, 237+2+self.y, 911-self.x2+self.x-22, 237+2+self.y, 911-self.x2+self.x-22, 249+2+self.y, 899-self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901-self.x2+self.x-2, 237+2+self.y, 905-self.x2+self.x-10, 227+2+self.y, 909-self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897-self.x2+self.x+6, 242+2+self.y, 913-self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x2+self.x+42, 217+2+self.y, 882+self.x2+self.x+36, 217+2+self.y, 882+self.x2+self.x+36, 277+2+self.y, 879+self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x2+self.x+50, 217+2+self.y, 880+self.x2+self.x+40, 202+2+self.y, 886+self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x2+self.x+56, 232+2+self.y, 888+self.x2+self.x+24, 247+2+self.y)
+
+                #LEGS ARE MOVING, MAY HAVE TO TWEAK THIS A BIT
+                canvas.coords(self.e2_Lleg2, 886+self.x+3+28, 263+self.y, 901+self.x+3-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3+2, 263+self.y, 916-2+self.x-3-28, 273+self.y)
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame)
+                
+
+            elif self.Frame == 3: #returning
+                if self.counterArm == 5:
+                    self.x2 += 1
+                    self.counterArm = 0
+                
+                canvas.coords(self.e2_shoulder2, 899-self.x2+self.x+2, 237+2+self.y, 911-self.x2+self.x-22, 237+2+self.y, 911-self.x2+self.x-22, 249+2+self.y, 899-self.x2+self.x+2, 249+2+self.y)
+                canvas.coords(self.e2_shoulderspike2, 901-self.x2+self.x-2, 237+2+self.y, 905-self.x2+self.x-10, 227+2+self.y, 909-self.x2+self.x-18, 237+2+self.y)
+                canvas.coords(self.e2_lefthand2, 897-self.x2+self.x+6, 242+2+self.y, 913-self.x2+self.x-26, 257+2+self.y)
+                
+                canvas.coords(self.e2_spearshaft2, 879+self.x2+self.x+42, 217+2+self.y, 882+self.x2+self.x+36, 217+2+self.y, 882+self.x2+self.x+36, 277+2+self.y, 879+self.x2+self.x+42, 277+2+self.y)
+                canvas.coords(self.e2_spearhead2, 875+self.x2+self.x+50, 217+2+self.y, 880+self.x2+self.x+40, 202+2+self.y, 886+self.x2+self.x+28, 217+2+self.y)
+                canvas.coords(self.e2_righthand2, 872+self.x2+self.x+56, 232+2+self.y, 888+self.x2+self.x+24, 247+2+self.y)
+                
+                canvas.coords(self.e2_Lleg2, 886+self.x+3+28, 263+self.y, 901+self.x+3-2, 273+self.y)
+                
+                canvas.coords(self.e2_Rleg2, 901-2+self.x-3+2, 263+self.y, 916-2+self.x-3-28, 273+self.y)
+            
+                
+           
+                
+            
+                
+                
+                
+                #print(self.x2, self.Frame, self.counterArm, self.counterFrame
 
 
                         
 
-
-        self.e2_righthandhitbox = canvas.coords(self.e2_righthand2) #to stop enemy2 when it hits window border
         
+        self.e2_righthandhitbox = canvas.coords(self.e2_righthand2) #to stop enemy2 when it hits window border
+        self.e2_lefthandhitbox = canvas.coords(self.e2_lefthand2) #cause either left or right may be in front of enemy
         self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
+        self.counterArm += 1
+        
+            
+        
         #print(self.Frame)
         #print(self.counterFrame)
         #print(self.counterFrame)
-        
-        if 0 <= self.counterFrame < 25: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
+
+        # IF YOU WANT TO EDIT THIS REMEMBER THAT THE LENGTHS OF THESE 
+        if 0 <= self.counterFrame < 40: #Once 25 iterations of draw() in the while loop far far below, change frame to 0
             self.Frame = 0
-        elif 25 <= self.counterFrame < 50: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
+            
+        elif 40 <= self.counterFrame < 75: #if self.counterFrame > 25: #Once 50 iterations of draw() in the while loop far far below, change frame to 1
             self.Frame = 1
-        elif 50 <= self.counterFrame < 75:
+            
+        elif 75 <= self.counterFrame < 90:
             self.Frame = 2
-        elif 75 <= self.counterFrame < 100:
+            
+        elif 90 <= self.counterFrame < 105:
             self.Frame = 3
-        if self.counterFrame == 100: #Reset the counter after 50 so that the cycle repeats over and over again.
+       # elif 75 <= self.counterFrame < 78: #No movement here, prevents teleportation
+       #     self.Frame = 4 
+        if self.counterFrame == 105: #Reset the counter after 50 so that the cycle repeats over and over again.
             self.counterFrame = 0
             self.Frame = 0
-        
-
-
-
-
+            self.counterArm = 0
 
 class Enemy1: #Designs by Edward. Eye animation by Leon.
     def __init__(self,canvas):
@@ -1048,8 +1233,9 @@ class Enemy3: #Third enemy design. I'm planning on making this one (design, anim
         self.counterFrame += 1 #Add one to counterFrame (Starts at 0)
 
 class Sword: 
-    def __init__(self,canvas):
+    def __init__(self,canvas, player):
         self.canvas = canvas
+        self.player = player
         #All of these variables are used for drawEye(self) method below.
         self.x_eye1, self.y_eye1 = 0,0
         self.x_pupil1, self.y_pupil1 = 0,0
@@ -1065,6 +1251,9 @@ class Sword:
         self.s1_handle1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 501, 168, 501, 180, 499, 180, 499, 168, 493, 168, fill="saddle brown", outline="black")
         self.s1_hilt1 = canvas.create_polygon(493, 165, 507, 165, 507, 168, 493, 168, fill="brown", outline="black")
         self.s1_rust1 = canvas.create_line(500, 139, 501, 140, 501, 165, fill="brown")
+        self.s1_hitbox = canvas.create_line(493, 138, 507, 180, fill="black")
+        canvas.itemconfigure(self.s1_hitbox, state='hidden')
+        self.s1_hitboxData = canvas.coords(self.s1_hitbox)
 
         #Porous Sword (Tier Unknown) Designed by Leon
         #An  unusual sword that is riddled with little holes on its surface. Upon closer inspection the holes seem to be.. pulsating?
@@ -1117,7 +1306,12 @@ class Sword:
         #self.s_eye1 = canvas.create_oval(1155, 20-140, 1295, 90-140, fill="white") #EYE OPEN
         self.s_eye1 = canvas.create_oval(1155, -85, 1295, -85, fill="white") #Eye closed
         self.s_pupil1 = canvas.create_oval(1213, -98, 1238, -72, fill="black")
-        
+
+    def draw1(self):
+        #pass
+        if (self.player.hitbox[0] >= self.s1_hitboxData[0] >= self.player.hitbox[2] or self.player.hitbox[0] >= self.s1_hitboxData[2] >= self.player.hitbox[2] or self.player.hitbox[0] <= self.s1_hitboxData[0] <= self.player.hitbox[2] or self.player.hitbox[0] <= self.s1_hitboxData[2] <= self.player.hitbox[2] ) and ( self.player.hitbox[1] <= self.s1_hitboxData[1] <= self.player.hitbox[3] or self.player.hitbox[1] <= self.s1_hitboxData[3] <= self.player.hitbox[3] ):
+            print("Player has crossed over sword1.")
+
     def drawEye(self): #Animates the big eye in the top right of the screen. self.counter (which is a counter) starts at -70 and ends at 246 when it resets.
         if -70 <= self.counter < 0: #Move closed eye into screen
             if self.counter == -1:
@@ -1197,7 +1391,8 @@ class Bars:
         self.counterFrameSprint = 0 #For first if statement regarding sprint in this class's draw(self) method.
         self.counterFrameSprint2 = -100 #second ^
         self.counterFrameSprint3 = 0 #third ^
-        self.getOutOfStatement = True #Used for 
+        self.getOutOfStatement = True #Used for
+        self.changeColorBack = False
 
         #Model for the bars in the bottom right hand corner of window.
         self.h_sprintBorder = canvas.create_rectangle(1037, 667, 1228, 689, fill="black", outline="black")
@@ -1263,13 +1458,21 @@ class Bars:
                 self.manaLoss -= 50
                 #print("self.manaLoss:", self.manaLoss)
                 canvas.delete(self.h_mp)
-                self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
+                self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue4")
             #else: #Unreachable code because the player.spacebar bind method will not make manaUsed to True ever if out of mana.
                 #print("YOU GOT NO MANA!")
                 #pass
             self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
             self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
             manaUsed = False
+            self.changeColorBack = True
+
+        if voiceOn == False and self.changeColorBack == True:
+            canvas.delete(self.h_mp)
+            self.h_mp = canvas.create_arc(1165, 560, 1260, 655, width=18, start=0, extent=359+self.manaLoss, style=ARC, outline="blue")
+            self.h_mpName = canvas.create_text(1205, 560, text="MP", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.h_mpAbilityName = canvas.create_text(1215, 655, text="Voice", fill="black", anchor="center", font=("Fixedsys", 16))
+            self.changeColorBack = False
 
         #Update sprint bar when sprinting.
         global sprinting
@@ -1352,14 +1555,9 @@ class Nathaniel2010: #Refernce to Heavy Rain's AVI
 class Background:
     def __init__(self,canvas):
         self.canvas = canvas
-        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 3.0.4: Enemies of the East\n"""
-                                                """Added Enemy3's walking animation. It moves left and pauses to portray that it moves slowly."""
-                                                  """\nThe line is the hitbox and it is facing the wrong way but I'm too lazy to mirror it and it should be fine."""
-                                                """ Enemy3 should move across the screen, stop, and turn around when it reaches the window border. This is done with the hitbox line."""
-                                                #"""\nMight change basic attacks while sprinting and/or crouching to have a different animation."""
-                                                """ Pressing Q now pauses/unpauses the Big Eye animation."""
-                                                  """ Voice rework. Voice and basic attacks can now damage hp bar of Enemy3. Has death animation now and deletes shapes and ends it's draw method."""
-                                                """ Enemy3 will turn towards player if one the same level. Enemy3 can attack the player dealing damage.""", 
+        self.a_description = canvas.create_text(0, 550, text="""Update Alpha 3.0.5: The Details are in the Details\n"""
+                                                            """The mana bar changes color when on cooldown. Rusty sword barely interactable."""
+                                                            """\nLeon's Dark Guard can move back and forth, finished moving animations, and has a health bar.""", 
                                                   width=1000, fill="black", anchor="nw", font=("Fixedsys", 16))#Top left corner of screen text
         self.a_description2 = canvas.create_text(0, 0, text="""WASD to move around. Press left Shift to toggle sprint. Press left Control to toggle crouch.\n"""
                                                                  """Spacebar is the special ability that has a cooldown. Only Voice Attack is avaliable. Did I mention you can left click?""",
@@ -3111,11 +3309,11 @@ class Player:
 background = Background(canvas)
 enemy1 = Enemy1(canvas)
 enemy2 = Enemy2(canvas)
-sword = Sword(canvas)
 #nathaniel2010 = Nathaniel2010(canvas)
 #photoTest = PhotoTest(canvas)
 bars = Bars(canvas)
 player = Player(canvas,background, bars)
+sword = Sword(canvas, player)
 voice = Voice(canvas,player)
 enemy3 = Enemy3(canvas, voice, player)
 canvas.focus_set() #Tells Python to use keyboard so left and right arrow keys work now
@@ -3129,6 +3327,7 @@ while 1:
         #pass
     if voiceOn == True:
         voice.draw()
+    sword.draw1()
     enemy1.draw()
     enemy2.draw()
     if turnOffEnemy3 == False:

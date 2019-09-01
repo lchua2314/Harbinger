@@ -19,3 +19,11 @@
 -Fixed voice being able to hit when it is not there first hit thing.
 -Fixed missing +y variables for coordinate 346 for torsoBlank
 -Made code more efficient.
+
+3.0.5 - The Details are in the Details
+(All Dark Guard updates made by Leon)
+-Dark Guard has a health bar now.
+-Dark Guard can move back and forth.
+-Dark Guard walk animation finished.
+-When special ability is on cooldown, change color of the mana bar.
+-Player can interact with the sword... just a bit...
